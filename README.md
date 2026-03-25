@@ -1,4 +1,4 @@
-# Unifilar Studio ⚡
+# WorLine by Pao ⚡
 
 > Professional single-line diagram editor for electrical engineers.
 
@@ -113,7 +113,7 @@ railway up
 ## Project Structure
 
 ```
-unifilar-studio/
+worline-by-pao/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/           # Login / Signup pages

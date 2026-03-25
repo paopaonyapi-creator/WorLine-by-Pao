@@ -36,7 +36,7 @@ export default function DashboardLayout({
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/app" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />
-            <span className="font-bold">Unifilar Studio</span>
+            <span className="font-bold">WorLine</span>
           </Link>
         </div>
         <div className="flex-1">
@@ -74,7 +74,7 @@ export default function DashboardLayout({
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
           <Link href="/app" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />
-            <span>Unifilar</span>
+            <span>WorLine</span>
           </Link>
         </header>
         <main className="flex-1 p-4 md:p-6 lg:p-8">

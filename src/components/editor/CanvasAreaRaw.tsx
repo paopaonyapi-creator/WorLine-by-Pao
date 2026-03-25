@@ -185,7 +185,7 @@ export const CanvasAreaRaw = () => {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    const symbolId = e.dataTransfer.getData("application/unifilar-symbol");
+    const symbolId = e.dataTransfer.getData("application/worline-symbol");
     if (!symbolId) return;
 
     if (stageRef.current) {

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Unifilar Studio",
-  description: "Electrical single-line diagram creator.",
+  title: "WorLine by Pao",
+  description: "Create electrical single-line diagrams online.",
 };
 
 export default function RootLayout({

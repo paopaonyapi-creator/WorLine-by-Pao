@@ -17,7 +17,7 @@ export default function MarketingLayout({
                 <Zap className="h-4 w-4" />
               </div>
               <span className="font-bold text-lg tracking-tight">
-                Unifilar <span className="text-primary">Studio</span>
+                Wor<span className="text-primary">Line</span>
               </span>
             </Link>
             <nav className="flex items-center space-x-1 text-sm font-medium">
@@ -42,7 +42,7 @@ export default function MarketingLayout({
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Zap className="h-3.5 w-3.5" />
                 </div>
-                <span className="font-bold">Unifilar</span>
+                <span className="font-bold">WorLine</span>
               </Link>
             </div>
             <nav className="flex items-center space-x-2">
@@ -70,7 +70,7 @@ export default function MarketingLayout({
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Zap className="h-3.5 w-3.5" />
                 </div>
-                <span className="font-bold">Unifilar Studio</span>
+                <span className="font-bold">WorLine by Pao</span>
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Professional electrical single-line diagram editor built for engineers.
@@ -107,7 +107,7 @@ export default function MarketingLayout({
           
           <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} StudioGrid Labs. All rights reserved.
+              &copy; {new Date().getFullYear()} WorLine by Pao. All rights reserved.
             </p>
             <p className="text-xs text-muted-foreground/60">
               Built with Next.js, Supabase, and Stripe

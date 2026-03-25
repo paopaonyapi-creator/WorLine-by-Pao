@@ -5,7 +5,7 @@ export default function PrivacyPage() {
       <p className="text-muted-foreground whitespace-pre-wrap">
         We respect your privacy.
         Your diagrams and metadata are stored securely and won't be shared with third parties.
-        Payment details are processed securely by Stripe and are not stored by Unifilar Studio directly.
+        Payment details are processed securely by Stripe and are not stored by WorLine directly.
       </p>
     </div>
   );

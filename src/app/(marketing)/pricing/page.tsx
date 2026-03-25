@@ -128,7 +128,7 @@ export default function PricingPage() {
         <div className="mt-20 text-center">
           <p className="text-sm text-muted-foreground">
             Need a custom plan for your organization?{" "}
-            <a href="mailto:hello@unifilar.studio" className="text-primary hover:underline font-medium">
+            <a href="mailto:hello@worline.app" className="text-primary hover:underline font-medium">
               Contact us
             </a>
           </p>

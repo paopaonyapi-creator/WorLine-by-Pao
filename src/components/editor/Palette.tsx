@@ -24,7 +24,7 @@ export const Palette = () => {
                       key={sym.id}
                       draggable
                       onDragStart={(e) => {
-                        e.dataTransfer.setData("application/unifilar-symbol", sym.id);
+                        e.dataTransfer.setData("application/worline-symbol", sym.id);
                         e.dataTransfer.effectAllowed = "copy";
                       }}
                       className={cn(

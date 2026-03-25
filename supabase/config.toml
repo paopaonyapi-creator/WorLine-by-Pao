@@ -3,7 +3,7 @@
 # Full reference: https://supabase.com/docs/guides/cli/config
 
 [project]
-id = "unifilar-studio"
+id = "worline-by-pao"
 
 [api]
 enabled = true

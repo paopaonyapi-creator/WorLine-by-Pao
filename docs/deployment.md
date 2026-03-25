@@ -1,10 +1,10 @@
-# Unifilar Studio Deployment Guide
+# WorLine by Pao Deployment Guide
 
 This project is built and optimized for Railway Pro deployment.
 It does not rely on Vercel-specific features. Features such as server functions, edge configuration, auth flows, and webhooks are containerized via Docker.
 
 ## 1. Deploy from GitHub to Railway
-Log into your Railway Dashboard. Create a new project, select "Deploy from Github repo", and point to your Unifilar Studio repository.
+Log into your Railway Dashboard. Create a new project, select "Deploy from Github repo", and point to your WorLine by Pao repository.
 Railway will automatically detect the Dockerfile and build it.
 
 ## 2. Environment Variables
@@ -28,7 +28,7 @@ The endpoint secret should be added to Railway as `STRIPE_WEBHOOK_SECRET`.
 
 ## 5. Docker Local Verification
 ```bash
-docker build -t unifilar-studio-app .
-docker run -p 3000:3000 unifilar-studio-app
+docker build -t worline-app .
+docker run -p 3000:3000 worline-app
 ```
 Then navigate to http://localhost:3000 to verify.

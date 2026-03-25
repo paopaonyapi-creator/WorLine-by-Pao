@@ -39,7 +39,7 @@ export default function SignupPage() {
       return;
     }
 
-    toast.success("Account created! Welcome to Unifilar Studio.");
+    toast.success("Account created! Welcome to WorLine.");
     router.push("/app");
     router.refresh();
   };

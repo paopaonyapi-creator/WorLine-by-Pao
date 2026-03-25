@@ -6,7 +6,7 @@ export default function TemplatesPage() {
     { id: '1', name: "Blank Project", desc: "Start from scratch with a blank canvas", isPremium: false },
     { id: '2', name: "Single Motor Circuit", desc: "Basic DOL starter single line configuration", isPremium: false },
     { id: '3', name: "Substation Layout", desc: "Typical 132/33kV substation layout", isPremium: true },
-    { id: '4', name: "Solar PV Plant", desc: "Utility-scale solar power plant unifilar", isPremium: true }
+    { id: '4', name: "Solar PV Plant", desc: "Utility-scale solar power plant single-line", isPremium: true }
   ];
 
   return (

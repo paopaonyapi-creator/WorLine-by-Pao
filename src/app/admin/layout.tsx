@@ -37,7 +37,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
         <header className="h-14 border-b flex items-center px-6">
-          <h1 className="font-semibold">Unifilar Studio Administration</h1>
+          <h1 className="font-semibold">WorLine Administration</h1>
         </header>
         <div className="p-8">
           {children}
