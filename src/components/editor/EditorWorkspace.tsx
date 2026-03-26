@@ -5,12 +5,21 @@ import { CanvasArea } from "./CanvasArea";
 import { Palette } from "./Palette";
 import { Toolbar } from "./Toolbar";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { ZoomControls } from "./ZoomControls";
 import { useEditorStore } from "@/store/editorStore";
+import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
+import { useAutoSave } from "@/hooks/useAutoSave";
 import { createClient } from "@/lib/supabase/client";
 
 export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
   const { initialize, canvas } = useEditorStore();
   const [loading, setLoading] = useState(true);
+
+  // Auto-save every 30 seconds
+  const { save: manualSave } = useAutoSave(projectId);
+
+  // Keyboard shortcuts: Ctrl+S, Ctrl+Z/Y, Delete, Escape, Ctrl+D
+  useEditorShortcuts(projectId, manualSave);
 
   useEffect(() => {
     const loadProject = async () => {
@@ -24,7 +33,6 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
         .maybeSingle();
 
       if (data) {
-        // Hydrate from DB
         const objects = data.diagram_objects ? data.diagram_objects.map((doObj: any) => ({
           id: doObj.id,
           ...doObj.object_data
@@ -38,7 +46,6 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
           gridSize: 20
         });
       } else {
-        // Just initialize blank
         initialize(projectId);
       }
       setLoading(false);
@@ -47,7 +54,14 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
   }, [projectId, initialize]);
 
   if (loading) {
-    return <div className="flex h-screen w-full items-center justify-center">Loading editor...</div>;
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <span className="text-sm text-muted-foreground">Loading editor...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -57,9 +71,17 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
         <Palette />
         <div className="flex-1 overflow-hidden relative" id="canvas-container">
           <CanvasArea />
+          <ZoomControls />
+          {/* Shortcut hints */}
+          <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
+            <span>Ctrl+S save</span>
+            <span>Ctrl+Z undo</span>
+            <span>Del delete</span>
+          </div>
         </div>
         <PropertiesPanel />
       </div>
     </div>
   );
 };
+
