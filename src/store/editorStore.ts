@@ -28,6 +28,9 @@ export type EditorState = {
   // Interaction Mode
   activeTool: "select" | "text" | "wire";
 
+  // Snap
+  snapToGrid: boolean;
+
   // Actions
   initialize: (id: string, state?: Partial<CanvasState>) => void;
   setActiveTool: (tool: "select" | "text" | "wire") => void;
@@ -36,6 +39,11 @@ export type EditorState = {
   deleteObjects: (ids: string[]) => void;
   setSelection: (ids: string[]) => void;
   duplicateSelected: () => void;
+  rotateSelected: () => void;
+  flipSelectedH: () => void;
+  flipSelectedV: () => void;
+  toggleSnapToGrid: () => void;
+  snapPosition: (x: number, y: number) => { x: number; y: number };
   
   // Viewport actions
   setZoom: (zoom: number) => void;
@@ -71,6 +79,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   panX: 0,
   panY: 0,
   activeTool: "select",
+  snapToGrid: true,
   isDrawingWire: false,
   wireStartParams: null,
 
@@ -197,6 +206,54 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       selectedIds: newSelection
     });
     get().pushHistory();
+  },
+
+  rotateSelected: () => {
+    const { canvas, selectedIds } = get();
+    if (selectedIds.length === 0) return;
+    const objects = canvas.objects.map(obj => {
+      if (selectedIds.includes(obj.id)) {
+        return { ...obj, rotation: ((obj.rotation || 0) + 90) % 360 };
+      }
+      return obj;
+    });
+    set({ canvas: { ...canvas, objects } });
+    get().pushHistory();
+  },
+
+  flipSelectedH: () => {
+    const { canvas, selectedIds } = get();
+    if (selectedIds.length === 0) return;
+    const objects = canvas.objects.map(obj => {
+      if (selectedIds.includes(obj.id)) {
+        return { ...obj, scaleX: ((obj as any).scaleX || 1) * -1 };
+      }
+      return obj;
+    });
+    set({ canvas: { ...canvas, objects } });
+    get().pushHistory();
+  },
+
+  flipSelectedV: () => {
+    const { canvas, selectedIds } = get();
+    if (selectedIds.length === 0) return;
+    const objects = canvas.objects.map(obj => {
+      if (selectedIds.includes(obj.id)) {
+        return { ...obj, scaleY: ((obj as any).scaleY || 1) * -1 };
+      }
+      return obj;
+    });
+    set({ canvas: { ...canvas, objects } });
+    get().pushHistory();
+  },
+
+  toggleSnapToGrid: () => set((s) => ({ snapToGrid: !s.snapToGrid })),
+
+  snapPosition: (x, y) => {
+    const { snapToGrid, canvas } = get();
+    if (!snapToGrid) return { x, y };
+    const grid = canvas.gridSize || 20;
+    return { x: Math.round(x / grid) * grid, y: Math.round(y / grid) * grid };
   },
 
   setZoom: (zoom) => set({ zoom: Math.max(0.1, Math.min(zoom, 5)) }),

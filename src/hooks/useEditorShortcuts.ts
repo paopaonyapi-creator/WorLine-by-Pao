@@ -4,7 +4,7 @@ import { useEffect, useCallback } from "react";
 import { useEditorStore } from "@/store/editorStore";
 
 export function useEditorShortcuts(projectId: string, onSave: () => void) {
-  const { undo, redo, deleteObjects, selectedIds, duplicateSelected } = useEditorStore();
+  const { undo, redo, deleteObjects, selectedIds, duplicateSelected, rotateSelected, flipSelectedH, flipSelectedV, setActiveTool } = useEditorStore();
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     // Don't trigger shortcuts when typing in input fields
@@ -52,12 +52,58 @@ export function useEditorShortcuts(projectId: string, onSave: () => void) {
       return;
     }
 
+    // R → Rotate 90°
+    if (e.key === "r" || e.key === "R") {
+      if (!isCtrl && selectedIds.length > 0) {
+        e.preventDefault();
+        rotateSelected();
+        return;
+      }
+    }
+
+    // H → Flip Horizontal
+    if (e.key === "h" && !isCtrl) {
+      if (selectedIds.length > 0) {
+        e.preventDefault();
+        flipSelectedH();
+        return;
+      }
+    }
+
+    // V → Flip Vertical (only when not Ctrl+V paste)
+    if (e.key === "v" && !isCtrl) {
+      if (selectedIds.length > 0) {
+        e.preventDefault();
+        flipSelectedV();
+        return;
+      }
+    }
+
+    // W → Wire tool
+    if (e.key === "w" && !isCtrl) {
+      setActiveTool("wire");
+      return;
+    }
+
+    // T → Text tool
+    if (e.key === "t" && !isCtrl) {
+      setActiveTool("text");
+      return;
+    }
+
+    // S key (no ctrl) → Select tool
+    if (e.key === "s" && !isCtrl) {
+      setActiveTool("select");
+      return;
+    }
+
     // Escape → Deselect
     if (e.key === "Escape") {
       useEditorStore.getState().setSelection([]);
+      useEditorStore.getState().cancelWire();
       return;
     }
-  }, [undo, redo, deleteObjects, selectedIds, duplicateSelected, onSave]);
+  }, [undo, redo, deleteObjects, selectedIds, duplicateSelected, rotateSelected, flipSelectedH, flipSelectedV, setActiveTool, onSave]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);

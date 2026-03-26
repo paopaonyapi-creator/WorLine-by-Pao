@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/editorStore";
-import { Save, Undo, Redo, Download, ArrowLeft, Loader2, MousePointer2, Type, Cable, Grid3x3, Maximize, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter } from "lucide-react";
+import { Save, Undo, Redo, Download, ArrowLeft, Loader2, MousePointer2, Type, Cable, Grid3x3, Maximize, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter, RotateCw, FlipHorizontal, FlipVertical, Magnet, Search } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -15,7 +15,7 @@ import { Share2, Check, Copy, Trash, Boxes } from "lucide-react";
 import { Palette } from "./Palette";
 
 export const Toolbar = ({ projectId }: { projectId: string }) => {
-  const { undo, redo, canvas, history, currentHistoryIndex, activeTool, setActiveTool, selectedIds, deleteObjects, duplicateSelected, setZoom, setPan } = useEditorStore();
+  const { undo, redo, canvas, history, currentHistoryIndex, activeTool, setActiveTool, selectedIds, deleteObjects, duplicateSelected, setZoom, setPan, rotateSelected, flipSelectedH, flipSelectedV, snapToGrid, toggleSnapToGrid } = useEditorStore();
   const [saving, setSaving] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shared, setShared] = useState(false);
@@ -330,6 +330,31 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
         >
           <Maximize className="h-4 w-4" />
         </Button>
+        <Button
+          variant={snapToGrid ? "secondary" : "ghost"}
+          size="icon"
+          className="w-8 h-8 hidden sm:inline-flex"
+          onClick={toggleSnapToGrid}
+          title="Snap to Grid (Magnet)"
+        >
+          <Magnet className="h-4 w-4" />
+        </Button>
+
+        {/* Transform tools (visible when selected) */}
+        {selectedIds.length > 0 && (
+          <>
+            <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
+            <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" onClick={rotateSelected} title="Rotate 90° (R)">
+              <RotateCw className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" onClick={flipSelectedH} title="Flip Horizontal (H)">
+              <FlipHorizontal className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" onClick={flipSelectedV} title="Flip Vertical (V)">
+              <FlipVertical className="h-4 w-4" />
+            </Button>
+          </>
+        )}
 
         {/* Alignment tools (visible when 2+ selected) */}
         {selectedIds.length >= 2 && (

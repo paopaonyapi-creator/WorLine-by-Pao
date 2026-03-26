@@ -482,6 +482,31 @@ export const CanvasAreaRaw = () => {
                 );
               });
           })()}
+
+          {/* Auto wire labels (W1, W2...) */}
+          {canvas.objects
+            .filter(o => o.type === "wire")
+            .map((w, idx) => {
+              const wire = w as WireObject;
+              if (wire.points.length < 4) return null;
+              // Find midpoint of wire path
+              const midIdx = Math.floor(wire.points.length / 2);
+              const mx = (wire.points[midIdx - 2] + wire.points[midIdx]) / 2;
+              const my = (wire.points[midIdx - 1] + wire.points[midIdx + 1]) / 2;
+              const label = (wire as any).label || `W${idx + 1}`;
+              return (
+                <Text
+                  key={`wire-label-${wire.id}`}
+                  x={mx - 12}
+                  y={my - 14}
+                  text={label}
+                  fontSize={10}
+                  fill="#6b7280"
+                  fontStyle="italic"
+                  listening={false}
+                />
+              );
+            })}
         </Layer>
       </Stage>
 

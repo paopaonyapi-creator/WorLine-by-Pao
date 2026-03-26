@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { CanvasArea } from "./CanvasArea";
 import { Palette } from "./Palette";
 import { Toolbar } from "./Toolbar";
@@ -8,15 +8,23 @@ import { PropertiesPanel } from "./PropertiesPanel";
 import { ZoomControls } from "./ZoomControls";
 import { VersionHistory } from "./VersionHistory";
 import { CursorOverlay } from "./CursorOverlay";
+import { CrosshairOverlay } from "./CrosshairOverlay";
+import { RulerOverlay } from "./RulerOverlay";
+import { SymbolSearch } from "./SymbolSearch";
+import { LoadCalculator } from "./LoadCalculator";
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
+import { Calculator } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
   const { initialize, canvas, zoom, panX, panY } = useEditorStore();
   const [loading, setLoading] = useState(true);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showLoadCalc, setShowLoadCalc] = useState(false);
 
   // Auto-save every 30 seconds (if not readonly)
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
@@ -24,14 +32,29 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   // Real-time collaboration
   const { cursors } = useRealtimeCollaboration(readOnly ? null : projectId);
 
-  // Keyboard shortcuts: Ctrl+S, Ctrl+Z/Y, Delete, Escape, Ctrl+D (disable if readonly)
+  // Keyboard shortcuts: Ctrl+S, Ctrl+Z/Y, Delete, Escape, R, H, V, etc.
   useEditorShortcuts(readOnly ? "readonly" : projectId, manualSave);
+
+  // Ctrl+K for search
+  useEffect(() => {
+    if (readOnly) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setShowSearch(prev => !prev);
+      }
+      if (e.key === "Escape" && showSearch) {
+        setShowSearch(false);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [readOnly, showSearch]);
 
   useEffect(() => {
     const loadProject = async () => {
       const supabase = createClient();
 
-      // Load from projects.diagram_data (the single source of truth)
       const { data, error } = await supabase
         .from('projects')
         .select('diagram_data')
@@ -41,7 +64,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
       if (data?.diagram_data && typeof data.diagram_data === 'object') {
         const dd = data.diagram_data as any;
 
-        // If diagram_data contains objects array, use it
         if (dd.objects && Array.isArray(dd.objects)) {
           initialize(projectId, {
             objects: dd.objects,
@@ -51,11 +73,9 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             gridSize: dd.gridSize || 20,
           });
         } else {
-          // diagram_data exists but is a preset or empty object
           initialize(projectId);
         }
       } else {
-        // No diagram_data, start fresh
         initialize(projectId);
       }
 
@@ -87,19 +107,49 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
         <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
           <CanvasArea />
           <ZoomControls />
+
+          {/* Rulers */}
+          {!readOnly && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
+
+          {/* Crosshair cursor */}
+          {!readOnly && <CrosshairOverlay />}
+
           {!readOnly && <VersionHistory projectId={projectId} />}
           {!readOnly && <CursorOverlay cursors={cursors} zoom={zoom} panX={panX} panY={panY} />}
+
+          {/* Symbol Search (Ctrl+K) */}
+          {showSearch && <SymbolSearch onClose={() => setShowSearch(false)} />}
+
+          {/* Load Calculator */}
+          {showLoadCalc && <LoadCalculator onClose={() => setShowLoadCalc(false)} />}
+
           {/* Shortcut hints */}
           {!readOnly && (
             <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
-              <span>Ctrl+S save</span>
-              <span>Ctrl+Z undo</span>
-              <span>Del delete</span>
+              <span>R rotate</span>
+              <span>H/V flip</span>
+              <span>Ctrl+K search</span>
+              <span>W wire</span>
+              <span>T text</span>
             </div>
           )}
+
+          {/* Load calculator toggle */}
+          {!readOnly && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute bottom-4 right-4 z-10 w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+              onClick={() => setShowLoadCalc(!showLoadCalc)}
+              title="Load Calculator"
+            >
+              <Calculator className="h-4 w-4" />
+            </Button>
+          )}
+
           {/* Online users indicator */}
           {!readOnly && cursors.length > 0 && (
-            <div className="absolute top-4 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
+            <div className="absolute top-24 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
               <div className="flex -space-x-1">
                 {cursors.slice(0, 3).map((c) => (
                   <div
