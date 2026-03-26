@@ -127,47 +127,37 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
     };
     load();
   }, []);
-
   const handleAddCenter = (symbolId: string) => {
-    // On mobile: close the sheet first, then place after canvas is visible
-    if (onClose) {
-      onClose();
-      // Wait for sheet animation (300ms) before calculating canvas bounds
-      setTimeout(() => placeSymbol(symbolId), 350);
-    } else {
-      placeSymbol(symbolId);
-    }
-  };
+    // Capture current viewport state NOW (from React hook) before sheet closes
+    const capturedPanX  = panX;
+    const capturedPanY  = panY;
+    const capturedZoom  = zoom || 1;
 
-  const placeSymbol = (symbolId: string) => {
     const def = symbolRegistry[symbolId];
     if (!def) return;
 
-    // Get fresh state directly (avoids stale closure capture)
-    const st = useEditorStore.getState();
-    const px = st.panX;
-    const py = st.panY;
-    const z  = st.zoom ?? 1;
-    // Use the logical canvas size from state — always valid, never zero
-    const cw = st.canvas?.width  || 2000;
-    const ch = st.canvas?.height || 2000;
+    // Correct formula: convert viewport center → canvas coordinate space
+    // canvas_coord = (viewport_center - pan_offset) / zoom
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const cx = Math.round((vw / 2 - capturedPanX) / capturedZoom - def.width  / 2);
+    const cy = Math.round((vh / 2 - capturedPanY) / capturedZoom - def.height / 2);
 
-    // Convert canvas-space center from the panned & zoomed coordinate system
-    const centerX = -px / z + (cw / 2);
-    const centerY = -py / z + (ch / 2);
-
-    st.addObject({
+    addObject({
       type: "symbol",
       symbolId,
-      x: Math.round(centerX - def.width / 2),
-      y: Math.round(centerY - def.height / 2),
+      x: cx,
+      y: cy,
       rotation: 0,
-      zIndex: 1,
+      zIndex: canvas.objects.length + 1,
       width: def.width,
       height: def.height,
       label: def.customData?.label || "",
       connections: [],
     } as any);
+
+    // Close sheet after adding (on mobile)
+    if (onClose) onClose();
   };
 
   const handleSaveToLibrary = async () => {
@@ -236,85 +226,123 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
     }
   };
 
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string>("Power Sources");
+
+  const filteredSymbols = Object.values(symbolRegistry).filter((s) => {
+    const matchCat = s.category === activeCategory;
+    const matchSearch = search
+      ? s.displayName.toLowerCase().includes(search.toLowerCase())
+      : matchCat;
+    return matchSearch;
+  });
+
+  const displayedSymbols = search ? Object.values(symbolRegistry).filter(s =>
+    s.displayName.toLowerCase().includes(search.toLowerCase())
+  ) : filteredSymbols;
+
   return (
     <div className="w-full h-full bg-background flex flex-col overflow-hidden">
-      <div className="p-4 border-b font-semibold text-sm flex items-center gap-2">
-        <Zap className="h-4 w-4" />
-        Symbol Library
-      </div>
-      <div className="flex-1 overflow-y-auto w-full pb-20">
-        <div className="p-4 space-y-6">
-          {/* My Library Section */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wider flex items-center gap-1">
-                <Bookmark className="h-3 w-3" /> My Library
-              </h4>
-              {selectedIds.length > 0 && (
-                <Button variant="ghost" size="sm" className="h-6 text-[10px] gap-1 px-2" onClick={handleSaveToLibrary}>
-                  <Plus className="h-3 w-3" /> Save
-                </Button>
-              )}
-            </div>
-            {userSymbols.length === 0 ? (
-              <p className="text-[10px] text-muted-foreground/60 text-center py-2">
-                Select objects → click "Save" to create reusable groups
-              </p>
-            ) : (
-              <div className="space-y-1">
-                {userSymbols.map(us => (
-                  <div
-                    key={us.id}
-                    className="group flex items-center justify-between px-3 py-2 rounded-md border bg-card hover:border-primary cursor-pointer transition-all"
-                    onClick={() => handlePlaceUserSymbol(us)}
-                  >
-                    <span className="text-xs font-medium truncate">{us.name}</span>
-                    <button
-                      className="opacity-0 group-hover:opacity-100 text-destructive hover:text-destructive/80 transition-opacity"
-                      onClick={(e) => { e.stopPropagation(); handleDeleteUserSymbol(us.id); }}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="border-t" />
-
-          {/* Built-in Symbol Categories */}
-          {categories.map((cat) => {
-            const symbols = Object.values(symbolRegistry).filter(s => s.category === cat);
-            if (symbols.length === 0) return null;
-            return (
-              <div key={cat} className="space-y-3">
-                <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wider">{cat}</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {symbols.map(sym => (
-                    <div
-                      key={sym.id}
-                      draggable
-                      onClick={() => handleAddCenter(sym.id)}
-                      onDragStart={(e) => {
-                        e.dataTransfer.setData("application/worline-symbol", sym.id);
-                        e.dataTransfer.effectAllowed = "copy";
-                      }}
-                      className={cn(
-                        "flex flex-col items-center justify-center p-2 rounded-md border bg-card text-card-foreground shadow-sm cursor-grab active:cursor-grabbing hover:border-primary hover:shadow-md transition-all h-20"
-                      )}
-                    >
-                      <div className="mb-1.5 text-foreground">
-                        <SymbolMiniIcon symbolType={sym.symbolType} />
-                      </div>
-                      <span className="text-[10px] leading-tight text-center font-medium truncate w-full">{sym.displayName}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+      {/* Header with search */}
+      <div className="p-3 border-b space-y-2 flex-none">
+        <div className="flex items-center justify-between">
+          <span className="font-semibold text-sm flex items-center gap-2">
+            <Zap className="h-4 w-4 text-primary" />
+            Symbol Library
+          </span>
+          {selectedIds.length > 0 && (
+            <Button variant="ghost" size="sm" className="h-6 text-[10px] gap-1 px-2" onClick={handleSaveToLibrary}>
+              <Plus className="h-3 w-3" /> Save
+            </Button>
+          )}
         </div>
+        <input
+          type="text"
+          placeholder="🔍  Search symbols..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-3 py-1.5 text-xs rounded-md border bg-muted/30 placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+        />
+      </div>
+
+      {/* Category tabs (horizontal scroll like IEC app) */}
+      {!search && (
+        <div className="flex-none overflow-x-auto border-b hide-scrollbar">
+          <div className="flex gap-0.5 p-1 min-w-max">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={cn(
+                  "px-2.5 py-1 text-[10px] font-medium rounded whitespace-nowrap transition-colors",
+                  activeCategory === cat
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Symbol Grid */}
+      <div className="flex-1 overflow-y-auto pb-20">
+        {/* My Library */}
+        {!search && userSymbols.length > 0 && activeCategory === categories[0] && (
+          <div className="p-3 border-b space-y-2">
+            <p className="text-[10px] font-semibold uppercase text-muted-foreground tracking-wide flex items-center gap-1">
+              <Bookmark className="h-3 w-3" /> My Saved Groups
+            </p>
+            {userSymbols.map(us => (
+              <div
+                key={us.id}
+                className="group flex items-center justify-between px-3 py-2 rounded-md border bg-card hover:border-primary cursor-pointer transition-all"
+                onClick={() => handlePlaceUserSymbol(us)}
+              >
+                <span className="text-xs font-medium truncate">{us.name}</span>
+                <button
+                  className="opacity-0 group-hover:opacity-100 text-destructive hover:text-destructive/80 transition-opacity"
+                  onClick={(e) => { e.stopPropagation(); handleDeleteUserSymbol(us.id); }}
+                >
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Symbol cards - 3 column IEC-style grid */}
+        <div className="grid grid-cols-3 gap-1.5 p-2">
+          {displayedSymbols.map(sym => (
+            <button
+              key={sym.id}
+              draggable
+              onClick={() => handleAddCenter(sym.id)}
+              onDragStart={(e) => {
+                e.dataTransfer.setData("application/worline-symbol", sym.id);
+                e.dataTransfer.effectAllowed = "copy";
+              }}
+              className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg border border-border bg-card text-card-foreground shadow-sm hover:border-primary hover:bg-primary/5 hover:shadow-md active:scale-95 transition-all cursor-pointer select-none"
+              style={{ minHeight: "72px" }}
+            >
+              <div className="text-foreground scale-110">
+                <SymbolMiniIcon symbolType={sym.symbolType} />
+              </div>
+              <span className="text-[9px] leading-tight text-center font-medium text-muted-foreground w-full truncate px-0.5">
+                {sym.displayName}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {displayedSymbols.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <Zap className="h-8 w-8 mb-2 opacity-30" />
+            <p className="text-xs">No symbols found</p>
+          </div>
+        )}
       </div>
     </div>
   );
