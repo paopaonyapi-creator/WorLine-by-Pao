@@ -68,6 +68,17 @@ import { ThermalIRMap } from "./ThermalIRMap";
 import { LoadProfileSim } from "./LoadProfileSim";
 import { AIGenerativeReport } from "./AIGenerativeReport";
 import { WebXRPreview } from "./WebXRPreview";
+// Tier 9
+import { EVFleetOptimizer } from "./EVFleetOptimizer";
+import { BlockchainP2PEnergy } from "./BlockchainP2PEnergy";
+import { CyberAttackSim } from "./CyberAttackSim";
+import { AIFailurePrediction } from "./AIFailurePrediction";
+import { DroneInspectionPath } from "./DroneInspectionPath";
+import { ESGCarbonTokenizer } from "./ESGCarbonTokenizer";
+import { ExtremeWeatherSim } from "./ExtremeWeatherSim";
+import { GenerativeVoiceCommand } from "./GenerativeVoiceCommand";
+import { HologramDisplayExport } from "./HologramDisplayExport";
+import { AutoGridHealing } from "./AutoGridHealing";
 
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
@@ -84,6 +95,7 @@ import {
   Grid3x3, Image, History, Smartphone, FileOutput,
   Flame, ActivitySquare, Sun, Play, Bot, Route, Box, CircleDollarSign, Users,
   CloudLightning, Network, Wifi, Cpu, Map as MapIcon, Wrench, Glasses,
+  CarFront, Bitcoin, Skull, BrainCircuit, PlaneTakeoff, Leaf, CloudRainWind, Mic, Cuboid, PowerOff
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -211,6 +223,17 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.loadProfile && <LoadProfileSim onClose={() => toggle("loadProfile")} />}
             {panels.aiReport && <AIGenerativeReport onClose={() => toggle("aiReport")} />}
             {panels.webXr && <WebXRPreview onClose={() => toggle("webXr")} />}
+            {/* Tier 9 */}
+            {panels.evFleet && <EVFleetOptimizer onClose={() => toggle("evFleet")} />}
+            {panels.blockchain && <BlockchainP2PEnergy onClose={() => toggle("blockchain")} />}
+            {panels.cyber && <CyberAttackSim onClose={() => toggle("cyber")} />}
+            {panels.aiPred && <AIFailurePrediction onClose={() => toggle("aiPred")} />}
+            {panels.drone && <DroneInspectionPath onClose={() => toggle("drone")} />}
+            {panels.esg && <ESGCarbonTokenizer onClose={() => toggle("esg")} />}
+            {panels.weather && <ExtremeWeatherSim onClose={() => toggle("weather")} />}
+            {panels.voiceCmd && <GenerativeVoiceCommand onClose={() => toggle("voiceCmd")} />}
+            {panels.hologram && <HologramDisplayExport onClose={() => toggle("hologram")} />}
+            {panels.healing && <AutoGridHealing onClose={() => toggle("healing")} />}
 
             {/* Shortcuts */}
             {!readOnly && (
@@ -219,9 +242,22 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               </div>
             )}
 
-            {/* === ACTION BUTTONS — 6 rows === */}
+            {/* === ACTION BUTTONS — 7 rows === */}
             {!readOnly && (
               <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1 items-end">
+                {/* Row 000: Tier 9 — Cyber-Physical / Cosmic Grid */}
+                <div className="flex gap-1">
+                  <Btn icon={CarFront} title="EV Fleet V2G Optimizer" id="evFleet" />
+                  <Btn icon={Bitcoin} title="Blockchain P2P Trade" id="blockchain" />
+                  <Btn icon={Skull} title="SCADA Cyber Attack" id="cyber" />
+                  <Btn icon={BrainCircuit} title="AI Failure Predict" id="aiPred" />
+                  <Btn icon={PlaneTakeoff} title="Drone Fleet Path" id="drone" />
+                  <Btn icon={Leaf} title="ESG Carbon Token" id="esg" />
+                  <Btn icon={CloudRainWind} title="Weather Hazard Sim" id="weather" />
+                  <Btn icon={Mic} title="AI Voice Command" id="voiceCmd" />
+                  <Btn icon={Cuboid} title="3D Hologram Export" id="hologram" />
+                  <Btn icon={PowerOff} title="Grid Self-Healing" id="healing" />
+                </div>
                 {/* Row 00: Tier 8 — Digital Twin Omniverse */}
                 <div className="flex gap-1">
                   <Btn icon={CloudLightning} title="Lightning Protect." id="lightning" />
