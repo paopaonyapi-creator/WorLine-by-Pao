@@ -19,7 +19,7 @@ import { CustomSymbolCreator } from "./CustomSymbolCreator";
 import { DrawingToolbar } from "./DrawingToolbar";
 import { CableSchedule } from "./CableSchedule";
 import { TitleBlockEditor } from "./TitleBlockEditor";
-// Sprint 11 — Tier 4
+// Tier 4
 import { ShortCircuitCalc } from "./ShortCircuitCalc";
 import { ProtectionCoordination } from "./ProtectionCoordination";
 import { CommentOverlay } from "./CommentOverlay";
@@ -28,6 +28,16 @@ import { DXFExport } from "./DXFExport";
 import { VersionDiffView } from "./VersionDiffView";
 import { SymbolEditorPro } from "./SymbolEditorPro";
 import { DarkCanvasToggle } from "./DarkCanvasToggle";
+// Tier 5
+import { TerminalStripDesigner } from "./TerminalStripDesigner";
+import { VoltageDropCalc } from "./VoltageDropCalc";
+import { LoadFlowAnalysis } from "./LoadFlowAnalysis";
+import { EquipmentDatabase } from "./EquipmentDatabase";
+import { InspectionChecklist } from "./InspectionChecklist";
+import { HyperlinkCrossRef } from "./HyperlinkCrossRef";
+import { ProjectTemplateLibrary } from "./ProjectTemplateLibrary";
+import { AIDiagramRecognition } from "./AIDiagramRecognition";
+
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
@@ -37,6 +47,8 @@ import {
   Calculator, FileSpreadsheet, Sparkles, Paintbrush,
   Cable, FileText, Zap, Shield, MessageSquare,
   Printer, FileDown, GitCompare, PenTool,
+  CircuitBoard, TrendingDown, Activity, Database,
+  ClipboardCheck, Link2, FolderOpen, Brain,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -44,20 +56,9 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const { initialize, canvas, zoom, panX, panY } = useEditorStore();
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
-  const [showLoadCalc, setShowLoadCalc] = useState(false);
-  const [showBOM, setShowBOM] = useState(false);
-  const [showAILayout, setShowAILayout] = useState(false);
-  const [showSymbolCreator, setShowSymbolCreator] = useState(false);
-  const [showCableSchedule, setShowCableSchedule] = useState(false);
-  const [showTitleBlock, setShowTitleBlock] = useState(false);
-  // Tier 4
-  const [showShortCircuit, setShowShortCircuit] = useState(false);
-  const [showProtection, setShowProtection] = useState(false);
-  const [showComments, setShowComments] = useState(false);
-  const [showPrintLayout, setShowPrintLayout] = useState(false);
-  const [showDXF, setShowDXF] = useState(false);
-  const [showVersionDiff, setShowVersionDiff] = useState(false);
-  const [showSymbolEditor, setShowSymbolEditor] = useState(false);
+  // Tool panels
+  const [panels, setPanels] = useState<Record<string, boolean>>({});
+  const toggle = (key: string) => setPanels(p => ({ ...p, [key]: !p[key] }));
 
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
   const { cursors } = useRealtimeCollaboration(readOnly ? null : projectId);
@@ -117,12 +118,12 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
     );
   }
 
-  const ActionBtn = ({ icon: Icon, title, active, onClick }: { icon: any; title: string; active?: boolean; onClick: () => void }) => (
+  const Btn = ({ icon: Icon, title, id }: { icon: any; title: string; id: string }) => (
     <Button
-      variant={active ? "secondary" : "ghost"}
+      variant={panels[id] ? "secondary" : "ghost"}
       size="icon"
       className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-      onClick={onClick}
+      onClick={() => toggle(id)}
       title={title}
     >
       <Icon className="h-3.5 w-3.5" />
@@ -147,63 +148,76 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
           <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
             <CanvasArea />
             <ZoomControls />
-
             {!readOnly && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
             {!readOnly && <CrosshairOverlay />}
             {!readOnly && <VersionHistory projectId={projectId} />}
             {!readOnly && <CursorOverlay cursors={cursors} zoom={zoom} panX={panX} panY={panY} />}
 
-            {/* Overlays */}
+            {/* All overlay panels */}
             {showSearch && <SymbolSearch onClose={() => setShowSearch(false)} />}
-            {showLoadCalc && <LoadCalculator onClose={() => setShowLoadCalc(false)} />}
-            {showBOM && <BOMTable onClose={() => setShowBOM(false)} />}
-            {showAILayout && <AIAutoLayout onClose={() => setShowAILayout(false)} />}
-            {showSymbolCreator && <CustomSymbolCreator onClose={() => setShowSymbolCreator(false)} />}
-            {showCableSchedule && <CableSchedule onClose={() => setShowCableSchedule(false)} />}
-            {showTitleBlock && <TitleBlockEditor onClose={() => setShowTitleBlock(false)} onApply={() => {}} />}
-            {/* Tier 4 overlays */}
-            {showShortCircuit && <ShortCircuitCalc onClose={() => setShowShortCircuit(false)} />}
-            {showProtection && <ProtectionCoordination onClose={() => setShowProtection(false)} />}
-            {showComments && <CommentOverlay onClose={() => setShowComments(false)} />}
-            {showPrintLayout && <PrintLayout onClose={() => setShowPrintLayout(false)} />}
-            {showDXF && <DXFExport onClose={() => setShowDXF(false)} />}
-            {showVersionDiff && <VersionDiffView onClose={() => setShowVersionDiff(false)} />}
-            {showSymbolEditor && <SymbolEditorPro onClose={() => setShowSymbolEditor(false)} />}
+            {panels.loadCalc && <LoadCalculator onClose={() => toggle("loadCalc")} />}
+            {panels.bom && <BOMTable onClose={() => toggle("bom")} />}
+            {panels.aiLayout && <AIAutoLayout onClose={() => toggle("aiLayout")} />}
+            {panels.symCreator && <CustomSymbolCreator onClose={() => toggle("symCreator")} />}
+            {panels.cable && <CableSchedule onClose={() => toggle("cable")} />}
+            {panels.titleBlock && <TitleBlockEditor onClose={() => toggle("titleBlock")} onApply={() => {}} />}
+            {panels.shortCircuit && <ShortCircuitCalc onClose={() => toggle("shortCircuit")} />}
+            {panels.protection && <ProtectionCoordination onClose={() => toggle("protection")} />}
+            {panels.comments && <CommentOverlay onClose={() => toggle("comments")} />}
+            {panels.print && <PrintLayout onClose={() => toggle("print")} />}
+            {panels.dxf && <DXFExport onClose={() => toggle("dxf")} />}
+            {panels.diff && <VersionDiffView onClose={() => toggle("diff")} />}
+            {panels.symEditor && <SymbolEditorPro onClose={() => toggle("symEditor")} />}
+            {/* Tier 5 */}
+            {panels.terminal && <TerminalStripDesigner onClose={() => toggle("terminal")} />}
+            {panels.vdrop && <VoltageDropCalc onClose={() => toggle("vdrop")} />}
+            {panels.loadFlow && <LoadFlowAnalysis onClose={() => toggle("loadFlow")} />}
+            {panels.equipDb && <EquipmentDatabase onClose={() => toggle("equipDb")} />}
+            {panels.inspect && <InspectionChecklist onClose={() => toggle("inspect")} />}
+            {panels.crossRef && <HyperlinkCrossRef onClose={() => toggle("crossRef")} />}
+            {panels.templates && <ProjectTemplateLibrary onClose={() => toggle("templates")} />}
+            {panels.aiRecog && <AIDiagramRecognition onClose={() => toggle("aiRecog")} />}
 
             {/* Shortcut hints */}
             {!readOnly && (
               <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
-                <span>R rotate</span>
-                <span>H/V flip</span>
-                <span>Ctrl+K search</span>
-                <span>W wire</span>
-                <span>T text</span>
-                <span>F freehand</span>
+                <span>R rotate</span><span>H/V flip</span><span>Ctrl+K search</span><span>W wire</span><span>T text</span>
               </div>
             )}
 
-            {/* Bottom-right action buttons — 2 rows */}
+            {/* Action buttons — 3 rows */}
             {!readOnly && (
-              <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5 items-end">
-                {/* Row 1: Engineering */}
+              <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1 items-end">
+                {/* Row 1: Tier 5 - SCADA */}
+                <div className="flex gap-1">
+                  <Btn icon={Brain} title="AI Diagram Recognition" id="aiRecog" />
+                  <Btn icon={FolderOpen} title="Templates" id="templates" />
+                  <Btn icon={Link2} title="Cross-Reference" id="crossRef" />
+                  <Btn icon={ClipboardCheck} title="Inspection" id="inspect" />
+                  <Btn icon={Database} title="Equipment DB" id="equipDb" />
+                </div>
+                {/* Row 2: Tier 5 + 4 - Analysis */}
+                <div className="flex gap-1">
+                  <Btn icon={CircuitBoard} title="Terminal Strips" id="terminal" />
+                  <Btn icon={TrendingDown} title="Voltage Drop" id="vdrop" />
+                  <Btn icon={Activity} title="Load Flow" id="loadFlow" />
+                  <Btn icon={Zap} title="Short Circuit" id="shortCircuit" />
+                  <Btn icon={Shield} title="Protection TCC" id="protection" />
+                  <Btn icon={MessageSquare} title="Comments" id="comments" />
+                </div>
+                {/* Row 3: Core tools */}
                 <div className="flex gap-1">
                   <DarkCanvasToggle />
-                  <ActionBtn icon={PenTool} title="Symbol Editor Pro" active={showSymbolEditor} onClick={() => setShowSymbolEditor(!showSymbolEditor)} />
-                  <ActionBtn icon={GitCompare} title="Version Diff" active={showVersionDiff} onClick={() => setShowVersionDiff(!showVersionDiff)} />
-                  <ActionBtn icon={MessageSquare} title="Comments" active={showComments} onClick={() => setShowComments(!showComments)} />
-                  <ActionBtn icon={Printer} title="Print Layout" active={showPrintLayout} onClick={() => setShowPrintLayout(!showPrintLayout)} />
-                  <ActionBtn icon={FileDown} title="DXF Export" active={showDXF} onClick={() => setShowDXF(!showDXF)} />
-                </div>
-                {/* Row 2: Analysis */}
-                <div className="flex gap-1">
-                  <ActionBtn icon={Zap} title="Short Circuit Calc" active={showShortCircuit} onClick={() => setShowShortCircuit(!showShortCircuit)} />
-                  <ActionBtn icon={Shield} title="Protection Coordination" active={showProtection} onClick={() => setShowProtection(!showProtection)} />
-                  <ActionBtn icon={FileText} title="Title Block" active={showTitleBlock} onClick={() => setShowTitleBlock(!showTitleBlock)} />
-                  <ActionBtn icon={Cable} title="Cable Schedule" active={showCableSchedule} onClick={() => setShowCableSchedule(!showCableSchedule)} />
-                  <ActionBtn icon={Paintbrush} title="Custom Symbol" active={showSymbolCreator} onClick={() => setShowSymbolCreator(!showSymbolCreator)} />
-                  <ActionBtn icon={Sparkles} title="AI Layout" active={showAILayout} onClick={() => setShowAILayout(!showAILayout)} />
-                  <ActionBtn icon={FileSpreadsheet} title="BOM" active={showBOM} onClick={() => setShowBOM(!showBOM)} />
-                  <ActionBtn icon={Calculator} title="Load Calc" active={showLoadCalc} onClick={() => setShowLoadCalc(!showLoadCalc)} />
+                  <Btn icon={PenTool} title="Symbol Editor" id="symEditor" />
+                  <Btn icon={GitCompare} title="Version Diff" id="diff" />
+                  <Btn icon={Printer} title="Print Layout" id="print" />
+                  <Btn icon={FileDown} title="DXF Export" id="dxf" />
+                  <Btn icon={FileText} title="Title Block" id="titleBlock" />
+                  <Btn icon={Cable} title="Cable Schedule" id="cable" />
+                  <Btn icon={Paintbrush} title="Custom Symbol" id="symCreator" />
+                  <Btn icon={Sparkles} title="AI Layout" id="aiLayout" />
+                  <Btn icon={FileSpreadsheet} title="BOM" id="bom" />
+                  <Btn icon={Calculator} title="Load Calc" id="loadCalc" />
                 </div>
               </div>
             )}
@@ -213,23 +227,15 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               <div className="absolute top-24 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
                 <div className="flex -space-x-1">
                   {cursors.slice(0, 3).map((c) => (
-                    <div
-                      key={c.userId}
-                      className="w-5 h-5 rounded-full border-2 border-background flex items-center justify-center text-[8px] font-bold text-white"
-                      style={{ backgroundColor: c.color }}
-                      title={c.name}
-                    >
+                    <div key={c.userId} className="w-5 h-5 rounded-full border-2 border-background flex items-center justify-center text-[8px] font-bold text-white" style={{ backgroundColor: c.color }} title={c.name}>
                       {c.name.charAt(0).toUpperCase()}
                     </div>
                   ))}
                 </div>
-                <span className="text-[10px] text-muted-foreground ml-1">
-                  {cursors.length} online
-                </span>
+                <span className="text-[10px] text-muted-foreground ml-1">{cursors.length} online</span>
               </div>
             )}
           </div>
-
           {!readOnly && <SheetTabs />}
         </div>
         {!readOnly && (
