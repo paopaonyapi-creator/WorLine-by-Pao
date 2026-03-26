@@ -36,14 +36,20 @@ export type EditorState = {
   wireStartParams: { objectId: string; terminalId: string; x: number; y: number } | null;
 
   // Interaction Mode
-  activeTool: "select" | "text" | "wire";
+  activeTool: "select" | "text" | "wire" | "pencil" | "shape" | "arrow" | "dimension" | "busbar";
+
+  // Ortho mode
+  orthoMode: boolean;
+
+  // Layer
+  activeLayer: "power" | "control" | "ground" | "annotation";
 
   // Snap
   snapToGrid: boolean;
 
   // Actions
   initialize: (id: string, state?: Partial<CanvasState>) => void;
-  setActiveTool: (tool: "select" | "text" | "wire") => void;
+  setActiveTool: (tool: EditorState["activeTool"]) => void;
   addObject: (obj: Omit<AnyDiagramObject, "id"> & { id?: string }) => void;
   updateObject: (id: string, updates: Partial<AnyDiagramObject>) => void;
   deleteObjects: (ids: string[]) => void;
@@ -54,6 +60,11 @@ export type EditorState = {
   flipSelectedV: () => void;
   toggleSnapToGrid: () => void;
   snapPosition: (x: number, y: number) => { x: number; y: number };
+  toggleOrthoMode: () => void;
+  setActiveLayer: (layer: EditorState["activeLayer"]) => void;
+  groupSelected: () => void;
+  ungroupSelected: () => void;
+  autoNumberSymbols: () => void;
   
   // Viewport actions
   setZoom: (zoom: number) => void;
@@ -98,6 +109,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   panY: 0,
   activeTool: "select",
   snapToGrid: true,
+  orthoMode: false,
+  activeLayer: "power" as const,
   isDrawingWire: false,
   wireStartParams: null,
 
@@ -418,5 +431,46 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         s.id === sheetId ? { ...s, name } : s
       ),
     }));
+  },
+
+  // ─── Tier 2: Ortho, Layer, Group, AutoNumber ────────
+  toggleOrthoMode: () => set((state) => ({ orthoMode: !state.orthoMode })),
+
+  setActiveLayer: (layer) => set({ activeLayer: layer }),
+
+  groupSelected: () => {
+    const { selectedIds, canvas } = get();
+    if (selectedIds.length < 2) return;
+    const groupId = `group-${Date.now()}`;
+    const objects = canvas.objects.map(obj =>
+      selectedIds.includes(obj.id) ? { ...obj, groupId } : obj
+    ) as AnyDiagramObject[];
+    set({ canvas: { ...canvas, objects } });
+    get().pushHistory();
+  },
+
+  ungroupSelected: () => {
+    const { selectedIds, canvas } = get();
+    const objects = canvas.objects.map(obj =>
+      selectedIds.includes(obj.id) ? { ...obj, groupId: undefined } : obj
+    ) as AnyDiagramObject[];
+    set({ canvas: { ...canvas, objects } });
+    get().pushHistory();
+  },
+
+  autoNumberSymbols: () => {
+    const { canvas } = get();
+    const counters: Record<string, number> = {};
+    const objects = canvas.objects.map(obj => {
+      if (obj.type !== 'symbol') return obj;
+      const sym = obj as any;
+      const prefix = (sym.symbolId || 'SYM').toUpperCase().slice(0, 3);
+      if (!counters[prefix]) counters[prefix] = 0;
+      counters[prefix]++;
+      const num = String(counters[prefix]).padStart(3, '0');
+      return { ...sym, label: `${prefix}-${num}` };
+    }) as AnyDiagramObject[];
+    set({ canvas: { ...canvas, objects } });
+    get().pushHistory();
   },
 }));

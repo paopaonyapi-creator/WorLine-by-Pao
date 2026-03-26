@@ -24,12 +24,14 @@ export type SymbolDef = {
 
 export type DiagramObject = {
   id: string;
-  type: "symbol" | "wire" | "text" | "shape";
+  type: "symbol" | "wire" | "text" | "shape" | "arrow" | "pencil" | "dimension" | "busbar";
   x: number;
   y: number;
   rotation: number;
   zIndex: number;
   locked?: boolean;
+  layer?: "power" | "control" | "ground" | "annotation";
+  groupId?: string;
 };
 
 export type SymbolObject = DiagramObject & {
@@ -58,7 +60,48 @@ export type TextObject = DiagramObject & {
   fill: string;
 };
 
-export type AnyDiagramObject = SymbolObject | WireObject | TextObject;
+export type ShapeObject = DiagramObject & {
+  type: "shape";
+  shapeType: "rect" | "ellipse" | "line";
+  width: number;
+  height: number;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+};
+
+export type ArrowObject = DiagramObject & {
+  type: "arrow";
+  points: number[]; // [x1,y1, x2,y2]
+  color: string;
+  thickness: number;
+};
+
+export type PencilObject = DiagramObject & {
+  type: "pencil";
+  points: number[]; // freehand points
+  color: string;
+  thickness: number;
+};
+
+export type DimensionObject = DiagramObject & {
+  type: "dimension";
+  startPoint: Point;
+  endPoint: Point;
+  offset: number;
+  label?: string;
+  color: string;
+};
+
+export type BusBarObject = DiagramObject & {
+  type: "busbar";
+  points: number[]; // horizontal bar points
+  color: string;
+  thickness: number;
+  label?: string;
+};
+
+export type AnyDiagramObject = SymbolObject | WireObject | TextObject | ShapeObject | ArrowObject | PencilObject | DimensionObject | BusBarObject;
 
 export type CanvasState = {
   objects: AnyDiagramObject[];

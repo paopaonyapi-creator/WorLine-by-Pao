@@ -16,12 +16,15 @@ import { BOMTable } from "./BOMTable";
 import { SheetTabs } from "./SheetTabs";
 import { AIAutoLayout } from "./AIAutoLayout";
 import { CustomSymbolCreator } from "./CustomSymbolCreator";
+import { DrawingToolbar } from "./DrawingToolbar";
+import { CableSchedule } from "./CableSchedule";
+import { TitleBlockEditor } from "./TitleBlockEditor";
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
-import { Calculator, FileSpreadsheet, Sparkles, Paintbrush } from "lucide-react";
+import { Calculator, FileSpreadsheet, Sparkles, Paintbrush, Cable, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
@@ -32,6 +35,8 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const [showBOM, setShowBOM] = useState(false);
   const [showAILayout, setShowAILayout] = useState(false);
   const [showSymbolCreator, setShowSymbolCreator] = useState(false);
+  const [showCableSchedule, setShowCableSchedule] = useState(false);
+  const [showTitleBlock, setShowTitleBlock] = useState(false);
 
   // Auto-save every 30 seconds (if not readonly)
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
@@ -108,6 +113,12 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             <Palette />
           </div>
         )}
+        {/* Drawing Toolbar - vertical strip */}
+        {!readOnly && (
+          <div className="hidden md:flex flex-none">
+            <DrawingToolbar />
+          </div>
+        )}
         <div className="flex-1 overflow-hidden relative flex flex-col">
           {/* Canvas area */}
           <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
@@ -138,6 +149,12 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {/* Custom Symbol Creator */}
             {showSymbolCreator && <CustomSymbolCreator onClose={() => setShowSymbolCreator(false)} />}
 
+            {/* Cable Schedule */}
+            {showCableSchedule && <CableSchedule onClose={() => setShowCableSchedule(false)} />}
+
+            {/* Title Block Editor */}
+            {showTitleBlock && <TitleBlockEditor onClose={() => setShowTitleBlock(false)} onApply={() => {}} />}
+
             {/* Shortcut hints */}
             {!readOnly && (
               <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
@@ -146,47 +163,67 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
                 <span>Ctrl+K search</span>
                 <span>W wire</span>
                 <span>T text</span>
+                <span>F freehand</span>
+                <span>D shape</span>
               </div>
             )}
 
             {/* Bottom-right action buttons */}
             {!readOnly && (
-              <div className="absolute bottom-4 right-4 z-10 flex gap-2">
+              <div className="absolute bottom-4 right-4 z-10 flex gap-1.5 flex-wrap justify-end">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  onClick={() => setShowTitleBlock(!showTitleBlock)}
+                  title="Title Block"
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  onClick={() => setShowCableSchedule(!showCableSchedule)}
+                  title="Cable Schedule"
+                >
+                  <Cable className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
                   onClick={() => setShowSymbolCreator(!showSymbolCreator)}
                   title="Custom Symbol Creator"
                 >
-                  <Paintbrush className="h-4 w-4" />
+                  <Paintbrush className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
                   onClick={() => setShowAILayout(!showAILayout)}
                   title="AI Auto Layout"
                 >
-                  <Sparkles className="h-4 w-4" />
+                  <Sparkles className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
                   onClick={() => setShowBOM(!showBOM)}
                   title="Bill of Materials"
                 >
-                  <FileSpreadsheet className="h-4 w-4" />
+                  <FileSpreadsheet className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
                   onClick={() => setShowLoadCalc(!showLoadCalc)}
                   title="Load Calculator"
                 >
-                  <Calculator className="h-4 w-4" />
+                  <Calculator className="h-3.5 w-3.5" />
                 </Button>
               </div>
             )}
