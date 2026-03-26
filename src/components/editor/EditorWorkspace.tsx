@@ -13,12 +13,15 @@ import { RulerOverlay } from "./RulerOverlay";
 import { SymbolSearch } from "./SymbolSearch";
 import { LoadCalculator } from "./LoadCalculator";
 import { BOMTable } from "./BOMTable";
+import { SheetTabs } from "./SheetTabs";
+import { AIAutoLayout } from "./AIAutoLayout";
+import { CustomSymbolCreator } from "./CustomSymbolCreator";
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
-import { Calculator, FileSpreadsheet } from "lucide-react";
+import { Calculator, FileSpreadsheet, Sparkles, Paintbrush } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
@@ -27,6 +30,8 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const [showSearch, setShowSearch] = useState(false);
   const [showLoadCalc, setShowLoadCalc] = useState(false);
   const [showBOM, setShowBOM] = useState(false);
+  const [showAILayout, setShowAILayout] = useState(false);
+  const [showSymbolCreator, setShowSymbolCreator] = useState(false);
 
   // Auto-save every 30 seconds (if not readonly)
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
@@ -34,7 +39,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   // Real-time collaboration
   const { cursors } = useRealtimeCollaboration(readOnly ? null : projectId);
 
-  // Keyboard shortcuts: Ctrl+S, Ctrl+Z/Y, Delete, Escape, R, H, V, etc.
+  // Keyboard shortcuts
   useEditorShortcuts(readOnly ? "readonly" : projectId, manualSave);
 
   // Ctrl+K for search
@@ -56,7 +61,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   useEffect(() => {
     const loadProject = async () => {
       const supabase = createClient();
-
       const { data, error } = await supabase
         .from('projects')
         .select('diagram_data')
@@ -65,7 +69,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
 
       if (data?.diagram_data && typeof data.diagram_data === 'object') {
         const dd = data.diagram_data as any;
-
         if (dd.objects && Array.isArray(dd.objects)) {
           initialize(projectId, {
             objects: dd.objects,
@@ -80,7 +83,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
       } else {
         initialize(projectId);
       }
-
       setLoading(false);
     };
     loadProject();
@@ -106,83 +108,113 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             <Palette />
           </div>
         )}
-        <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
-          <CanvasArea />
-          <ZoomControls />
+        <div className="flex-1 overflow-hidden relative flex flex-col">
+          {/* Canvas area */}
+          <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
+            <CanvasArea />
+            <ZoomControls />
 
-          {/* Rulers */}
-          {!readOnly && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
+            {/* Rulers */}
+            {!readOnly && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
 
-          {/* Crosshair cursor */}
-          {!readOnly && <CrosshairOverlay />}
+            {/* Crosshair cursor */}
+            {!readOnly && <CrosshairOverlay />}
 
-          {!readOnly && <VersionHistory projectId={projectId} />}
-          {!readOnly && <CursorOverlay cursors={cursors} zoom={zoom} panX={panX} panY={panY} />}
+            {!readOnly && <VersionHistory projectId={projectId} />}
+            {!readOnly && <CursorOverlay cursors={cursors} zoom={zoom} panX={panX} panY={panY} />}
 
-          {/* Symbol Search (Ctrl+K) */}
-          {showSearch && <SymbolSearch onClose={() => setShowSearch(false)} />}
+            {/* Symbol Search (Ctrl+K) */}
+            {showSearch && <SymbolSearch onClose={() => setShowSearch(false)} />}
 
-          {/* Load Calculator */}
-          {showLoadCalc && <LoadCalculator onClose={() => setShowLoadCalc(false)} />}
+            {/* Load Calculator */}
+            {showLoadCalc && <LoadCalculator onClose={() => setShowLoadCalc(false)} />}
 
-          {/* BOM Table */}
-          {showBOM && <BOMTable onClose={() => setShowBOM(false)} />}
+            {/* BOM Table */}
+            {showBOM && <BOMTable onClose={() => setShowBOM(false)} />}
 
-          {/* Shortcut hints */}
-          {!readOnly && (
-            <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
-              <span>R rotate</span>
-              <span>H/V flip</span>
-              <span>Ctrl+K search</span>
-              <span>W wire</span>
-              <span>T text</span>
-            </div>
-          )}
+            {/* AI Auto Layout */}
+            {showAILayout && <AIAutoLayout onClose={() => setShowAILayout(false)} />}
 
-          {/* Bottom-right action buttons */}
-          {!readOnly && (
-            <div className="absolute bottom-4 right-4 z-10 flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
-                onClick={() => setShowBOM(!showBOM)}
-                title="Bill of Materials"
-              >
-                <FileSpreadsheet className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
-                onClick={() => setShowLoadCalc(!showLoadCalc)}
-                title="Load Calculator"
-              >
-                <Calculator className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
+            {/* Custom Symbol Creator */}
+            {showSymbolCreator && <CustomSymbolCreator onClose={() => setShowSymbolCreator(false)} />}
 
-          {/* Online users indicator */}
-          {!readOnly && cursors.length > 0 && (
-            <div className="absolute top-24 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
-              <div className="flex -space-x-1">
-                {cursors.slice(0, 3).map((c) => (
-                  <div
-                    key={c.userId}
-                    className="w-5 h-5 rounded-full border-2 border-background flex items-center justify-center text-[8px] font-bold text-white"
-                    style={{ backgroundColor: c.color }}
-                    title={c.name}
-                  >
-                    {c.name.charAt(0).toUpperCase()}
-                  </div>
-                ))}
+            {/* Shortcut hints */}
+            {!readOnly && (
+              <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
+                <span>R rotate</span>
+                <span>H/V flip</span>
+                <span>Ctrl+K search</span>
+                <span>W wire</span>
+                <span>T text</span>
               </div>
-              <span className="text-[10px] text-muted-foreground ml-1">
-                {cursors.length} online
-              </span>
-            </div>
-          )}
+            )}
+
+            {/* Bottom-right action buttons */}
+            {!readOnly && (
+              <div className="absolute bottom-4 right-4 z-10 flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  onClick={() => setShowSymbolCreator(!showSymbolCreator)}
+                  title="Custom Symbol Creator"
+                >
+                  <Paintbrush className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  onClick={() => setShowAILayout(!showAILayout)}
+                  title="AI Auto Layout"
+                >
+                  <Sparkles className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  onClick={() => setShowBOM(!showBOM)}
+                  title="Bill of Materials"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                  onClick={() => setShowLoadCalc(!showLoadCalc)}
+                  title="Load Calculator"
+                >
+                  <Calculator className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+
+            {/* Online users indicator */}
+            {!readOnly && cursors.length > 0 && (
+              <div className="absolute top-24 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
+                <div className="flex -space-x-1">
+                  {cursors.slice(0, 3).map((c) => (
+                    <div
+                      key={c.userId}
+                      className="w-5 h-5 rounded-full border-2 border-background flex items-center justify-center text-[8px] font-bold text-white"
+                      style={{ backgroundColor: c.color }}
+                      title={c.name}
+                    >
+                      {c.name.charAt(0).toUpperCase()}
+                    </div>
+                  ))}
+                </div>
+                <span className="text-[10px] text-muted-foreground ml-1">
+                  {cursors.length} online
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Sheet Tabs — bottom of canvas */}
+          {!readOnly && <SheetTabs />}
         </div>
         {!readOnly && (
           <div className="hidden lg:flex w-64 flex-none border-l border-border/50">

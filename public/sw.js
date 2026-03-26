@@ -1,13 +1,15 @@
+// WorLine Offline Service Worker
 const CACHE_NAME = 'worline-v1';
+
 const STATIC_ASSETS = [
   '/',
+  '/app',
+  '/app/projects',
+  '/app/templates',
   '/login',
   '/signup',
-  '/features',
-  '/pricing',
 ];
 
-// Install: cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -17,49 +19,47 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate: clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
     })
   );
   self.clients.claim();
 });
 
-// Fetch: network-first with cache fallback
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET, API, auth, and Supabase requests
-  if (
-    event.request.method !== 'GET' ||
-    event.request.url.includes('/api/') ||
-    event.request.url.includes('/auth/') ||
-    event.request.url.includes('supabase')
-  ) {
-    return;
-  }
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') return;
+
+  // Skip API/auth requests
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')) return;
 
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Only cache successful responses
+    caches.match(event.request).then((cached) => {
+      // Network-first for pages, cache-first for assets
+      if (event.request.destination === 'document') {
+        return fetch(event.request)
+          .then((response) => {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+            return response;
+          })
+          .catch(() => cached || new Response('Offline', { status: 503 }));
+      }
+
+      // Cache-first for assets (JS, CSS, images)
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
         if (response.ok) {
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clone);
-          });
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
         return response;
-      })
-      .catch(() => {
-        // Fallback to cache
-        return caches.match(event.request).then((cached) => {
-          return cached || caches.match('/');
-        });
-      })
+      });
+    })
   );
 });

@@ -6,12 +6,22 @@ import { calculateOrthogonalRoute } from '@/lib/editor/routing';
 // Avoid deep imports that might break depending on the platform, we'll implement simple deep copy or shallow copy
 const clone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
 
+export type SheetData = {
+  id: string;
+  name: string;
+  canvas: CanvasState;
+};
+
 export type EditorState = {
   // Document state
   id: string | null;
   history: CanvasState[];
   currentHistoryIndex: number;
   canvas: CanvasState;
+  
+  // Multi-sheet
+  sheets: SheetData[];
+  activeSheetId: string;
   
   // Selection
   selectedIds: string[];
@@ -55,6 +65,12 @@ export type EditorState = {
   cancelWire: () => void;
   updateWirePoint: (wireId: string, index: number, x: number, y: number) => void;
 
+  // Multi-sheet actions
+  addSheet: (name?: string) => void;
+  removeSheet: (sheetId: string) => void;
+  switchSheet: (sheetId: string) => void;
+  renameSheet: (sheetId: string, name: string) => void;
+
   // History actions
   undo: () => void;
   redo: () => void;
@@ -74,6 +90,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   history: [DEFAULT_CANVAS],
   currentHistoryIndex: 0,
   canvas: DEFAULT_CANVAS,
+  sheets: [{ id: 'sheet-1', name: 'Sheet 1', canvas: DEFAULT_CANVAS }],
+  activeSheetId: 'sheet-1',
   selectedIds: [],
   zoom: 1,
   panX: 0,
@@ -85,6 +103,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
   initialize: (id, state) => {
     const newState = { ...DEFAULT_CANVAS, ...state };
+    const sheetId = 'sheet-1';
     set({
       id,
       canvas: newState,
@@ -92,6 +111,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       currentHistoryIndex: 0,
       selectedIds: [],
       activeTool: "select",
+      sheets: [{ id: sheetId, name: 'Sheet 1', canvas: newState }],
+      activeSheetId: sheetId,
     });
   },
 
@@ -331,5 +352,71 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         selectedIds: [],
       });
     }
+  },
+
+  // ─── Multi-Sheet Actions ────────────────────────────
+  addSheet: (name) => {
+    const state = get();
+    const newId = `sheet-${uuidv4().slice(0, 8)}`;
+    const sheetName = name || `Sheet ${state.sheets.length + 1}`;
+    const newSheet: SheetData = {
+      id: newId,
+      name: sheetName,
+      canvas: clone(DEFAULT_CANVAS),
+    };
+    // Save current sheet's canvas
+    const updatedSheets = state.sheets.map(s =>
+      s.id === state.activeSheetId ? { ...s, canvas: clone(state.canvas) } : s
+    );
+    set({
+      sheets: [...updatedSheets, newSheet],
+      activeSheetId: newId,
+      canvas: clone(DEFAULT_CANVAS),
+      history: [clone(DEFAULT_CANVAS)],
+      currentHistoryIndex: 0,
+      selectedIds: [],
+    });
+  },
+
+  removeSheet: (sheetId) => {
+    const state = get();
+    if (state.sheets.length <= 1) return; // Can't remove last sheet
+    const remaining = state.sheets.filter(s => s.id !== sheetId);
+    const switchTo = remaining[0];
+    set({
+      sheets: remaining,
+      activeSheetId: switchTo.id,
+      canvas: clone(switchTo.canvas),
+      history: [clone(switchTo.canvas)],
+      currentHistoryIndex: 0,
+      selectedIds: [],
+    });
+  },
+
+  switchSheet: (sheetId) => {
+    const state = get();
+    if (sheetId === state.activeSheetId) return;
+    // Save current sheet's canvas
+    const updatedSheets = state.sheets.map(s =>
+      s.id === state.activeSheetId ? { ...s, canvas: clone(state.canvas) } : s
+    );
+    const target = updatedSheets.find(s => s.id === sheetId);
+    if (!target) return;
+    set({
+      sheets: updatedSheets,
+      activeSheetId: sheetId,
+      canvas: clone(target.canvas),
+      history: [clone(target.canvas)],
+      currentHistoryIndex: 0,
+      selectedIds: [],
+    });
+  },
+
+  renameSheet: (sheetId, name) => {
+    set((state) => ({
+      sheets: state.sheets.map(s =>
+        s.id === sheetId ? { ...s, name } : s
+      ),
+    }));
   },
 }));
