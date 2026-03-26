@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import { Zap, ArrowRight, Shield, Cloud, FileDown } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "WorLine by Pao — Professional Single-Line Diagram Editor",
-  description: "Design electrical single-line diagrams like a pro. Modern cloud-based editor with drag-and-drop, IEC/IEEE symbols, and PDF export.",
-};
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function HomePage() {
+  const { t } = useLocale();
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -16,29 +15,28 @@ export default function HomePage() {
         <div className="mx-auto max-w-4xl px-6 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary mb-8">
             <Zap className="h-4 w-4" />
-            Professional Electrical Engineering Tool
+            {t("hero_badge")}
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text">
-            Design Single-Line Diagrams{" "}
-            <span className="text-primary">Like a Pro</span>
+            {t("hero_title_1")}{" "}
+            <span className="text-primary">{t("hero_title_2")}</span>
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl mx-auto">
-            WorLine is the modern, cloud-based editor for electrical engineers. 
-            Create, collaborate, and export professional single-line diagrams in minutes.
+            {t("hero_desc")}
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <Link
               href="/signup"
               className="inline-flex items-center justify-center h-12 px-8 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors glow-primary"
             >
-              Get Started Free
+              {t("get_started_free")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
             <Link
               href="/pricing"
               className="inline-flex items-center justify-center h-12 px-8 rounded-md border border-input bg-background font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
             >
-              View Pricing
+              {t("view_pricing")}
             </Link>
           </div>
         </div>
@@ -48,34 +46,34 @@ export default function HomePage() {
       <section className="py-20 px-6">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-3xl font-bold tracking-tight text-center mb-12">
-            Everything you need to design electrical schematics
+            {t("features_heading")}
           </h2>
           <div className="grid gap-8 md:grid-cols-3">
             <div className="rounded-2xl border bg-card p-6 hover:shadow-lg transition-shadow">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <Zap className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Drag & Drop Editor</h3>
+              <h3 className="text-lg font-semibold mb-2">{t("feature_editor_title")}</h3>
               <p className="text-muted-foreground text-sm">
-                Intuitive canvas with professional electrical symbols. Just drag, drop, and connect.
+                {t("feature_editor_desc")}
               </p>
             </div>
             <div className="rounded-2xl border bg-card p-6 hover:shadow-lg transition-shadow">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <Cloud className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Cloud Save & Sync</h3>
+              <h3 className="text-lg font-semibold mb-2">{t("feature_cloud_title")}</h3>
               <p className="text-muted-foreground text-sm">
-                Your diagrams are automatically saved and synced across all your devices.
+                {t("feature_cloud_desc")}
               </p>
             </div>
             <div className="rounded-2xl border bg-card p-6 hover:shadow-lg transition-shadow">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <FileDown className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Export Anywhere</h3>
+              <h3 className="text-lg font-semibold mb-2">{t("feature_export_title")}</h3>
               <p className="text-muted-foreground text-sm">
-                Export to PNG, SVG, or PDF. Share with clients and colleagues instantly.
+                {t("feature_export_desc")}
               </p>
             </div>
           </div>
@@ -87,16 +85,16 @@ export default function HomePage() {
         <div className="mx-auto max-w-3xl text-center">
           <Shield className="h-12 w-12 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-bold tracking-tight mb-4">
-            Ready to streamline your workflow?
+            {t("cta_heading")}
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Join engineers who trust WorLine for their electrical diagram needs.
+            {t("cta_desc")}
           </p>
           <Link
             href="/signup"
             className="inline-flex items-center justify-center h-12 px-8 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors glow-primary"
           >
-            Start Designing Free
+            {t("cta_button")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </div>

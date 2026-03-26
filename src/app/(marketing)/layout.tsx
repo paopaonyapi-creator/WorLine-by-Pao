@@ -2,18 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, Menu, X } from "lucide-react";
+import { Zap, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLocale } from "@/lib/i18n/useLocale";
 import { useState } from "react";
-
-const navLinks = [
-  { name: "Features", href: "/features" },
-  { name: "Pricing", href: "/pricing" },
-  { name: "Guide", href: "/guide" },
-];
 
 export default function MarketingLayout({
   children,
@@ -22,6 +17,13 @@ export default function MarketingLayout({
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useLocale();
+
+  const navLinks = [
+    { name: t("nav_features"), href: "/features" },
+    { name: t("nav_pricing"), href: "/pricing" },
+    { name: t("nav_guide"), href: "/guide" },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -52,7 +54,7 @@ export default function MarketingLayout({
             </nav>
           </div>
 
-          {/* Mobile Logo + Hamburger */}
+          {/* Mobile Logo + Controls */}
           <div className="flex flex-1 items-center justify-between md:justify-end">
             <Link href="/" className="flex items-center space-x-2 md:hidden">
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -62,14 +64,14 @@ export default function MarketingLayout({
             </Link>
 
             <nav className="flex items-center space-x-1">
-              <ThemeToggle />
               <LanguageSwitcher />
+              <ThemeToggle />
               <div className="hidden md:flex items-center space-x-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="h-9 px-4">Log in</Button>
+                  <Button variant="ghost" size="sm" className="h-9 px-4">{t("nav_login")}</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm" className="h-9 px-4">Sign Up Free</Button>
+                  <Button size="sm" className="h-9 px-4">{t("nav_signup")}</Button>
                 </Link>
               </div>
 
@@ -98,10 +100,10 @@ export default function MarketingLayout({
                       className="text-lg font-medium px-2 py-2 rounded-md hover:bg-accent text-foreground/80"
                       onClick={() => setMobileOpen(false)}
                     >
-                      Log in
+                      {t("nav_login")}
                     </Link>
                     <Link href="/signup" onClick={() => setMobileOpen(false)}>
-                      <Button className="w-full">Sign Up Free</Button>
+                      <Button className="w-full">{t("nav_signup")}</Button>
                     </Link>
                   </nav>
                 </SheetContent>
@@ -116,7 +118,6 @@ export default function MarketingLayout({
       <footer className="border-t bg-muted/30">
         <div className="container mx-auto px-4 md:px-8 py-12 md:py-16">
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
-            {/* Brand */}
             <div className="sm:col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center space-x-2 mb-4">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -129,38 +130,35 @@ export default function MarketingLayout({
               </p>
             </div>
 
-            {/* Product */}
             <div>
-              <h4 className="text-sm font-semibold mb-3">Product</h4>
+              <h4 className="text-sm font-semibold mb-3">{t("footer_product")}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/features" className="hover:text-foreground transition-colors">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
-                <li><Link href="/guide" className="hover:text-foreground transition-colors">User Guide</Link></li>
+                <li><Link href="/features" className="hover:text-foreground transition-colors">{t("nav_features")}</Link></li>
+                <li><Link href="/pricing" className="hover:text-foreground transition-colors">{t("nav_pricing")}</Link></li>
+                <li><Link href="/guide" className="hover:text-foreground transition-colors">{t("nav_guide")}</Link></li>
               </ul>
             </div>
 
-            {/* Legal */}
             <div>
-              <h4 className="text-sm font-semibold mb-3">Legal</h4>
+              <h4 className="text-sm font-semibold mb-3">{t("footer_legal")}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link></li>
-                <li><Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-foreground transition-colors">{t("footer_terms")}</Link></li>
+                <li><Link href="/privacy" className="hover:text-foreground transition-colors">{t("footer_privacy")}</Link></li>
               </ul>
             </div>
 
-            {/* Get Started */}
             <div>
-              <h4 className="text-sm font-semibold mb-3">Get Started</h4>
+              <h4 className="text-sm font-semibold mb-3">{t("get_started_free")}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/signup" className="hover:text-foreground transition-colors">Create Account</Link></li>
-                <li><Link href="/login" className="hover:text-foreground transition-colors">Sign In</Link></li>
+                <li><Link href="/signup" className="hover:text-foreground transition-colors">{t("nav_signup")}</Link></li>
+                <li><Link href="/login" className="hover:text-foreground transition-colors">{t("nav_login")}</Link></li>
               </ul>
             </div>
           </div>
-          
+
           <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} WorLine by Pao. All rights reserved.
+              &copy; {new Date().getFullYear()} WorLine by Pao. {t("footer_rights")}
             </p>
             <p className="text-xs text-muted-foreground/60">
               Built with Next.js, Supabase, and Stripe

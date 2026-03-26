@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLocale } from "@/lib/i18n/useLocale";
 import { useState } from "react";
 
 export default function DashboardLayout({
@@ -19,6 +21,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const supabase = createClient();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useLocale();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -27,14 +30,14 @@ export default function DashboardLayout({
   };
 
   const mainNav = [
-    { name: "Projects", href: "/app/projects", icon: Folder },
-    { name: "Templates", href: "/app/templates", icon: LayoutTemplate },
+    { name: t("sidebar_projects"), href: "/app/projects", icon: Folder },
+    { name: t("sidebar_templates"), href: "/app/templates", icon: LayoutTemplate },
   ];
 
   const accountNav = [
-    { name: "Profile", href: "/app/settings/profile", icon: User },
-    { name: "Billing", href: "/app/settings/billing", icon: CreditCard },
-    { name: "Help", href: "/guide", icon: BookOpen },
+    { name: t("sidebar_profile"), href: "/app/settings/profile", icon: User },
+    { name: t("sidebar_billing"), href: "/app/settings/billing", icon: CreditCard },
+    { name: t("sidebar_help"), href: "/guide", icon: BookOpen },
   ];
 
   const isActive = (href: string) =>
@@ -69,7 +72,7 @@ export default function DashboardLayout({
       <div className="my-4 border-t" />
 
       {/* Account */}
-      <p className="px-3 mb-2 text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider">Account</p>
+      <p className="px-3 mb-2 text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider">{t("sidebar_account")}</p>
       <div className="space-y-1">
         {accountNav.map((item) => {
           const Icon = item.icon;
@@ -110,9 +113,10 @@ export default function DashboardLayout({
         <div className="p-4 border-t">
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            <LanguageSwitcher />
             <Button variant="outline" className="flex-1 justify-start gap-2" onClick={handleSignOut}>
               <LogOut className="h-4 w-4" />
-              Sign out
+              {t("sidebar_signout")}
             </Button>
           </div>
         </div>

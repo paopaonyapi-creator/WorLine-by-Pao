@@ -1,14 +1,19 @@
-import type { Metadata } from "next";
-import { Check, Zap, ArrowRight, Gift } from "lucide-react";
+"use client";
+
+import { Check, ArrowRight, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useLocale } from "@/lib/i18n/useLocale";
+import type { TranslationKey } from "@/lib/i18n/translations";
 
-export const metadata: Metadata = {
-  title: "Pricing",
-  description: "WorLine Pro features are free for 1 year. All users get unlimited projects, full symbol library, and PDF export until March 2027.",
-};
+const featureKeys: TranslationKey[] = [
+  "feat_unlimited", "feat_symbols", "feat_templates", "feat_pdf",
+  "feat_cloud", "feat_shortcuts", "feat_zoom", "feat_backup", "feat_support",
+];
 
 export default function PricingPage() {
+  const { t } = useLocale();
+
   return (
     <div className="py-24 sm:py-32">
       <div className="container mx-auto px-4 md:px-8">
@@ -16,15 +21,14 @@ export default function PricingPage() {
         <div className="mx-auto max-w-3xl text-center mb-20">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400 mb-6">
             <Gift className="h-4 w-4" />
-            🎉 Launch Offer — Pro Free for 1 Year!
+            {t("pricing_badge")}
           </div>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-6">
-            All Pro features{" "}
-            <span className="text-emerald-500">free until March 2027</span>
+            {t("pricing_heading_1")}{" "}
+            <span className="text-emerald-500">{t("pricing_heading_2")}</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            We&apos;re launching WorLine and want you to experience the full power of our editor.
-            No credit card. No limits. Just create.
+            {t("pricing_desc")}
           </p>
         </div>
 
@@ -34,7 +38,7 @@ export default function PricingPage() {
             <div className="absolute -top-3 left-1/2 -translate-x-1/2">
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-4 py-1 text-xs font-semibold text-white">
                 <Gift className="h-3 w-3" />
-                Free for 1 Year
+                {t("pricing_trial_badge")}
               </span>
             </div>
 
@@ -43,40 +47,30 @@ export default function PricingPage() {
                 Pro
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Everything you need to design professional diagrams.
+                {t("pricing_plan_desc")}
               </p>
             </div>
 
             <div className="mb-8">
               <span className="text-5xl font-bold tracking-tight">$0</span>
               <span className="text-base font-medium text-muted-foreground">/year</span>
-              <p className="text-xs text-muted-foreground mt-1">Until March 2027 • Then pricing TBD</p>
+              <p className="text-xs text-muted-foreground mt-1">{t("pricing_tbd")}</p>
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
-              {[
-                "Unlimited projects",
-                "Full symbol library (20 symbols)",
-                "All premium templates",
-                "PDF export (no watermark)",
-                "Auto-save & cloud sync",
-                "Keyboard shortcuts",
-                "Zoom controls",
-                "JSON backup export",
-                "Priority support",
-              ].map((text, i) => (
-                <li key={i} className="flex items-start gap-3">
+              {featureKeys.map((key) => (
+                <li key={key} className="flex items-start gap-3">
                   <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10">
                     <Check className="h-3 w-3 text-emerald-500" />
                   </div>
-                  <span className="text-sm text-foreground">{text}</span>
+                  <span className="text-sm text-foreground">{t(key)}</span>
                 </li>
               ))}
             </ul>
 
             <Link href="/signup">
               <Button className="w-full h-11 gap-2 bg-emerald-500 hover:bg-emerald-600 text-white">
-                Get Started Free
+                {t("get_started_free")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -86,9 +80,9 @@ export default function PricingPage() {
         {/* FAQ */}
         <div className="mt-20 text-center">
           <p className="text-sm text-muted-foreground">
-            Questions about the launch offer?{" "}
+            {t("pricing_contact")}{" "}
             <a href="mailto:paopaonyapi@gmail.com" className="text-primary hover:underline font-medium">
-              Contact us
+              {t("pricing_contact_link")}
             </a>
           </p>
         </div>
