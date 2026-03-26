@@ -13,7 +13,6 @@ const templates = [
     id: "blank",
     name: "Blank Project",
     desc: "Start from scratch with a blank canvas",
-    isPremium: false,
     icon: Zap,
     diagram_data: {},
   },
@@ -21,31 +20,22 @@ const templates = [
     id: "motor-starter",
     name: "Single Motor Circuit",
     desc: "Basic DOL starter with circuit breaker, contactor, and motor",
-    isPremium: false,
     icon: CircuitBoard,
-    diagram_data: {
-      preset: "motor-starter",
-    },
+    diagram_data: { preset: "motor-starter" },
   },
   {
     id: "substation",
     name: "Substation Layout",
     desc: "Typical 132/33kV substation with transformer and switchgear",
-    isPremium: true,
     icon: Building2,
-    diagram_data: {
-      preset: "substation",
-    },
+    diagram_data: { preset: "substation" },
   },
   {
     id: "solar-pv",
     name: "Solar PV Plant",
     desc: "Utility-scale solar power plant single-line diagram",
-    isPremium: true,
     icon: Sun,
-    diagram_data: {
-      preset: "solar-pv",
-    },
+    diagram_data: { preset: "solar-pv" },
   },
 ];
 
@@ -97,6 +87,10 @@ export default function TemplatesPage() {
         <p className="text-muted-foreground mt-2">
           Start your schematic with a pre-configured template.
         </p>
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+          <Zap className="h-3 w-3" />
+          🎉 Launch offer — All templates free until March 2027
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -105,17 +99,10 @@ export default function TemplatesPage() {
           return (
             <Card key={tpl.id} className="flex flex-col hover:shadow-lg hover:border-primary/30 transition-all duration-200">
               <CardHeader>
-                <div className="flex justify-between items-start">
-                  <CardTitle className="flex items-center gap-2">
-                    <Icon className="h-5 w-5 text-primary" />
-                    {tpl.name}
-                  </CardTitle>
-                  {tpl.isPremium && (
-                    <span className="text-xs font-semibold bg-primary/20 text-primary px-2 py-1 rounded-full">
-                      PRO
-                    </span>
-                  )}
-                </div>
+                <CardTitle className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-primary" />
+                  {tpl.name}
+                </CardTitle>
                 <CardDescription>{tpl.desc}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
@@ -126,7 +113,6 @@ export default function TemplatesPage() {
               <div className="p-4 pt-0 mt-auto">
                 <Button
                   className="w-full"
-                  variant={tpl.isPremium ? "secondary" : "default"}
                   onClick={() => handleUseTemplate(tpl)}
                   disabled={creating === tpl.id}
                 >

@@ -1,65 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Loader2, CreditCard } from "lucide-react";
+import { Check, Zap, CreditCard, Gift } from "lucide-react";
 
 export default function BillingPage() {
-  const [loading, setLoading] = useState(true);
-  const [isPro, setIsPro] = useState(false);
-  const [managing, setManaging] = useState(false);
-  const supabase = createClient();
-
-  useEffect(() => {
-    async function loadData() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data } = await supabase.from('subscriptions').select('stripe_price_id').eq('user_id', user.id).maybeSingle();
-        if (data?.stripe_price_id) {
-          setIsPro(true);
-        }
-      }
-      setLoading(false);
-    }
-    loadData();
-  }, []);
-
-  const handleSubscribe = async () => {
-    setManaging(true);
-    toast.info("Preparing checkout session...");
-
-    try {
-      const res = await fetch('/api/stripe/checkout', { method: 'POST' });
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.assign(data.url);
-      } else {
-        toast.error("Failed to create checkout session");
-        setManaging(false);
-      }
-    } catch {
-      toast.error("An error occurred");
-      setManaging(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Billing</h1>
         <p className="text-muted-foreground mt-2">Manage your subscription plan.</p>
+      </div>
+
+      {/* Launch Offer Banner */}
+      <div className="rounded-xl border-2 border-emerald-500/30 bg-emerald-500/5 p-6">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 shrink-0">
+            <Gift className="h-6 w-6 text-emerald-500" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-lg">🎉 Launch Offer Active!</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              All Pro features are <span className="font-semibold text-foreground">free for 1 year</span> until <span className="font-semibold text-foreground">March 2027</span>.
+              Enjoy unlimited projects, all templates, and PDF export — no credit card needed.
+            </p>
+          </div>
+        </div>
       </div>
 
       <Card>
@@ -69,40 +34,35 @@ export default function BillingPage() {
             Current Plan
           </CardTitle>
           <CardDescription>
-            You are on the <span className="font-semibold text-foreground">{isPro ? "Pro" : "Free"}</span> plan.
+            You are on the <span className="font-semibold text-emerald-600 dark:text-emerald-400">Pro (Free Trial)</span> plan.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
-            <Check className="text-primary w-4 h-4 shrink-0" />
-            <span>{isPro ? "Unlimited projects" : "Up to 3 projects"}</span>
+            <Check className="text-emerald-500 w-4 h-4 shrink-0" />
+            <span>Unlimited projects</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Check className="text-primary w-4 h-4 shrink-0" />
-            <span>{isPro ? "All templates included" : "Basic templates only"}</span>
+            <Check className="text-emerald-500 w-4 h-4 shrink-0" />
+            <span>All templates included</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Check className="text-primary w-4 h-4 shrink-0" />
-            <span>{isPro ? "Priority support" : "Community support"}</span>
+            <Check className="text-emerald-500 w-4 h-4 shrink-0" />
+            <span>PDF export (no watermark)</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Check className="text-emerald-500 w-4 h-4 shrink-0" />
+            <span>Full symbol library (20 symbols)</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Check className="text-emerald-500 w-4 h-4 shrink-0" />
+            <span>Auto-save &amp; cloud sync</span>
           </div>
         </CardContent>
         <CardFooter>
-          {isPro ? (
-            <Button variant="outline" disabled>
-              Manage via Stripe Portal
-            </Button>
-          ) : (
-            <Button onClick={handleSubscribe} disabled={managing} className="glow-primary">
-              {managing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Redirecting...
-                </>
-              ) : (
-                "Upgrade to Pro"
-              )}
-            </Button>
-          )}
+          <p className="text-xs text-muted-foreground">
+            Trial ends March 2027. Pricing plans will be announced before then.
+          </p>
         </CardFooter>
       </Card>
     </div>
