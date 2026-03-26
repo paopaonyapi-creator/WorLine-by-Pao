@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Zap, Eye, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EditorWorkspace } from "@/components/editor/EditorWorkspace";
 
 export const dynamic = "force-dynamic";
 
@@ -67,14 +68,8 @@ export default async function SharedProjectPage({
           </div>
 
           {/* Diagram Preview */}
-          <div className="border rounded-xl bg-card shadow-sm overflow-hidden">
-            <div className="bg-muted w-full min-h-[500px] flex items-center justify-center text-muted-foreground">
-              <div className="text-center space-y-2">
-                <Zap className="h-12 w-12 mx-auto text-primary/30" />
-                <p className="text-lg font-medium">Diagram Preview</p>
-                <p className="text-sm">Interactive preview coming soon</p>
-              </div>
-            </div>
+          <div className="border rounded-xl bg-card shadow-sm overflow-hidden h-[700px] w-full relative">
+            <EditorWorkspace projectId={project.id} readOnly={true} />
           </div>
 
           {/* CTA */}

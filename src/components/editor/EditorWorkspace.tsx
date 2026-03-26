@@ -11,15 +11,15 @@ import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { createClient } from "@/lib/supabase/client";
 
-export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
+export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
   const { initialize, canvas } = useEditorStore();
   const [loading, setLoading] = useState(true);
 
-  // Auto-save every 30 seconds
-  const { save: manualSave } = useAutoSave(projectId);
+  // Auto-save every 30 seconds (if not readonly)
+  const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
 
-  // Keyboard shortcuts: Ctrl+S, Ctrl+Z/Y, Delete, Escape, Ctrl+D
-  useEditorShortcuts(projectId, manualSave);
+  // Keyboard shortcuts: Ctrl+S, Ctrl+Z/Y, Delete, Escape, Ctrl+D (disable if readonly)
+  useEditorShortcuts(readOnly ? "readonly" : projectId, manualSave);
 
   useEffect(() => {
     const loadProject = async () => {
@@ -71,20 +71,22 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
-      <Toolbar projectId={projectId} />
+      {!readOnly && <Toolbar projectId={projectId} />}
       <div className="flex flex-1 overflow-hidden relative">
-        <Palette />
-        <div className="flex-1 overflow-hidden relative" id="canvas-container">
+        {!readOnly && <Palette />}
+        <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
           <CanvasArea />
           <ZoomControls />
           {/* Shortcut hints */}
-          <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
-            <span>Ctrl+S save</span>
-            <span>Ctrl+Z undo</span>
-            <span>Del delete</span>
-          </div>
+          {!readOnly && (
+            <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
+              <span>Ctrl+S save</span>
+              <span>Ctrl+Z undo</span>
+              <span>Del delete</span>
+            </div>
+          )}
         </div>
-        <PropertiesPanel />
+        {!readOnly && <PropertiesPanel />}
       </div>
     </div>
   );
