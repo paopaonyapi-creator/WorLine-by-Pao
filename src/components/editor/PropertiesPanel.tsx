@@ -54,7 +54,7 @@ export const PropertiesPanel = () => {
           <span className="text-[10px] text-muted-foreground font-normal">{firstObj.id.slice(0, 8)}</span>
         )}
       </div>
-      <div className="p-4 space-y-4 flex-1 overflow-auto text-sm">
+      <div className="p-4 space-y-4 flex-1 overflow-y-auto text-sm pb-20">
         {selectedObjects.length === 1 && (
           <div className="space-y-4">
             {/* Type & Symbol Info */}

@@ -214,12 +214,12 @@ export const Palette = () => {
   };
 
   return (
-    <div className="w-full h-full bg-background flex flex-col">
+    <div className="w-full h-full bg-background flex flex-col overflow-hidden">
       <div className="p-4 border-b font-semibold text-sm flex items-center gap-2">
         <Zap className="h-4 w-4" />
         Symbol Library
       </div>
-      <ScrollArea className="flex-1">
+      <div className="flex-1 overflow-y-auto w-full pb-20">
         <div className="p-4 space-y-6">
           {/* My Library Section */}
           <div className="space-y-3">
@@ -292,7 +292,7 @@ export const Palette = () => {
             );
           })}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };
