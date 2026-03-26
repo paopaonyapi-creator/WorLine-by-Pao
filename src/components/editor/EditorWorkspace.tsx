@@ -174,7 +174,12 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
       {!readOnly && <Toolbar projectId={projectId} />}
       <div className="flex flex-1 overflow-hidden relative">
         {!readOnly && <div className="hidden md:flex w-64 flex-none border-r border-border/50"><Palette /></div>}
-        {!readOnly && <div className="hidden md:flex flex-none"><DrawingToolbar /></div>}
+        {/* Mobile-friendly Floating Toolbar */}
+        {!readOnly && (
+          <div className="absolute left-0 top-16 md:relative md:top-0 md:left-0 flex-none z-40">
+            <DrawingToolbar />
+          </div>
+        )}
         <div className="flex-1 overflow-hidden relative flex flex-col">
           <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
             <CanvasArea />

@@ -36,7 +36,7 @@ export type EditorState = {
   wireStartParams: { objectId: string; terminalId: string; x: number; y: number } | null;
 
   // Interaction Mode
-  activeTool: "select" | "text" | "wire" | "pencil" | "shape" | "arrow" | "dimension" | "busbar";
+  activeTool: "select" | "pan" | "text" | "wire" | "pencil" | "shape" | "arrow" | "dimension" | "busbar";
 
   // Ortho mode
   orthoMode: boolean;

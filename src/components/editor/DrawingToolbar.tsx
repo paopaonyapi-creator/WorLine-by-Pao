@@ -4,7 +4,7 @@ import { useEditorStore } from "@/store/editorStore";
 import { Button } from "@/components/ui/button";
 import {
   Pencil, Square, Circle, ArrowUpRight, Ruler, Minus, 
-  Group, Ungroup, Hash, Layers, ToggleLeft, ToggleRight,
+  Group, Ungroup, Hash, Layers, ToggleLeft, ToggleRight, MousePointer2, Hand
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,6 +19,8 @@ export const DrawingToolbar = () => {
   } = useEditorStore();
 
   const tools = [
+    { id: "select" as const, icon: MousePointer2, label: "Select", shortcut: "V" },
+    { id: "pan" as const, icon: Hand, label: "Pan / Hand", shortcut: "H" },
     { id: "pencil" as const, icon: Pencil, label: "Freehand", shortcut: "F" },
     { id: "shape" as const, icon: Square, label: "Rectangle", shortcut: "D" },
     { id: "arrow" as const, icon: ArrowUpRight, label: "Arrow", shortcut: "A" },
@@ -34,7 +36,7 @@ export const DrawingToolbar = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-1 p-2 bg-background border-r w-10 shrink-0">
+    <div className="flex flex-col gap-1 p-2 bg-background/95 backdrop-blur border-r w-12 items-center shrink-0 shadow-md md:shadow-none z-50 rounded-r-lg md:rounded-none">
       {/* Drawing tools */}
       {tools.map(tool => {
         const Icon = tool.icon;

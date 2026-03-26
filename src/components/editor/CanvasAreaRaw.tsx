@@ -210,6 +210,9 @@ export const CanvasAreaRaw = () => {
   const [editingLabel, setEditingLabel] = useState<{ id: string; x: number; y: number; label: string } | null>(null);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
 
+  const lastCenter = useRef<{ x: number, y: number } | null>(null);
+  const lastDist = useRef<number>(0);
+
   const gridSize = canvas.gridSize || 20;
 
   useEffect(() => {
@@ -287,6 +290,85 @@ export const CanvasAreaRaw = () => {
         setSelection([]);
       }
     }
+  };
+
+  const handleWheel = (e: any) => {
+    e.evt.preventDefault();
+    const scaleBy = 1.1;
+    const stage = e.target.getStage();
+    const oldScale = stage.scaleX();
+
+    const pointer = stage.getPointerPosition();
+    if (!pointer) return;
+
+    const mousePointTo = {
+      x: (pointer.x - stage.x()) / oldScale,
+      y: (pointer.y - stage.y()) / oldScale,
+    };
+
+    const direction = e.evt.deltaY > 0 ? -1 : 1;
+    const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+    const clampedScale = Math.max(0.1, Math.min(newScale, 5));
+
+    setZoom(clampedScale);
+
+    const newPos = {
+      x: pointer.x - mousePointTo.x * clampedScale,
+      y: pointer.y - mousePointTo.y * clampedScale,
+    };
+    setPan(newPos.x, newPos.y);
+  };
+
+  const handleTouchMove = (e: any) => {
+    const touch1 = e.evt.touches[0];
+    const touch2 = e.evt.touches[1];
+
+    if (touch1 && touch2) {
+      e.evt.preventDefault();
+      const stage = stageRef.current;
+      if (!stage) return;
+      if (stage.isDragging()) stage.stopDrag();
+
+      const p1 = { x: touch1.clientX, y: touch1.clientY };
+      const p2 = { x: touch2.clientX, y: touch2.clientY };
+
+      const dist = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+      const center = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+
+      if (!lastCenter.current) {
+        lastCenter.current = center;
+        lastDist.current = dist;
+        return;
+      }
+
+      // Calculate scale
+      const scaleBy = dist / lastDist.current;
+      const oldScale = stage.scaleX();
+      let newScale = oldScale * scaleBy;
+      newScale = Math.max(0.1, Math.min(newScale, 5));
+
+      // Calculate pan
+      const pointTo = {
+        x: (center.x - stage.x()) / oldScale,
+        y: (center.y - stage.y()) / oldScale,
+      };
+
+      const newPos = {
+        x: center.x - pointTo.x * newScale + (center.x - lastCenter.current.x),
+        y: center.y - pointTo.y * newScale + (center.y - lastCenter.current.y),
+      };
+
+      setZoom(newScale);
+      setPan(newPos.x, newPos.y);
+
+      lastDist.current = dist;
+      lastCenter.current = center;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    lastDist.current = 0;
+    lastCenter.current = null;
   };
 
   const startEditText = (id: string) => {
@@ -400,8 +482,21 @@ export const CanvasAreaRaw = () => {
       <Stage
         width={dimensions.width}
         height={dimensions.height}
+        scaleX={zoom}
+        scaleY={zoom}
+        x={panX}
+        y={panY}
+        draggable={activeTool === "pan"}
+        onDragEnd={(e) => {
+          if (e.target === stageRef.current) {
+            setPan(e.target.x(), e.target.y());
+          }
+        }}
+        onWheel={handleWheel}
         onMouseDown={checkStageClick}
         onTouchStart={checkStageClick}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onMouseMove={handleMouseMove}
         ref={stageRef}
       >
