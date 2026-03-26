@@ -49,6 +49,20 @@ function SymbolMiniIcon({ symbolType }: { symbolType: string }) {
       return <svg {...common}><line x1="14" y1="4" x2="14" y2="14" stroke={stroke} strokeWidth={sw} /><line x1="6" y1="14" x2="22" y2="14" stroke={stroke} strokeWidth={2} /><line x1="9" y1="18" x2="19" y2="18" stroke={stroke} strokeWidth={2} /><line x1="12" y1="22" x2="16" y2="22" stroke={stroke} strokeWidth={2} /></svg>;
     case "junction":
       return <svg {...common}><circle cx="14" cy="14" r="4" fill={stroke} /></svg>;
+    case "wind_turbine":
+      return <svg {...common}><circle cx="14" cy="14" r="10" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">WT</text></svg>;
+    case "ats":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">ATS</text></svg>;
+    case "potential_transformer":
+      return <svg {...common}><circle cx="14" cy="14" r="8" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="9" fontWeight="bold">PT</text></svg>;
+    case "vfd":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="7" fontWeight="bold">VFD</text></svg>;
+    case "overload_relay":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="9" fontWeight="bold">OL</text></svg>;
+    case "power_meter":
+      return <svg {...common}><circle cx="14" cy="14" r="10" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">kW</text></svg>;
+    case "ammeter":
+      return <svg {...common}><circle cx="14" cy="14" r="9" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="10" fontWeight="bold">A</text></svg>;
     default:
       return <svg {...common}><rect x="6" y="6" width="16" height="16" stroke={stroke} strokeWidth={sw} /></svg>;
   }

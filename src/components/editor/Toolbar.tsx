@@ -19,53 +19,19 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
     if (!projectId) return;
     setSaving(true);
     const supabase = createClient();
-    
-    // Minimal autosave/manual save logic
-    // Just save all objects to `project_pages` assuming 1 page per project for MVP
-    
-    const { data: page } = await supabase.from('project_pages').select('id').eq('project_id', projectId).single();
-    if (!page) {
-      toast.error("Page not found");
-      setSaving(false);
-      return;
-    }
 
-    // Upsert project page config
-    await supabase.from('project_pages').update({
-      canvas_width: canvas.width,
-      canvas_height: canvas.height,
-      background: { color: canvas.background }
-    }).eq('id', page.id);
+    const { error } = await supabase
+      .from("projects")
+      .update({
+        diagram_data: canvas,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", projectId);
 
-    // To prevent deleting all objects and creating new ones, a precise syncing is better
-    // But for MVP, let's just delete previous objects and recreate them to avoid state mismatch
-    const { error: deleteErr } = await supabase.from('diagram_objects').delete().eq('page_id', page.id);
-    
-    if (deleteErr) {
-      toast.error("Failed to clear old objects before saving");
+    if (error) {
+      toast.error("Save failed: " + error.message);
     } else {
-      const inserts = canvas.objects.map((obj, index) => ({
-        id: obj.id, // we might need to be careful with UUID collision on insert if delete is slow
-        page_id: page.id,
-        object_type: obj.type,
-        object_data: obj,
-        z_index: index,
-      }));
-
-      // We should strip `id` from `object_data` and just rely on the DB tracking it, but frontend relies on `obj.id` being identical across saves. 
-      // Supabase supports upserts or we just trust the ID. For robustness let's just bulk insert.
-      
-      // If we use obj.id for PK, and we just deleted it, we can insert again safely.
-      if (inserts.length > 0) {
-        const { error: insertErr } = await supabase.from('diagram_objects').insert(inserts);
-        if (insertErr) {
-          toast.error("Save failed: " + insertErr.message);
-        } else {
-          toast.success("Saved successfully");
-        }
-      } else {
-        toast.success("Saved successfully (Empty)");
-      }
+      toast.success("Saved successfully");
     }
 
     setSaving(false);
@@ -75,9 +41,6 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
     try {
       setSaving(true);
       toast.info("Generating PDF...");
-      // For this, we can get data URL from a DOM stage or we can just reconstruct it
-      // Let's use the simplest approach: we grab the canvas and put it in a PDF.
-      // But we don't have direct access to the `stageRef`. We can use `document.querySelector('canvas')`.
       const canvasEl = document.querySelector('canvas');
       if (!canvasEl) {
         toast.error("Could not find canvas to export.");

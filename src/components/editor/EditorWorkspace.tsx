@@ -24,30 +24,35 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
   useEffect(() => {
     const loadProject = async () => {
       const supabase = createClient();
+
+      // Load from projects.diagram_data (the single source of truth)
       const { data, error } = await supabase
-        .from('project_pages')
-        .select('canvas_width, canvas_height, background, scene_version, diagram_objects (id, object_type, object_data, z_index)')
-        .eq('project_id', projectId)
-        .order('z_index', { referencedTable: 'diagram_objects', ascending: true })
-        .limit(1)
-        .maybeSingle();
+        .from('projects')
+        .select('diagram_data')
+        .eq('id', projectId)
+        .single();
 
-      if (data) {
-        const objects = data.diagram_objects ? data.diagram_objects.map((doObj: any) => ({
-          id: doObj.id,
-          ...doObj.object_data
-        })) : [];
+      if (data?.diagram_data && typeof data.diagram_data === 'object') {
+        const dd = data.diagram_data as any;
 
-        initialize(projectId, {
-          objects,
-          width: data.canvas_width || 1920,
-          height: data.canvas_height || 1080,
-          background: data.background ? (data.background as any).color : "#ffffff",
-          gridSize: 20
-        });
+        // If diagram_data contains objects array, use it
+        if (dd.objects && Array.isArray(dd.objects)) {
+          initialize(projectId, {
+            objects: dd.objects,
+            width: dd.width || 1920,
+            height: dd.height || 1080,
+            background: dd.background || "#ffffff",
+            gridSize: dd.gridSize || 20,
+          });
+        } else {
+          // diagram_data exists but is a preset or empty object
+          initialize(projectId);
+        }
       } else {
+        // No diagram_data, start fresh
         initialize(projectId);
       }
+
       setLoading(false);
     };
     loadProject();
@@ -84,4 +89,3 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
     </div>
   );
 };
-

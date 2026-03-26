@@ -177,6 +177,57 @@ export const RenderSymbol = ({ obj, isSelected }: { obj: SymbolObject, isSelecte
       </Group>
     ),
 
+    // --- New Symbols ---
+    wind_turbine: (
+      <Group>
+        <Circle x={width*0.5} y={height*0.5} radius={height*0.4} stroke={strokeColor} strokeWidth={sw} fill="white" />
+        <Text text="WT" x={0} y={height*0.5 - 10} width={width} align="center" fontSize={16} fill={strokeColor} fontStyle="bold" />
+        <Line points={[width*0.5, 0, width*0.5, height*0.1]} stroke={strokeColor} strokeWidth={sw} />
+      </Group>
+    ),
+    ats: (
+      <Group>
+        <Rect x={width*0.1} y={height*0.1} width={width*0.8} height={height*0.8} stroke={strokeColor} strokeWidth={sw} fill="white" rx={4} ry={4} />
+        <Text text="ATS" x={0} y={height*0.5 - 10} width={width} align="center" fontSize={14} fill={strokeColor} fontStyle="bold" />
+        <Line points={[width*0.5, 0, width*0.5, height*0.1]} stroke={strokeColor} strokeWidth={sw} />
+        <Line points={[width*0.5, height*0.9, width*0.5, height]} stroke={strokeColor} strokeWidth={sw} />
+      </Group>
+    ),
+    potential_transformer: (
+      <Group>
+        <Circle x={width*0.5} y={height*0.5} radius={height*0.35} stroke={strokeColor} strokeWidth={sw} fill="white" />
+        <Text text="PT" x={0} y={height*0.5 - 8} width={width} align="center" fontSize={14} fill={strokeColor} fontStyle="bold" />
+        <Line points={[width*0.5, 0, width*0.5, height*0.15]} stroke={strokeColor} strokeWidth={sw} />
+        <Line points={[width*0.5, height*0.85, width*0.5, height]} stroke={strokeColor} strokeWidth={sw} />
+      </Group>
+    ),
+    vfd: (
+      <Group>
+        <Rect x={width*0.1} y={height*0.1} width={width*0.8} height={height*0.8} stroke={strokeColor} strokeWidth={sw} fill="white" rx={4} ry={4} />
+        <Text text="VFD" x={0} y={height*0.5 - 10} width={width} align="center" fontSize={13} fill={strokeColor} fontStyle="bold" />
+        <Line points={[width*0.5, 0, width*0.5, height*0.1]} stroke={strokeColor} strokeWidth={sw} />
+        <Line points={[width*0.5, height*0.9, width*0.5, height]} stroke={strokeColor} strokeWidth={sw} />
+      </Group>
+    ),
+    overload_relay: (
+      <Group>
+        <Rect x={width*0.1} y={height*0.1} width={width*0.8} height={height*0.8} stroke={strokeColor} strokeWidth={sw} fill="white" rx={4} ry={4} />
+        <Text text="OL" x={0} y={height*0.5 - 10} width={width} align="center" fontSize={16} fill={strokeColor} fontStyle="bold" />
+      </Group>
+    ),
+    power_meter: (
+      <Group>
+        <Circle x={width*0.5} y={height*0.5} radius={height*0.4} stroke={strokeColor} strokeWidth={sw} fill="white" />
+        <Text text="kW" x={0} y={height*0.5 - 10} width={width} align="center" fontSize={14} fill={strokeColor} fontStyle="bold" />
+      </Group>
+    ),
+    ammeter: (
+      <Group>
+        <Circle x={width*0.5} y={height*0.5} radius={height*0.35} stroke={strokeColor} strokeWidth={sw} fill="white" />
+        <Text text="A" x={0} y={height*0.5 - 8} width={width} align="center" fontSize={18} fill={strokeColor} fontStyle="bold" />
+      </Group>
+    ),
+
     // Legacy aliases
     breaker: (
       <Group>
