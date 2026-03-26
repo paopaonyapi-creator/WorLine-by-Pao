@@ -384,6 +384,19 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        {/* Language Toggle */}
+        <button
+          onClick={() => {
+            const current = localStorage.getItem("worline-locale") || "en";
+            const next = current === "en" ? "th" : "en";
+            localStorage.setItem("worline-locale", next);
+            window.location.reload();
+          }}
+          className="px-2 py-1 text-[10px] font-bold rounded border bg-muted hover:bg-muted/80 transition-colors"
+          title="Switch Language"
+        >
+          {(typeof window !== "undefined" && localStorage.getItem("worline-locale")) === "th" ? "🇹🇭 TH" : "🇬🇧 EN"}
+        </button>
         <Button onClick={handleShare} disabled={sharing} variant="outline" size="sm" className="gap-2">
           {shared ? <Check className="h-4 w-4 text-emerald-500" /> : <Share2 className="h-4 w-4" />}
           {shared ? "Copied" : "Share"}
