@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Folder, Clock, Trash2, Share2, Link2, Check, Pencil } from "lucide-react";
+import { Plus, Folder, Clock, Trash2, Share2, Link2, Check, Pencil, Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,10 @@ export default function ProjectsPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"name-asc" | "name-desc" | "newest" | "oldest">("newest");
+  const [page, setPage] = useState(1);
+  const perPage = 12;
   const supabase = createClient();
 
   useEffect(() => {
@@ -144,6 +148,33 @@ export default function ProjectsPage() {
         </Button>
       </div>
 
+      {/* Search & Sort Bar */}
+      {!loading && projects.length > 0 && (
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search projects..."
+              value={searchQuery}
+              onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
+              className="pl-9 h-10"
+              aria-label="Search projects"
+            />
+          </div>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+            className="h-10 rounded-md border bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            aria-label="Sort projects"
+          >
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name-asc">Name A → Z</option>
+            <option value="name-desc">Name Z → A</option>
+          </select>
+        </div>
+      )}
+
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
@@ -172,9 +203,29 @@ export default function ProjectsPage() {
             </Button>
           </CardContent>
         </Card>
-      ) : (
+      ) : (() => {
+          const filtered = projects.filter(p =>
+            p.name.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+          const sorted = [...filtered].sort((a, b) => {
+            switch (sortBy) {
+              case "name-asc": return a.name.localeCompare(b.name);
+              case "name-desc": return b.name.localeCompare(a.name);
+              case "oldest": return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+              default: return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+            }
+          });
+          const totalPages = Math.ceil(sorted.length / perPage);
+          const paginated = sorted.slice((page - 1) * perPage, page * perPage);
+
+          if (sorted.length === 0) return (
+            <p className="text-center text-muted-foreground py-12">No projects match "{searchQuery}"</p>
+          );
+
+          return (
+            <>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {paginated.map((project) => (
             <Card key={project.id} className="group hover:shadow-lg hover:border-primary/30 transition-all duration-200 relative">
               <Link href={`/app/projects/${project.id}`}>
                 <CardHeader>
@@ -261,7 +312,41 @@ export default function ProjectsPage() {
             </Card>
           ))}
         </div>
-      )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between pt-4">
+            <p className="text-sm text-muted-foreground">
+              Showing {(page - 1) * perPage + 1}–{Math.min(page * perPage, sorted.length)} of {sorted.length}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Prev
+              </Button>
+              <span className="text-sm font-medium px-2">
+                {page} / {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+        )}
+        </>
+          );
+        })()}
     </div>
   );
 }
