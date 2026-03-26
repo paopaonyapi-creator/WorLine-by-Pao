@@ -6,6 +6,12 @@ export const categories: string[] = [
   "Protection",
   "Connections",
   "Metering",
+  "Core Systems",
+  "AI Engines",
+  "Simulators",
+  "SCADA Modules",
+  "Future Tech",
+  "Utility Nodes"
 ];
 
 // Helper to define symbols with both width/height and defaultWidth/defaultHeight
@@ -69,4 +75,83 @@ export const symbolRegistry: Record<string, any> = {
   ammeter:            sym("ammeter", "Metering", "Ammeter", "ammeter", 40, 40, { label: "A" }),
   voltmeter:          sym("voltmeter", "Metering", "Voltmeter", "voltmeter", 40, 40, { label: "V" }),
   frequency_meter:    sym("frequency_meter", "Metering", "Frequency Meter", "frequency_meter", 40, 40, { label: "Hz" }),
+
+  // --- Core Systems ---
+  shortCircuit: sym("shortCircuit", "Core Systems", "Short Circuit", "shortCircuit", 60, 60),
+  protection_tcc: sym("protection_tcc", "Core Systems", "Protection TCC", "protection_tcc", 60, 60),
+  vdrop: sym("vdrop", "Core Systems", "Voltage Drop", "vdrop", 60, 60),
+  loadFlow: sym("loadFlow", "Core Systems", "Load Flow", "loadFlow", 60, 60),
+  loadCalc: sym("loadCalc", "Core Systems", "Load Calc", "loadCalc", 60, 60),
+  cableSch: sym("cableSch", "Core Systems", "Cable Schedule", "cableSch", 60, 60),
+  pfCorrection: sym("pfCorrection", "Core Systems", "PF Correction", "pfCorrection", 60, 60),
+  batterySize: sym("batterySize", "Core Systems", "Battery Sizing", "batterySize", 60, 60),
+  cableDerating: sym("cableDerating", "Core Systems", "Cable Derating", "cableDerating", 60, 60),
+  panelSch: sym("panelSch", "Core Systems", "Panel Schedule", "panelSch", 60, 60),
+
+  // --- AI Engines ---
+  agiGrid: sym("agiGrid", "AI Engines", "AGI God-Mode", "agiGrid", 60, 60),
+  aiGen: sym("aiGen", "AI Engines", "AI Gen Design", "aiGen", 60, 60),
+  aiRecog: sym("aiRecog", "AI Engines", "AI Recognition", "aiRecog", 60, 60),
+  aiLayout: sym("aiLayout", "AI Engines", "AI Auto Layout", "aiLayout", 60, 60),
+  aiPred: sym("aiPred", "AI Engines", "Failure Predict", "aiPred", 60, 60),
+  voiceCmd: sym("voiceCmd", "AI Engines", "Voice Command", "voiceCmd", 60, 60),
+  aiReport: sym("aiReport", "AI Engines", "AI Report", "aiReport", 60, 60),
+  autoRout: sym("autoRout", "AI Engines", "Smart Routing", "autoRout", 60, 60),
+
+  // --- Simulators ---
+  arcFlash: sym("arcFlash", "Simulators", "Arc Flash Sim", "arcFlash", 60, 60),
+  thd: sym("thd", "Simulators", "Harmonic THD%", "thd", 60, 60),
+  motorStart: sym("motorStart", "Simulators", "Motor Start", "motorStart", 60, 60),
+  solarSim: sym("solarSim", "Simulators", "Solar PV Yield", "solarSim", 60, 60),
+  weather: sym("weather", "Simulators", "Weather Hazard", "weather", 60, 60),
+  healing: sym("healing", "Simulators", "Auto-Heal Grid", "healing", 60, 60),
+  lightning: sym("lightning", "Simulators", "Lightning Protect", "lightning", 60, 60),
+  groundGrid: sym("groundGrid", "Simulators", "Earth Grid IEEE", "groundGrid", 60, 60),
+  peakShave: sym("peakShave", "Simulators", "Peak Shaving", "peakShave", 60, 60),
+
+  // --- SCADA Modules ---
+  scadaSim: sym("scadaSim", "SCADA Modules", "SCADA Term", "scadaSim", 60, 60),
+  relayLog: sym("relayLog", "SCADA Modules", "Relay Logic", "relayLog", 60, 60),
+  mqtt: sym("mqtt", "SCADA Modules", "IoT MQTT", "mqtt", 60, 60),
+  equipDb: sym("equipDb", "SCADA Modules", "Equipment DB", "equipDb", 60, 60),
+  cmms: sym("cmms", "SCADA Modules", "CMMS Tagging", "cmms", 60, 60),
+  thermalIr: sym("thermalIr", "SCADA Modules", "Thermal IR", "thermalIr", 60, 60),
+  terminalStrip: sym("terminalStrip", "SCADA Modules", "Terminal Strips", "terminalStrip", 60, 60),
+  cyberAttack: sym("cyberAttack", "SCADA Modules", "Cyber Sec Pen", "cyberAttack", 60, 60),
+  droneInsp: sym("droneInsp", "SCADA Modules", "Drone Fleet", "droneInsp", 60, 60),
+
+  // --- Future Tech ---
+  marsGrid: sym("marsGrid", "Future Tech", "Mars Microgrid", "marsGrid", 60, 60),
+  quantumCrypt: sym("quantumCrypt", "Future Tech", "Quantum QKD", "quantumCrypt", 60, 60),
+  dysonBeam: sym("dysonBeam", "Future Tech", "Dyson Beam", "dysonBeam", 60, 60),
+  fusionTokamak: sym("fusionTokamak", "Future Tech", "Fusion Tokamak", "fusionTokamak", 60, 60),
+  superconductor: sym("superconductor", "Future Tech", "Superconductor", "superconductor", 60, 60),
+  spaceLaunch: sym("spaceLaunch", "Future Tech", "Space Launch", "spaceLaunch", 60, 60),
+  multiverse: sym("multiverse", "Future Tech", "Multiverse Grid", "multiverse", 60, 60),
+  antimatterUps: sym("antimatterUps", "Future Tech", "Antimatter UPS", "antimatterUps", 60, 60),
+  neuralinkBci: sym("neuralinkBci", "Future Tech", "Neuralink BCI", "neuralinkBci", 60, 60),
+  hologram: sym("hologram", "Future Tech", "3D Hologram", "hologram", 60, 60),
+  webXr: sym("webXr", "Future Tech", "WebXR Preview", "webXr", 60, 60),
+  evFleet: sym("evFleet", "Future Tech", "EV Fleet V2G", "evFleet", 60, 60),
+  blockchain: sym("blockchain", "Future Tech", "Blockchain P2P", "blockchain", 60, 60),
+  esgToken: sym("esgToken", "Future Tech", "ESG Token", "esgToken", 60, 60),
+
+  // --- Utility Nodes ---
+  bomNode: sym("bomNode", "Utility Nodes", "BOM Data", "bomNode", 60, 60),
+  costNode: sym("costNode", "Utility Nodes", "Cost Tally", "costNode", 60, 60),
+  printNode: sym("printNode", "Utility Nodes", "Print Border", "printNode", 60, 60),
+  dxfNode: sym("dxfNode", "Utility Nodes", "DXF Link", "dxfNode", 60, 60),
+  pdfNode: sym("pdfNode", "Utility Nodes", "PDF Gen", "pdfNode", 60, 60),
+  bimNode: sym("bimNode", "Utility Nodes", "BIM Revit", "bimNode", 60, 60),
+  titleBlock: sym("titleBlock", "Utility Nodes", "Title Block", "titleBlock", 60, 60),
+  gisMap: sym("gisMap", "Utility Nodes", "GIS Map", "gisMap", 60, 60),
+  symEditor: sym("symEditor", "Utility Nodes", "Symbol Editor", "symEditor", 60, 60),
+  diffNode: sym("diffNode", "Utility Nodes", "Git Diff", "diffNode", 60, 60),
+  revHist: sym("revHist", "Utility Nodes", "Rev History", "revHist", 60, 60),
+  chatNode: sym("chatNode", "Utility Nodes", "Team Chat", "chatNode", 60, 60),
+  commentNode: sym("commentNode", "Utility Nodes", "Comment Pin", "commentNode", 60, 60),
+  templateNode: sym("templateNode", "Utility Nodes", "Template Pres", "templateNode", 60, 60),
+  crossRef: sym("crossRef", "Utility Nodes", "Cross-Ref", "crossRef", 60, 60),
+  inspectNode: sym("inspectNode", "Utility Nodes", "Inspection", "inspectNode", 60, 60),
+  themeNode: sym("themeNode", "Utility Nodes", "Theme Node", "themeNode", 60, 60),
 };
