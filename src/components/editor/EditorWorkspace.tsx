@@ -297,15 +297,15 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {/* Mobile Bottom Navigation */}
             {!readOnly && (
               <div className="lg:hidden absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur border-t p-1 px-2 flex justify-around items-center z-40 pb-safe">
-                <Button variant="ghost" className="flex flex-col items-center gap-1 h-14 w-full text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobilePalette(true)}>
+                <Button variant="ghost" className="flex-1 flex flex-col items-center justify-center gap-1 h-14 text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobilePalette(true)}>
                   <FolderOpen className="w-5 h-5" />
                   <span className="text-[10px] font-medium leading-none mt-1">Library</span>
                 </Button>
-                <Button variant="ghost" className="flex flex-col items-center gap-1 h-14 w-full text-indigo-500 hover:text-indigo-400 hover:bg-indigo-500/10" onClick={() => setShowPluginHub(true)}>
+                <Button variant="ghost" className="flex-1 flex flex-col items-center justify-center gap-1 h-14 text-indigo-500 hover:text-indigo-400 hover:bg-indigo-500/10" onClick={() => setShowPluginHub(true)}>
                   <LayoutGrid className="w-5 h-5" />
                   <span className="text-[10px] font-medium leading-none mt-1">Plugins</span>
                 </Button>
-                <Button variant="ghost" className="flex flex-col items-center gap-1 h-14 w-full text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobileProps(true)}>
+                <Button variant="ghost" className="flex-1 flex flex-col items-center justify-center gap-1 h-14 text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobileProps(true)}>
                   <Wrench className="w-5 h-5" />
                   <span className="text-[10px] font-medium leading-none mt-1">Props</span>
                 </Button>
