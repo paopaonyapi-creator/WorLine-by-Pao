@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { CanvasArea } from "./CanvasArea";
 import { Palette } from "./Palette";
 import { Toolbar } from "./Toolbar";
@@ -19,12 +19,25 @@ import { CustomSymbolCreator } from "./CustomSymbolCreator";
 import { DrawingToolbar } from "./DrawingToolbar";
 import { CableSchedule } from "./CableSchedule";
 import { TitleBlockEditor } from "./TitleBlockEditor";
+// Sprint 11 — Tier 4
+import { ShortCircuitCalc } from "./ShortCircuitCalc";
+import { ProtectionCoordination } from "./ProtectionCoordination";
+import { CommentOverlay } from "./CommentOverlay";
+import { PrintLayout } from "./PrintLayout";
+import { DXFExport } from "./DXFExport";
+import { VersionDiffView } from "./VersionDiffView";
+import { SymbolEditorPro } from "./SymbolEditorPro";
+import { DarkCanvasToggle } from "./DarkCanvasToggle";
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
-import { Calculator, FileSpreadsheet, Sparkles, Paintbrush, Cable, FileText } from "lucide-react";
+import {
+  Calculator, FileSpreadsheet, Sparkles, Paintbrush,
+  Cable, FileText, Zap, Shield, MessageSquare,
+  Printer, FileDown, GitCompare, PenTool,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
@@ -37,17 +50,19 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const [showSymbolCreator, setShowSymbolCreator] = useState(false);
   const [showCableSchedule, setShowCableSchedule] = useState(false);
   const [showTitleBlock, setShowTitleBlock] = useState(false);
+  // Tier 4
+  const [showShortCircuit, setShowShortCircuit] = useState(false);
+  const [showProtection, setShowProtection] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [showPrintLayout, setShowPrintLayout] = useState(false);
+  const [showDXF, setShowDXF] = useState(false);
+  const [showVersionDiff, setShowVersionDiff] = useState(false);
+  const [showSymbolEditor, setShowSymbolEditor] = useState(false);
 
-  // Auto-save every 30 seconds (if not readonly)
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
-
-  // Real-time collaboration
   const { cursors } = useRealtimeCollaboration(readOnly ? null : projectId);
-
-  // Keyboard shortcuts
   useEditorShortcuts(readOnly ? "readonly" : projectId, manualSave);
 
-  // Ctrl+K for search
   useEffect(() => {
     if (readOnly) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -55,9 +70,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
         e.preventDefault();
         setShowSearch(prev => !prev);
       }
-      if (e.key === "Escape" && showSearch) {
-        setShowSearch(false);
-      }
+      if (e.key === "Escape" && showSearch) setShowSearch(false);
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
@@ -66,7 +79,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   useEffect(() => {
     const loadProject = async () => {
       const supabase = createClient();
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('projects')
         .select('diagram_data')
         .eq('id', projectId)
@@ -104,6 +117,18 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
     );
   }
 
+  const ActionBtn = ({ icon: Icon, title, active, onClick }: { icon: any; title: string; active?: boolean; onClick: () => void }) => (
+    <Button
+      variant={active ? "secondary" : "ghost"}
+      size="icon"
+      className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
+      onClick={onClick}
+      title={title}
+    >
+      <Icon className="h-3.5 w-3.5" />
+    </Button>
+  );
+
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
       {!readOnly && <Toolbar projectId={projectId} />}
@@ -113,47 +138,37 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             <Palette />
           </div>
         )}
-        {/* Drawing Toolbar - vertical strip */}
         {!readOnly && (
           <div className="hidden md:flex flex-none">
             <DrawingToolbar />
           </div>
         )}
         <div className="flex-1 overflow-hidden relative flex flex-col">
-          {/* Canvas area */}
           <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
             <CanvasArea />
             <ZoomControls />
 
-            {/* Rulers */}
             {!readOnly && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
-
-            {/* Crosshair cursor */}
             {!readOnly && <CrosshairOverlay />}
-
             {!readOnly && <VersionHistory projectId={projectId} />}
             {!readOnly && <CursorOverlay cursors={cursors} zoom={zoom} panX={panX} panY={panY} />}
 
-            {/* Symbol Search (Ctrl+K) */}
+            {/* Overlays */}
             {showSearch && <SymbolSearch onClose={() => setShowSearch(false)} />}
-
-            {/* Load Calculator */}
             {showLoadCalc && <LoadCalculator onClose={() => setShowLoadCalc(false)} />}
-
-            {/* BOM Table */}
             {showBOM && <BOMTable onClose={() => setShowBOM(false)} />}
-
-            {/* AI Auto Layout */}
             {showAILayout && <AIAutoLayout onClose={() => setShowAILayout(false)} />}
-
-            {/* Custom Symbol Creator */}
             {showSymbolCreator && <CustomSymbolCreator onClose={() => setShowSymbolCreator(false)} />}
-
-            {/* Cable Schedule */}
             {showCableSchedule && <CableSchedule onClose={() => setShowCableSchedule(false)} />}
-
-            {/* Title Block Editor */}
             {showTitleBlock && <TitleBlockEditor onClose={() => setShowTitleBlock(false)} onApply={() => {}} />}
+            {/* Tier 4 overlays */}
+            {showShortCircuit && <ShortCircuitCalc onClose={() => setShowShortCircuit(false)} />}
+            {showProtection && <ProtectionCoordination onClose={() => setShowProtection(false)} />}
+            {showComments && <CommentOverlay onClose={() => setShowComments(false)} />}
+            {showPrintLayout && <PrintLayout onClose={() => setShowPrintLayout(false)} />}
+            {showDXF && <DXFExport onClose={() => setShowDXF(false)} />}
+            {showVersionDiff && <VersionDiffView onClose={() => setShowVersionDiff(false)} />}
+            {showSymbolEditor && <SymbolEditorPro onClose={() => setShowSymbolEditor(false)} />}
 
             {/* Shortcut hints */}
             {!readOnly && (
@@ -164,71 +179,36 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
                 <span>W wire</span>
                 <span>T text</span>
                 <span>F freehand</span>
-                <span>D shape</span>
               </div>
             )}
 
-            {/* Bottom-right action buttons */}
+            {/* Bottom-right action buttons — 2 rows */}
             {!readOnly && (
-              <div className="absolute bottom-4 right-4 z-10 flex gap-1.5 flex-wrap justify-end">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-                  onClick={() => setShowTitleBlock(!showTitleBlock)}
-                  title="Title Block"
-                >
-                  <FileText className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-                  onClick={() => setShowCableSchedule(!showCableSchedule)}
-                  title="Cable Schedule"
-                >
-                  <Cable className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-                  onClick={() => setShowSymbolCreator(!showSymbolCreator)}
-                  title="Custom Symbol Creator"
-                >
-                  <Paintbrush className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-                  onClick={() => setShowAILayout(!showAILayout)}
-                  title="AI Auto Layout"
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-                  onClick={() => setShowBOM(!showBOM)}
-                  title="Bill of Materials"
-                >
-                  <FileSpreadsheet className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm"
-                  onClick={() => setShowLoadCalc(!showLoadCalc)}
-                  title="Load Calculator"
-                >
-                  <Calculator className="h-3.5 w-3.5" />
-                </Button>
+              <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5 items-end">
+                {/* Row 1: Engineering */}
+                <div className="flex gap-1">
+                  <DarkCanvasToggle />
+                  <ActionBtn icon={PenTool} title="Symbol Editor Pro" active={showSymbolEditor} onClick={() => setShowSymbolEditor(!showSymbolEditor)} />
+                  <ActionBtn icon={GitCompare} title="Version Diff" active={showVersionDiff} onClick={() => setShowVersionDiff(!showVersionDiff)} />
+                  <ActionBtn icon={MessageSquare} title="Comments" active={showComments} onClick={() => setShowComments(!showComments)} />
+                  <ActionBtn icon={Printer} title="Print Layout" active={showPrintLayout} onClick={() => setShowPrintLayout(!showPrintLayout)} />
+                  <ActionBtn icon={FileDown} title="DXF Export" active={showDXF} onClick={() => setShowDXF(!showDXF)} />
+                </div>
+                {/* Row 2: Analysis */}
+                <div className="flex gap-1">
+                  <ActionBtn icon={Zap} title="Short Circuit Calc" active={showShortCircuit} onClick={() => setShowShortCircuit(!showShortCircuit)} />
+                  <ActionBtn icon={Shield} title="Protection Coordination" active={showProtection} onClick={() => setShowProtection(!showProtection)} />
+                  <ActionBtn icon={FileText} title="Title Block" active={showTitleBlock} onClick={() => setShowTitleBlock(!showTitleBlock)} />
+                  <ActionBtn icon={Cable} title="Cable Schedule" active={showCableSchedule} onClick={() => setShowCableSchedule(!showCableSchedule)} />
+                  <ActionBtn icon={Paintbrush} title="Custom Symbol" active={showSymbolCreator} onClick={() => setShowSymbolCreator(!showSymbolCreator)} />
+                  <ActionBtn icon={Sparkles} title="AI Layout" active={showAILayout} onClick={() => setShowAILayout(!showAILayout)} />
+                  <ActionBtn icon={FileSpreadsheet} title="BOM" active={showBOM} onClick={() => setShowBOM(!showBOM)} />
+                  <ActionBtn icon={Calculator} title="Load Calc" active={showLoadCalc} onClick={() => setShowLoadCalc(!showLoadCalc)} />
+                </div>
               </div>
             )}
 
-            {/* Online users indicator */}
+            {/* Online users */}
             {!readOnly && cursors.length > 0 && (
               <div className="absolute top-24 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
                 <div className="flex -space-x-1">
@@ -250,7 +230,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             )}
           </div>
 
-          {/* Sheet Tabs — bottom of canvas */}
           {!readOnly && <SheetTabs />}
         </div>
         {!readOnly && (
