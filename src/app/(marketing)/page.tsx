@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Zap, ArrowRight, Shield, Cloud, FileDown } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "WorLine by Pao — Professional Single-Line Diagram Editor",
+  description: "Design electrical single-line diagrams like a pro. Modern cloud-based editor with drag-and-drop, IEC/IEEE symbols, and PDF export.",
+};
 
 export default function HomePage() {
   return (

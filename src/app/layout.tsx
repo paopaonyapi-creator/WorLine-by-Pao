@@ -15,8 +15,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WorLine by Pao",
-  description: "Create electrical single-line diagrams online.",
+  title: {
+    default: "WorLine by Pao — Professional Single-Line Diagram Editor",
+    template: "%s | WorLine by Pao",
+  },
+  description: "Create professional electrical single-line diagrams online. Drag-and-drop editor with IEC/IEEE symbols, cloud save, and PDF export. Built for engineers.",
+  keywords: ["single-line diagram", "electrical diagram", "SLD editor", "electrical engineering", "one-line diagram", "WorLine"],
+  authors: [{ name: "WorLine by Pao" }],
+  creator: "WorLine by Pao",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://worline-by-pao-production.up.railway.app"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "WorLine by Pao",
+    title: "WorLine by Pao — Professional Single-Line Diagram Editor",
+    description: "Create professional electrical single-line diagrams online. Drag-and-drop editor with IEC/IEEE symbols, cloud save, and PDF export.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "WorLine by Pao — Professional Single-Line Diagram Editor",
+    description: "Create professional electrical single-line diagrams online. Built for engineers.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

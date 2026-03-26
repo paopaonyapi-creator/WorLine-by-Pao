@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { Check, X, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  description: "Simple, transparent pricing for WorLine. Start free, upgrade to Pro for unlimited projects, full symbol library, and PDF export.",
+};
 
 const plans = [
   {

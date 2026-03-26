@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { Zap, Download, Layers, Shield, Palette, Users, Cloud, MonitorSmartphone } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Features",
+  description: "Explore WorLine's powerful features: drag-and-drop editor, IEC/IEEE symbols, SVG & PDF export, cloud save, version history, and team collaboration.",
+};
 
 const features = [
   {
