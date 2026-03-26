@@ -68,9 +68,36 @@ function SymbolMiniIcon({ symbolType }: { symbolType: string }) {
   }
 }
 
+import { useEditorStore } from "@/store/editorStore";
+
 export const Palette = () => {
+  const { addObject, panX, panY, zoom } = useEditorStore();
+
+  const handleAddCenter = (symbolId: string) => {
+    const canvasContainer = document.getElementById("canvas-container");
+    const rect = canvasContainer?.getBoundingClientRect();
+    const w = rect ? rect.width : window.innerWidth;
+    const h = rect ? rect.height : window.innerHeight;
+
+    const centerX = -panX / zoom + (w / 2) / zoom;
+    const centerY = -panY / zoom + (h / 2) / zoom;
+
+    const def = symbolRegistry[symbolId];
+    if (!def) return;
+
+    addObject({
+      type: "symbol",
+      symbolId,
+      x: centerX - def.width / 2,
+      y: centerY - def.height / 2,
+      rotation: 0,
+      zIndex: 1,
+      connections: [],
+    } as any);
+  };
+
   return (
-    <div className="w-64 flex-none border-r bg-background flex flex-col">
+    <div className="w-full h-full bg-background flex flex-col">
       <div className="p-4 border-b font-semibold text-sm flex items-center gap-2">
         <Zap className="h-4 w-4" />
         Symbol Library
@@ -88,6 +115,7 @@ export const Palette = () => {
                     <div
                       key={sym.id}
                       draggable
+                      onClick={() => handleAddCenter(sym.id)}
                       onDragStart={(e) => {
                         e.dataTransfer.setData("application/worline-symbol", sym.id);
                         e.dataTransfer.effectAllowed = "copy";

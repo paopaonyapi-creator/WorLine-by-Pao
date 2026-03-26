@@ -7,13 +7,15 @@ import { createClient } from "@/lib/supabase/client";
 import { generateSVG } from "@/lib/editor/export";
 import { toast } from "sonner";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { symbolRegistry } from "@/lib/editor/symbols/registry";
 import { SymbolObject } from "@/lib/editor/types";
 import { rgb, StandardFonts } from "pdf-lib";
-import { Share2, Check } from "lucide-react";
+import { Share2, Check, Copy, Trash, Boxes } from "lucide-react";
+import { Palette } from "./Palette";
 
 export const Toolbar = ({ projectId }: { projectId: string }) => {
-  const { undo, redo, canvas, history, currentHistoryIndex, activeTool, setActiveTool } = useEditorStore();
+  const { undo, redo, canvas, history, currentHistoryIndex, activeTool, setActiveTool, selectedIds, deleteObjects, duplicateSelected } = useEditorStore();
   const [saving, setSaving] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shared, setShared] = useState(false);
@@ -221,21 +223,32 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
   };
 
   return (
-    <div className="h-14 border-b bg-background flex items-center px-4 justify-between gap-2 overflow-x-auto print:hidden">
-      <div className="flex items-center gap-2">
-        <Link href="/app">
+    <div className="h-14 border-b bg-background flex items-center px-4 justify-between gap-4 overflow-x-auto scrollbar-hide print:hidden">
+      <div className="flex items-center gap-2 shrink-0">
+        <Link href="/app/projects">
           <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-muted">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <div className="w-px h-6 bg-border mx-2" />
-        <Button variant="ghost" size="icon" className="w-8 h-8" disabled={!canUndo} onClick={undo}>
+        <div className="w-px h-6 bg-border mx-1" />
+        
+        {/* Mobile Library Button */}
+        <Sheet>
+          <SheetTrigger render={<Button variant="outline" size="sm" className="gap-2 md:hidden" />}>
+            <Boxes className="h-4 w-4" /> Library
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-72">
+            <Palette />
+          </SheetContent>
+        </Sheet>
+
+        <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" disabled={!canUndo} onClick={undo}>
           <Undo className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="w-8 h-8" disabled={!canRedo} onClick={redo}>
+        <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" disabled={!canRedo} onClick={redo}>
           <Redo className="h-4 w-4" />
         </Button>
-        <div className="w-px h-6 bg-border mx-2" />
+        <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
         {/* Tools */}
         <Button 
           variant={activeTool === "select" ? "secondary" : "ghost"} 
@@ -261,9 +274,22 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
         >
           <Cable className="h-4 w-4" /> Wire
         </Button>
+        
+        {/* Mobile quick actions for selected */}
+        {selectedIds.length > 0 && (
+          <>
+            <div className="w-px h-6 bg-border mx-1" />
+            <Button variant="ghost" size="icon" className="w-8 h-8 lg:hidden text-destructive" onClick={() => deleteObjects(selectedIds)}>
+              <Trash className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="w-8 h-8 lg:hidden" onClick={() => duplicateSelected()}>
+              <Copy className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shrink-0">
         <Button onClick={handleShare} disabled={sharing} variant="outline" size="sm" className="gap-2">
           {shared ? <Check className="h-4 w-4 text-emerald-500" /> : <Share2 className="h-4 w-4" />}
           {shared ? "Copied" : "Share"}

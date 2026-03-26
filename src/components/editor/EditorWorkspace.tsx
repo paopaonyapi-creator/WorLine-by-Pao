@@ -73,7 +73,11 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
     <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
       {!readOnly && <Toolbar projectId={projectId} />}
       <div className="flex flex-1 overflow-hidden relative">
-        {!readOnly && <Palette />}
+        {!readOnly && (
+          <div className="hidden md:flex w-64 flex-none border-r border-border/50">
+            <Palette />
+          </div>
+        )}
         <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
           <CanvasArea />
           <ZoomControls />
@@ -86,7 +90,11 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             </div>
           )}
         </div>
-        {!readOnly && <PropertiesPanel />}
+        {!readOnly && (
+          <div className="hidden lg:flex w-64 flex-none border-l border-border/50">
+            <PropertiesPanel />
+          </div>
+        )}
       </div>
     </div>
   );
