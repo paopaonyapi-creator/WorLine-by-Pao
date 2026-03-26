@@ -22,66 +22,108 @@ const sym = (id: string, category: string, displayName: string, symbolType: stri
 });
 
 export const symbolRegistry: Record<string, any> = {
-  // --- Power Sources (5) ---
+  // --- Power Sources ---
   generator:          sym("generator", "Power Sources", "Generator", "generator", 60, 60, { label: "G" }),
+  sync_generator:     sym("sync_generator", "Power Sources", "Synchronous Generator", "generator", 60, 60, { label: "GS" }),
+  async_generator:    sym("async_generator", "Power Sources", "Asynchronous Generator", "generator", 60, 60, { label: "GA" }),
+  dc_generator:       sym("dc_generator", "Power Sources", "DC Generator", "generator", 60, 60, { label: "G=" }),
   motor:              sym("motor", "Power Sources", "Motor", "motor", 60, 60, { label: "M" }),
+  motor_3ph:          sym("motor_3ph", "Power Sources", "3-Phase Motor", "motor", 60, 60, { label: "M3~" }),
+  stepper_motor:      sym("stepper_motor", "Power Sources", "Stepper Motor", "motor", 60, 60, { label: "SM" }),
+  servo_motor:        sym("servo_motor", "Power Sources", "Servo Motor", "motor", 60, 60, { label: "M_SRV" }),
   battery:            sym("battery", "Power Sources", "Battery", "battery", 40, 60),
+  battery_cell:       sym("battery_cell", "Power Sources", "Single Cell Battery", "battery", 40, 60, { label: "1.5V" }),
   solar_panel:        sym("solar_panel", "Power Sources", "Solar Panel", "solar_panel", 60, 60, { label: "PV" }),
+  solar_array:        sym("solar_array", "Power Sources", "Solar Array", "solar_panel", 80, 80, { label: "ARRAY" }),
   wind_turbine:       sym("wind_turbine", "Power Sources", "Wind Turbine", "wind_turbine", 60, 60, { label: "WT" }),
+  ups:                sym("ups", "Power Sources", "UPS", "battery", 60, 60, { label: "UPS" }),
+  fuel_cell:          sym("fuel_cell", "Power Sources", "Fuel Cell", "battery", 50, 60, { label: "FC" }),
 
-  // --- Switchgear (12) ---
+  // --- Switchgear ---
   circuit_breaker:    sym("circuit_breaker", "Switchgear", "Circuit Breaker", "circuit_breaker", 40, 60, { label: "CB" }),
+  mccb:               sym("mccb", "Switchgear", "MCCB", "circuit_breaker", 40, 60, { label: "MCCB" }),
+  acb:                sym("acb", "Switchgear", "Air Circuit Breaker", "circuit_breaker", 50, 70, { label: "ACB" }),
+  vcb:                sym("vcb", "Switchgear", "Vacuum Circuit Breaker", "circuit_breaker", 50, 70, { label: "VCB" }),
   disconnect_switch:  sym("disconnect_switch", "Switchgear", "Disconnect Switch", "disconnect_switch", 40, 60),
+  load_break_switch:  sym("load_break_switch", "Switchgear", "Load Break Switch", "disconnect_switch", 40, 60, { label: "LBS" }),
+  earth_switch:       sym("earth_switch", "Switchgear", "Earth Switch", "earthing_disconnector", 40, 60),
   fuse:               sym("fuse", "Switchgear", "Fuse", "fuse", 30, 60),
-  contactor:          sym("contactor", "Switchgear", "Contactor", "contactor", 40, 60, { label: "K" }),
+  fuse_link:          sym("fuse_link", "Switchgear", "Fuse Link", "fuse", 30, 60, { label: "FL" }),
+  contactor:          sym("contactor", "Switchgear", "Contactor (NO)", "contactor", 40, 60, { label: "K" }),
+  contactor_nc:       sym("contactor_nc", "Switchgear", "Contactor (NC)", "contactor", 40, 60, { label: "K_NC" }),
   ats:                sym("ats", "Switchgear", "ATS", "ats", 60, 60, { label: "ATS" }),
+  mts:                sym("mts", "Switchgear", "Manual Transfer Switch", "ats", 60, 60, { label: "MTS" }),
   switch_disconnector:sym("switch_disconnector", "Switchgear", "Switch-Disconnector", "switch_disconnector", 40, 60),
   earthing_disconnector: sym("earthing_disconnector", "Switchgear", "Earthing Disconnector", "earthing_disconnector", 40, 60),
   plug_in_switch:     sym("plug_in_switch", "Switchgear", "Plug-in Switch", "plug_in_switch", 40, 60),
   differential_switch:sym("differential_switch", "Switchgear", "Differential Switch", "differential_switch", 40, 60, { label: "RCD" }),
+  rcbo:               sym("rcbo", "Switchgear", "RCBO", "differential_switch", 40, 60, { label: "RCBO" }),
+  mcb:                sym("mcb", "Switchgear", "MCB", "circuit_breaker", 40, 60, { label: "MCB" }),
   fuse_disconnector:  sym("fuse_disconnector", "Switchgear", "Fuse Disconnector", "fuse_disconnector", 40, 70),
   disconnect_fuse_switch: sym("disconnect_fuse_switch", "Switchgear", "Disconnect Fuse Switch", "disconnect_fuse_switch", 40, 70),
-  contactor_coil:     sym("contactor_coil", "Switchgear", "Contactor & Coil", "contactor_coil", 40, 60, { label: "K" }),
+  contactor_coil:     sym("contactor_coil", "Switchgear", "Contactor Coil", "contactor_coil", 40, 60, { label: "K" }),
 
-  // --- Transformers (3) ---
-  transformer:        sym("transformer", "Transformers", "Transformer", "transformer", 60, 80, { label: "T" }),
-  current_transformer:sym("current_transformer", "Transformers", "Current Transformer", "current_transformer", 40, 40, { label: "CT" }),
-  potential_transformer: sym("potential_transformer", "Transformers", "PT / VT", "potential_transformer", 40, 40, { label: "PT" }),
+  // --- Transformers ---
+  transformer:        sym("transformer", "Transformers", "2-Winding Transformer", "transformer", 60, 80, { label: "T" }),
+  transformer_3w:     sym("transformer_3w", "Transformers", "3-Winding Transformer", "transformer", 60, 100, { label: "T3" }),
+  auto_transformer:   sym("auto_transformer", "Transformers", "Auto Transformer", "transformer", 60, 80, { label: "AT" }),
+  current_transformer:sym("current_transformer", "Transformers", "Current Transformer (CT)", "current_transformer", 40, 40, { label: "CT" }),
+  potential_transformer: sym("potential_transformer", "Transformers", "Potential Transformer (PT)", "potential_transformer", 40, 40, { label: "PT" }),
+  isolation_transformer: sym("isolation_transformer", "Transformers", "Isolation Transformer", "transformer", 60, 80, { label: "IT" }),
+  zig_zag_transformer: sym("zig_zag_transformer", "Transformers", "Zig-Zag Transformer", "transformer", 60, 80, { label: "Z" }),
 
-  // --- Loads (5) ---
+  // --- Loads ---
   resistor:           sym("resistor", "Loads", "Resistor", "resistor", 60, 30),
+  variable_resistor:  sym("variable_resistor", "Loads", "Variable Resistor", "resistor", 60, 30, { label: "VR" }),
   capacitor:          sym("capacitor", "Loads", "Capacitor", "capacitor", 40, 60),
+  polarized_capacitor:sym("polarized_capacitor", "Loads", "Polarized Capacitor", "capacitor", 40, 60, { label: "C+" }),
   inductor:           sym("inductor", "Loads", "Inductor", "inductor", 60, 30),
-  lamp:               sym("lamp", "Loads", "Lamp", "lamp", 40, 40, { label: "L" }),
+  lamp:               sym("lamp", "Loads", "Lamp/Indicator", "lamp", 40, 40, { label: "L" }),
+  heater:             sym("heater", "Loads", "Heater", "resistor", 60, 30, { label: "H" }),
   vfd:                sym("vfd", "Loads", "VFD / Drive", "vfd", 50, 50, { label: "VFD" }),
+  soft_starter:       sym("soft_starter", "Loads", "Soft Starter", "vfd", 50, 50, { label: "SS" }),
+  socket_outlet:      sym("socket_outlet", "Loads", "Socket Outlet", "junction", 30, 30, { label: "SKT" }),
+  generic_load:       sym("generic_load", "Loads", "Generic Load", "vfd", 50, 50, { label: "LOAD" }),
 
-  // --- Protection (8) ---
-  relay:              sym("relay", "Protection", "Relay", "relay", 50, 50, { label: "R" }),
+  // --- Protection ---
+  relay:              sym("relay", "Protection", "Relay (General)", "relay", 50, 50, { label: "R" }),
   surge_arrester:     sym("surge_arrester", "Protection", "Surge Arrester", "surge_arrester", 30, 60),
+  surge_arrester_3ph: sym("surge_arrester_3ph", "Protection", "3-Ph Surge Arrester", "surge_arrester", 50, 60, { label: "SPD" }),
   overload_relay:     sym("overload_relay", "Protection", "Overload Relay", "overload_relay", 50, 50, { label: "OL" }),
   thermal_protection: sym("thermal_protection", "Protection", "Thermal Protection", "thermal_protection", 40, 60, { label: "θ" }),
   magnetic_protection:sym("magnetic_protection", "Protection", "Magnetic Protection", "magnetic_protection", 40, 60, { label: "I>" }),
   instantaneous_overcurrent: sym("instantaneous_overcurrent", "Protection", "Instantaneous O/C", "instantaneous_overcurrent", 40, 60, { label: "I>>" }),
+  earth_fault_relay:  sym("earth_fault_relay", "Protection", "Earth Fault Relay", "relay", 50, 50, { label: "51N" }),
+  undervoltage_relay: sym("undervoltage_relay", "Protection", "Under Voltage Relay", "relay", 50, 50, { label: "27" }),
+  overvoltage_relay:  sym("overvoltage_relay", "Protection", "Over Voltage Relay", "relay", 50, 50, { label: "59" }),
+  differential_relay: sym("differential_relay", "Protection", "Differential Relay", "relay", 50, 50, { label: "87" }),
   relay_coil:         sym("relay_coil", "Protection", "Relay Coil", "relay_coil", 40, 50),
   timer_relay:        sym("timer_relay", "Protection", "Timer Relay", "timer_relay", 50, 50, { label: "T" }),
 
-  // --- Connections (3) ---
+  // --- Connections ---
   busbar:             sym("busbar", "Connections", "Busbar", "busbar", 200, 10),
-  ground:             sym("ground", "Connections", "Ground", "ground", 30, 40),
-  junction:           sym("junction", "Connections", "Junction", "junction", 10, 10),
+  ground:             sym("ground", "Connections", "Ground (Earth)", "ground", 30, 40),
+  chassis_ground:     sym("chassis_ground", "Connections", "Chassis Ground", "ground", 30, 40, { label: "PE" }),
+  junction:           sym("junction", "Connections", "Node / Junction", "junction", 10, 10),
+  terminal_block:     sym("terminal_block", "Connections", "Terminal Block", "junction", 20, 20, { label: "X" }),
+  plug_socket:        sym("plug_socket", "Connections", "Plug & Socket", "plug_in_switch", 40, 20),
 
-  // --- Metering (4) ---
+  // --- Metering ---
   power_meter:        sym("power_meter", "Metering", "Power Meter", "power_meter", 50, 50, { label: "kW" }),
   ammeter:            sym("ammeter", "Metering", "Ammeter", "ammeter", 40, 40, { label: "A" }),
   voltmeter:          sym("voltmeter", "Metering", "Voltmeter", "voltmeter", 40, 40, { label: "V" }),
   frequency_meter:    sym("frequency_meter", "Metering", "Frequency Meter", "frequency_meter", 40, 40, { label: "Hz" }),
+  var_meter:          sym("var_meter", "Metering", "VARMeter", "power_meter", 50, 50, { label: "kVAR" }),
+  energy_meter:       sym("energy_meter", "Metering", "Energy Meter", "power_meter", 50, 50, { label: "kWh" }),
+  pf_meter:           sym("pf_meter", "Metering", "Power Factor Meter", "power_meter", 50, 50, { label: "PF" }),
+  smart_meter:        sym("smart_meter", "Metering", "Smart Meter / Analyzer", "power_meter", 60, 60, { label: "PQ" }),
 
   // --- Core Systems ---
-  shortCircuit: sym("shortCircuit", "Core Systems", "Short Circuit", "shortCircuit", 60, 60),
-  protection_tcc: sym("protection_tcc", "Core Systems", "Protection TCC", "protection_tcc", 60, 60),
-  vdrop: sym("vdrop", "Core Systems", "Voltage Drop", "vdrop", 60, 60),
-  loadFlow: sym("loadFlow", "Core Systems", "Load Flow", "loadFlow", 60, 60),
-  loadCalc: sym("loadCalc", "Core Systems", "Load Calc", "loadCalc", 60, 60),
+  shortCircuit: sym("shortCircuit", "Core Systems", "Short Circuit Analysis", "shortCircuit", 60, 60),
+  protection_tcc: sym("protection_tcc", "Core Systems", "Protection TCC Config", "protection_tcc", 60, 60),
+  vdrop: sym("vdrop", "Core Systems", "Voltage Drop Study", "vdrop", 60, 60),
+  loadFlow: sym("loadFlow", "Core Systems", "Load Flow Engine", "loadFlow", 60, 60),
+  loadCalc: sym("loadCalc", "Core Systems", "Load Calculator", "loadCalc", 60, 60),
   cableSch: sym("cableSch", "Core Systems", "Cable Schedule", "cableSch", 60, 60),
   pfCorrection: sym("pfCorrection", "Core Systems", "PF Correction", "pfCorrection", 60, 60),
   batterySize: sym("batterySize", "Core Systems", "Battery Sizing", "batterySize", 60, 60),
@@ -95,15 +137,26 @@ export const symbolRegistry: Record<string, any> = {
   aiLayout: sym("aiLayout", "AI Engines", "AI Auto Layout", "aiLayout", 60, 60),
   aiPred: sym("aiPred", "AI Engines", "Failure Predict", "aiPred", 60, 60),
   voiceCmd: sym("voiceCmd", "AI Engines", "Voice Command", "voiceCmd", 60, 60),
-  aiReport: sym("aiReport", "AI Engines", "AI Report", "aiReport", 60, 60),
+  aiReport: sym("aiReport", "AI Engines", "AI Report Writer", "aiReport", 60, 60),
   autoRout: sym("autoRout", "AI Engines", "Smart Routing", "autoRout", 60, 60),
+
+  // --- SCADA Modules ---
+  plc_node: sym("plc_node", "SCADA Modules", "PLC Controller", "vfd", 60, 80, { label: "PLC" }),
+  rtu_node: sym("rtu_node", "SCADA Modules", "RTU Node", "vfd", 50, 70, { label: "RTU" }),
+  hmi_panel: sym("hmi_panel", "SCADA Modules", "HMI Display", "vfd", 80, 60, { label: "HMI" }),
+  comm_gateway: sym("comm_gateway", "SCADA Modules", "Comm Gateway", "vfd", 50, 50, { label: "GW" }),
+
+  // --- Future Tech ---
+  quantum_crypto: sym("quantum_crypto", "Future Tech", "Quantum Crypto", "agiGrid", 60, 60),
+  fusion_reactor: sym("fusion_reactor", "Future Tech", "Micro Fusion", "generator", 80, 80, { label: "FUS" }),
+  orbital_link: sym("orbital_link", "Future Tech", "Orbital Beam Link", "solar_panel", 60, 60, { label: "ORB" }),
+  nano_grid: sym("nano_grid", "Future Tech", "Nano Grid Controller", "vfd", 50, 50, { label: "NANO" }),
 
   // --- Simulators ---
   arcFlash: sym("arcFlash", "Simulators", "Arc Flash Sim", "arcFlash", 60, 60),
   thd: sym("thd", "Simulators", "Harmonic THD%", "thd", 60, 60),
   motorStart: sym("motorStart", "Simulators", "Motor Start", "motorStart", 60, 60),
   solarSim: sym("solarSim", "Simulators", "Solar PV Yield", "solarSim", 60, 60),
-  weather: sym("weather", "Simulators", "Weather Hazard", "weather", 60, 60),
   healing: sym("healing", "Simulators", "Auto-Heal Grid", "healing", 60, 60),
   lightning: sym("lightning", "Simulators", "Lightning Protect", "lightning", 60, 60),
   groundGrid: sym("groundGrid", "Simulators", "Earth Grid IEEE", "groundGrid", 60, 60),
