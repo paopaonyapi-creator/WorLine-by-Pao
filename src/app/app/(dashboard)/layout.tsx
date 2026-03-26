@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, LayoutDashboard, Folder, LayoutTemplate, Settings, LogOut, User, BookOpen, Menu } from "lucide-react";
+import { Zap, Folder, LayoutTemplate, Settings, LogOut, BookOpen, Menu, CreditCard, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -26,37 +26,71 @@ export default function DashboardLayout({
     router.refresh();
   };
 
-  const navItems = [
-    { name: "Dashboard", href: "/app", icon: LayoutDashboard },
+  const mainNav = [
     { name: "Projects", href: "/app/projects", icon: Folder },
     { name: "Templates", href: "/app/templates", icon: LayoutTemplate },
-    { name: "Settings", href: "/app/settings", icon: Settings },
+  ];
+
+  const accountNav = [
     { name: "Profile", href: "/app/settings/profile", icon: User },
+    { name: "Billing", href: "/app/settings/billing", icon: CreditCard },
     { name: "Help", href: "/guide", icon: BookOpen },
   ];
 
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/app" && pathname.startsWith(href));
+
   const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
-    <nav className="grid items-start px-2 text-sm font-medium lg:px-4 mt-4 space-y-1" role="navigation" aria-label="Main navigation">
-      {navItems.map((item) => {
-        const Icon = item.icon;
-        const isActive = pathname === item.href || (item.href !== "/app" && pathname.startsWith(item.href));
-        return (
-          <Link
-            key={item.name}
-            href={item.href}
-            onClick={onNavigate}
-            aria-current={isActive ? "page" : undefined}
-            className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-              isActive
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            }`}
-          >
-            <Icon className="h-4 w-4" />
-            {item.name}
-          </Link>
-        );
-      })}
+    <nav className="flex flex-col h-full px-2 text-sm font-medium lg:px-4 mt-4" role="navigation" aria-label="Main navigation">
+      {/* Main */}
+      <div className="space-y-1">
+        {mainNav.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={onNavigate}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                isActive(item.href)
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              {item.name}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Divider */}
+      <div className="my-4 border-t" />
+
+      {/* Account */}
+      <p className="px-3 mb-2 text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider">Account</p>
+      <div className="space-y-1">
+        {accountNav.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={onNavigate}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                isActive(item.href)
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              {item.name}
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 
@@ -65,7 +99,7 @@ export default function DashboardLayout({
       {/* Desktop Sidebar */}
       <aside className="w-64 border-r bg-muted/40 hidden md:flex md:flex-col" role="complementary" aria-label="Sidebar">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-          <Link href="/app" className="flex items-center gap-2 font-semibold">
+          <Link href="/app/projects" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />
             <span className="font-bold">WorLine</span>
           </Link>
@@ -86,9 +120,9 @@ export default function DashboardLayout({
 
       {/* Main Content */}
       <div className="flex flex-col flex-1 w-full bg-background">
-        {/* Mobile Header with Hamburger */}
+        {/* Mobile Header */}
         <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
-          <Link href="/app" className="flex items-center gap-2 font-semibold">
+          <Link href="/app/projects" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />
             <span>WorLine</span>
           </Link>
@@ -101,7 +135,7 @@ export default function DashboardLayout({
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-72 pt-8">
-                <div className="flex items-center gap-2 mb-6 px-2">
+                <div className="flex items-center gap-2 mb-2 px-2">
                   <Zap className="h-6 w-6 text-primary" />
                   <span className="font-bold text-lg">WorLine</span>
                 </div>

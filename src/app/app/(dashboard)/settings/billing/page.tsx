@@ -1,14 +1,11 @@
 "use client";
 
-// Force dynamic — prevent pre-rendering during build when env vars are absent
-
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, Loader2, CreditCard } from "lucide-react";
 
 export default function BillingPage() {
   const [loading, setLoading] = useState(true);
@@ -33,66 +30,77 @@ export default function BillingPage() {
   const handleSubscribe = async () => {
     setManaging(true);
     toast.info("Preparing checkout session...");
-    
+
     try {
-      const res = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-      });
+      const res = await fetch('/api/stripe/checkout', { method: 'POST' });
       const data = await res.json();
-      
+
       if (data.url) {
         window.location.assign(data.url);
       } else {
         toast.error("Failed to create checkout session");
         setManaging(false);
       }
-    } catch (e) {
+    } catch {
       toast.error("An error occurred");
       setManaging(false);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground mt-2">Manage your account and billing.</p>
-      </div>
-
-      <div className="flex space-x-4 border-b pb-4 mb-4">
-        <Link href="/app/settings">
-          <Button variant="ghost">Profile</Button>
-        </Link>
-        <Link href="/app/settings/billing">
-          <Button variant="default">Billing</Button>
-        </Link>
+        <h1 className="text-3xl font-bold tracking-tight">Billing</h1>
+        <p className="text-muted-foreground mt-2">Manage your subscription plan.</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Current Plan</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5" />
+            Current Plan
+          </CardTitle>
           <CardDescription>
-            You are currently on the {isPro ? "Pro" : "Free"} plan.
+            You are on the <span className="font-semibold text-foreground">{isPro ? "Pro" : "Free"}</span> plan.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-2 text-sm">
-            <Check className="text-primary w-4 h-4" />
+        <CardContent className="space-y-2">
+          <div className="flex items-center gap-2 text-sm">
+            <Check className="text-primary w-4 h-4 shrink-0" />
             <span>{isPro ? "Unlimited projects" : "Up to 3 projects"}</span>
           </div>
-          <div className="flex items-center space-x-2 text-sm mt-2">
-            <Check className="text-primary w-4 h-4" />
-            <span>{isPro ? "Premium templates included" : "Basic templates only"}</span>
+          <div className="flex items-center gap-2 text-sm">
+            <Check className="text-primary w-4 h-4 shrink-0" />
+            <span>{isPro ? "All templates included" : "Basic templates only"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Check className="text-primary w-4 h-4 shrink-0" />
+            <span>{isPro ? "Priority support" : "Community support"}</span>
           </div>
         </CardContent>
         <CardFooter>
           {isPro ? (
-            <Button disabled>Manage via Stripe Portal (Setup Required)</Button>
+            <Button variant="outline" disabled>
+              Manage via Stripe Portal
+            </Button>
           ) : (
-            <Button onClick={handleSubscribe} disabled={managing}>
-              {managing ? "Redirecting..." : "Upgrade to Pro"}
+            <Button onClick={handleSubscribe} disabled={managing} className="glow-primary">
+              {managing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Redirecting...
+                </>
+              ) : (
+                "Upgrade to Pro"
+              )}
             </Button>
           )}
         </CardFooter>
