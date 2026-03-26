@@ -69,9 +69,35 @@ function SymbolMiniIcon({ symbolType }: { symbolType: string }) {
 }
 
 import { useEditorStore } from "@/store/editorStore";
+import { createClient } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
+import { Bookmark, Trash2, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
+
+type UserSymbol = {
+  id: string;
+  name: string;
+  symbol_data: any;
+};
 
 export const Palette = () => {
-  const { addObject, panX, panY, zoom } = useEditorStore();
+  const { addObject, panX, panY, zoom, selectedIds, canvas } = useEditorStore();
+  const [userSymbols, setUserSymbols] = useState<UserSymbol[]>([]);
+  const supabase = createClient();
+
+  // Load user's custom symbols
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase
+        .from("user_symbols")
+        .select("id, name, symbol_data")
+        .order("created_at", { ascending: false });
+      if (data) setUserSymbols(data);
+    };
+    load();
+  }, []);
 
   const handleAddCenter = (symbolId: string) => {
     const canvasContainer = document.getElementById("canvas-container");
@@ -96,6 +122,68 @@ export const Palette = () => {
     } as any);
   };
 
+  const handleSaveToLibrary = async () => {
+    if (selectedIds.length === 0) {
+      toast.error("Select objects first");
+      return;
+    }
+    const name = prompt("Name for this group:");
+    if (!name) return;
+
+    const selectedObjs = canvas.objects.filter(o => selectedIds.includes(o.id));
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { toast.error("Not logged in"); return; }
+
+    const { error } = await supabase.from("user_symbols").insert({
+      user_id: user.id,
+      name,
+      symbol_data: selectedObjs,
+    });
+
+    if (error) {
+      toast.error("Failed to save: " + error.message);
+    } else {
+      toast.success(`"${name}" saved to My Library!`);
+      // Reload
+      const { data } = await supabase.from("user_symbols").select("id, name, symbol_data").order("created_at", { ascending: false });
+      if (data) setUserSymbols(data);
+    }
+  };
+
+  const handlePlaceUserSymbol = (us: UserSymbol) => {
+    const canvasContainer = document.getElementById("canvas-container");
+    const rect = canvasContainer?.getBoundingClientRect();
+    const w = rect ? rect.width : window.innerWidth;
+    const h = rect ? rect.height : window.innerHeight;
+    const centerX = -panX / zoom + (w / 2) / zoom;
+    const centerY = -panY / zoom + (h / 2) / zoom;
+
+    const objs = us.symbol_data as any[];
+    if (!Array.isArray(objs)) return;
+
+    // Calculate bounding box
+    let minX = Infinity, minY = Infinity;
+    objs.forEach(o => { if (o.x < minX) minX = o.x; if (o.y < minY) minY = o.y; });
+
+    objs.forEach(o => {
+      addObject({
+        ...o,
+        id: uuidv4(),
+        x: o.x - minX + centerX,
+        y: o.y - minY + centerY,
+      });
+    });
+    toast.success(`Placed "${us.name}"`);
+  };
+
+  const handleDeleteUserSymbol = async (id: string) => {
+    const { error } = await supabase.from("user_symbols").delete().eq("id", id);
+    if (!error) {
+      setUserSymbols(prev => prev.filter(s => s.id !== id));
+      toast.success("Deleted from library");
+    }
+  };
+
   return (
     <div className="w-full h-full bg-background flex flex-col">
       <div className="p-4 border-b font-semibold text-sm flex items-center gap-2">
@@ -104,6 +192,46 @@ export const Palette = () => {
       </div>
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-6">
+          {/* My Library Section */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wider flex items-center gap-1">
+                <Bookmark className="h-3 w-3" /> My Library
+              </h4>
+              {selectedIds.length > 0 && (
+                <Button variant="ghost" size="sm" className="h-6 text-[10px] gap-1 px-2" onClick={handleSaveToLibrary}>
+                  <Plus className="h-3 w-3" /> Save
+                </Button>
+              )}
+            </div>
+            {userSymbols.length === 0 ? (
+              <p className="text-[10px] text-muted-foreground/60 text-center py-2">
+                Select objects → click "Save" to create reusable groups
+              </p>
+            ) : (
+              <div className="space-y-1">
+                {userSymbols.map(us => (
+                  <div
+                    key={us.id}
+                    className="group flex items-center justify-between px-3 py-2 rounded-md border bg-card hover:border-primary cursor-pointer transition-all"
+                    onClick={() => handlePlaceUserSymbol(us)}
+                  >
+                    <span className="text-xs font-medium truncate">{us.name}</span>
+                    <button
+                      className="opacity-0 group-hover:opacity-100 text-destructive hover:text-destructive/80 transition-opacity"
+                      onClick={(e) => { e.stopPropagation(); handleDeleteUserSymbol(us.id); }}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="border-t" />
+
+          {/* Built-in Symbol Categories */}
           {categories.map((cat) => {
             const symbols = Object.values(symbolRegistry).filter(s => s.category === cat);
             if (symbols.length === 0) return null;
@@ -139,4 +267,3 @@ export const Palette = () => {
     </div>
   );
 };
-

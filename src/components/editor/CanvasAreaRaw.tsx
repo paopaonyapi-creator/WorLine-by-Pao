@@ -453,6 +453,35 @@ export const CanvasAreaRaw = () => {
               opacity={0.7}
             />
           )}
+
+          {/* Junction dots: where multiple wires share an endpoint */}
+          {(() => {
+            const wires = canvas.objects.filter(o => o.type === "wire") as WireObject[];
+            const pointCounts: Record<string, number> = {};
+            wires.forEach(w => {
+              if (w.points.length >= 2) {
+                const startKey = `${w.points[0]},${w.points[1]}`;
+                const endKey = `${w.points[w.points.length - 2]},${w.points[w.points.length - 1]}`;
+                pointCounts[startKey] = (pointCounts[startKey] || 0) + 1;
+                pointCounts[endKey] = (pointCounts[endKey] || 0) + 1;
+              }
+            });
+            return Object.entries(pointCounts)
+              .filter(([, count]) => count >= 2)
+              .map(([key]) => {
+                const [cx, cy] = key.split(",").map(Number);
+                return (
+                  <Circle
+                    key={`junction-${key}`}
+                    x={cx}
+                    y={cy}
+                    radius={4}
+                    fill="#000000"
+                    listening={false}
+                  />
+                );
+              });
+          })()}
         </Layer>
       </Stage>
 
