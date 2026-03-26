@@ -6,6 +6,7 @@ import { Zap, LayoutDashboard, Folder, LayoutTemplate, Settings, LogOut } from "
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function DashboardLayout({
   children,
@@ -62,15 +63,18 @@ export default function DashboardLayout({
           </nav>
         </div>
         <div className="mt-auto p-4 border-t absolute bottom-0 w-64">
-          <Button variant="outline" className="w-full justify-start gap-2" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4" />
-            Sign out
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button variant="outline" className="flex-1 justify-start gap-2" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </Button>
+          </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 w-full bg-slate-50/50">
+      <div className="flex flex-col flex-1 w-full bg-background">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
           <Link href="/app" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />

@@ -140,11 +140,31 @@
   );
 }
 
+.dark .gradient-hero {
+  background: linear-gradient(135deg,
+    oklch(0.14 0.04 264) 0%,
+    oklch(0.16 0.03 240) 40%,
+    oklch(0.13 0.02 200) 70%,
+    oklch(0.15 0.04 280) 100%
+  );
+}
+
 .gradient-text {
   background: linear-gradient(135deg,
     oklch(0.488 0.243 264) 0%,
     oklch(0.55 0.22 280) 50%,
     oklch(0.6 0.2 240) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(135deg,
+    oklch(0.65 0.24 264) 0%,
+    oklch(0.7 0.22 280) 50%,
+    oklch(0.75 0.2 240) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -158,9 +178,21 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.dark .glass-card {
+  background: rgba(30, 30, 50, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .glow-primary {
   box-shadow: 0 0 20px oklch(0.488 0.243 264 / 0.15),
               0 0 60px oklch(0.488 0.243 264 / 0.05);
+}
+
+.dark .glow-primary {
+  box-shadow: 0 0 20px oklch(0.65 0.24 264 / 0.25),
+              0 0 60px oklch(0.65 0.24 264 / 0.1);
 }
 
 .float-animation {
