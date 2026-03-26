@@ -79,6 +79,17 @@ import { ExtremeWeatherSim } from "./ExtremeWeatherSim";
 import { GenerativeVoiceCommand } from "./GenerativeVoiceCommand";
 import { HologramDisplayExport } from "./HologramDisplayExport";
 import { AutoGridHealing } from "./AutoGridHealing";
+// Tier 10
+import { MarsMicrogridDesigner } from "./MarsMicrogridDesigner";
+import { QuantumCryptoRouting } from "./QuantumCryptoRouting";
+import { DysonSwarmBeam } from "./DysonSwarmBeam";
+import { FusionReactorSim } from "./FusionReactorSim";
+import { AGIGridGodMode } from "./AGIGridGodMode";
+import { SuperconductorLines } from "./SuperconductorLines";
+import { SpaceLaunchPulse } from "./SpaceLaunchPulse";
+import { MultiverseTimeline } from "./MultiverseTimeline";
+import { AntimatterUPS } from "./AntimatterUPS";
+import { NeuralinkBCI } from "./NeuralinkBCI";
 
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
@@ -95,7 +106,8 @@ import {
   Grid3x3, Image, History, Smartphone, FileOutput,
   Flame, ActivitySquare, Sun, Play, Bot, Route, Box, CircleDollarSign, Users,
   CloudLightning, Network, Wifi, Cpu, Map as MapIcon, Wrench, Glasses,
-  CarFront, Bitcoin, Skull, BrainCircuit, PlaneTakeoff, Leaf, CloudRainWind, Mic, Cuboid, PowerOff
+  CarFront, Bitcoin, Skull, BrainCircuit, PlaneTakeoff, Leaf, CloudRainWind, Mic, Cuboid, PowerOff,
+  Earth, Lock, Satellite, Atom, Snowflake, Rocket, Layers, BatteryWarning
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -234,6 +246,17 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.voiceCmd && <GenerativeVoiceCommand onClose={() => toggle("voiceCmd")} />}
             {panels.hologram && <HologramDisplayExport onClose={() => toggle("hologram")} />}
             {panels.healing && <AutoGridHealing onClose={() => toggle("healing")} />}
+            {/* Tier 10 */}
+            {panels.mars && <MarsMicrogridDesigner onClose={() => toggle("mars")} />}
+            {panels.quantum && <QuantumCryptoRouting onClose={() => toggle("quantum")} />}
+            {panels.dyson && <DysonSwarmBeam onClose={() => toggle("dyson")} />}
+            {panels.fusion && <FusionReactorSim onClose={() => toggle("fusion")} />}
+            {panels.agi && <AGIGridGodMode onClose={() => toggle("agi")} />}
+            {panels.supercond && <SuperconductorLines onClose={() => toggle("supercond")} />}
+            {panels.spaceLaunch && <SpaceLaunchPulse onClose={() => toggle("spaceLaunch")} />}
+            {panels.multiverse && <MultiverseTimeline onClose={() => toggle("multiverse")} />}
+            {panels.antimatter && <AntimatterUPS onClose={() => toggle("antimatter")} />}
+            {panels.neuralink && <NeuralinkBCI onClose={() => toggle("neuralink")} />}
 
             {/* Shortcuts */}
             {!readOnly && (
@@ -242,9 +265,22 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               </div>
             )}
 
-            {/* === ACTION BUTTONS — 7 rows === */}
+            {/* === ACTION BUTTONS — 8 rows === */}
             {!readOnly && (
               <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1 items-end">
+                {/* Row 0000: Tier 10 — The Singularity */}
+                <div className="flex gap-1">
+                  <Btn icon={Earth} title="Mars Microgrid" id="mars" />
+                  <Btn icon={Lock} title="Quantum Crypto QKD" id="quantum" />
+                  <Btn icon={Satellite} title="Dyson Swarm Beam" id="dyson" />
+                  <Btn icon={Atom} title="Fusion Reactor Sim" id="fusion" />
+                  <Btn icon={Cpu} title="AGI Grid God-Mode" id="agi" />
+                  <Btn icon={Snowflake} title="Superconductor 0% Drop" id="supercond" />
+                  <Btn icon={Rocket} title="Space Launch Pulse" id="spaceLaunch" />
+                  <Btn icon={Layers} title="Multiverse Timeline" id="multiverse" />
+                  <Btn icon={BatteryWarning} title="Antimatter UPS" id="antimatter" />
+                  <Btn icon={Brain} title="Neuralink BCI" id="neuralink" />
+                </div>
                 {/* Row 000: Tier 9 — Cyber-Physical / Cosmic Grid */}
                 <div className="flex gap-1">
                   <Btn icon={CarFront} title="EV Fleet V2G Optimizer" id="evFleet" />
