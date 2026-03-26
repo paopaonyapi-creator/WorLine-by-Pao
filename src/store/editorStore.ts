@@ -26,11 +26,11 @@ export type EditorState = {
   wireStartParams: { objectId: string; terminalId: string; x: number; y: number } | null;
 
   // Interaction Mode
-  activeTool: "select" | "text";
+  activeTool: "select" | "text" | "wire";
 
   // Actions
   initialize: (id: string, state?: Partial<CanvasState>) => void;
-  setActiveTool: (tool: "select" | "text") => void;
+  setActiveTool: (tool: "select" | "text" | "wire") => void;
   addObject: (obj: Omit<AnyDiagramObject, "id"> & { id?: string }) => void;
   updateObject: (id: string, updates: Partial<AnyDiagramObject>) => void;
   deleteObjects: (ids: string[]) => void;

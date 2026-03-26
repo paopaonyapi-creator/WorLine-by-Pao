@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/editorStore";
-import { Save, Undo, Redo, Download, ArrowLeft, Loader2, MousePointer2, Type } from "lucide-react";
+import { Save, Undo, Redo, Download, ArrowLeft, Loader2, MousePointer2, Type, Cable } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -143,6 +143,14 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
           onClick={() => setActiveTool("text")}
         >
           <Type className="h-4 w-4" /> Text
+        </Button>
+        <Button 
+          variant={activeTool === "wire" ? "secondary" : "ghost"} 
+          size="sm" 
+          className="gap-2"
+          onClick={() => setActiveTool("wire")}
+        >
+          <Cable className="h-4 w-4" /> Wire
         </Button>
       </div>
 
