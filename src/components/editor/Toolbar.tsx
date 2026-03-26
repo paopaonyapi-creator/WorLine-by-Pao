@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/editorStore";
-import { Save, Undo, Redo, Download, ArrowLeft, Loader2, MousePointer2, Type, Cable } from "lucide-react";
+import { Save, Undo, Redo, Download, ArrowLeft, Loader2, MousePointer2, Type, Cable, Grid3x3, Maximize, AlignVerticalJustifyCenter, AlignHorizontalJustifyCenter } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -15,13 +15,47 @@ import { Share2, Check, Copy, Trash, Boxes } from "lucide-react";
 import { Palette } from "./Palette";
 
 export const Toolbar = ({ projectId }: { projectId: string }) => {
-  const { undo, redo, canvas, history, currentHistoryIndex, activeTool, setActiveTool, selectedIds, deleteObjects, duplicateSelected } = useEditorStore();
+  const { undo, redo, canvas, history, currentHistoryIndex, activeTool, setActiveTool, selectedIds, deleteObjects, duplicateSelected, setZoom, setPan } = useEditorStore();
   const [saving, setSaving] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shared, setShared] = useState(false);
+  const [gridVisible, setGridVisible] = useState(true);
 
   const canUndo = currentHistoryIndex > 0;
   const canRedo = currentHistoryIndex < history.length - 1;
+
+  const handleFitToScreen = () => {
+    // Reset zoom and pan to fit canvas
+    setZoom(1);
+    setPan(0, 0);
+    toast.success("Fit to screen");
+  };
+
+  const handleToggleGrid = () => {
+    setGridVisible(!gridVisible);
+    // Toggle grid visibility on canvas
+    const gridLayer = document.querySelector('[data-grid-layer]');
+    if (gridLayer) {
+      (gridLayer as HTMLElement).style.opacity = gridVisible ? '0' : '1';
+    }
+    toast.success(gridVisible ? "Grid hidden" : "Grid visible");
+  };
+
+  const handleAlignH = () => {
+    if (selectedIds.length < 2) { toast.error("Select 2+ objects"); return; }
+    const objs = canvas.objects.filter(o => selectedIds.includes(o.id));
+    const avgY = objs.reduce((sum, o) => sum + (o as any).y, 0) / objs.length;
+    objs.forEach(o => { (o as any).y = avgY; });
+    toast.success("Aligned horizontally");
+  };
+
+  const handleAlignV = () => {
+    if (selectedIds.length < 2) { toast.error("Select 2+ objects"); return; }
+    const objs = canvas.objects.filter(o => selectedIds.includes(o.id));
+    const avgX = objs.reduce((sum, o) => sum + (o as any).x, 0) / objs.length;
+    objs.forEach(o => { (o as any).x = avgX; });
+    toast.success("Aligned vertically");
+  };
 
   const handleSave = async () => {
     if (!projectId) return;
@@ -274,6 +308,41 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
         >
           <Cable className="h-4 w-4" /> Wire
         </Button>
+
+        <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
+
+        {/* Canvas tools */}
+        <Button
+          variant={gridVisible ? "secondary" : "ghost"}
+          size="icon"
+          className="w-8 h-8 hidden sm:inline-flex"
+          onClick={handleToggleGrid}
+          title="Toggle Grid"
+        >
+          <Grid3x3 className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="w-8 h-8 hidden sm:inline-flex"
+          onClick={handleFitToScreen}
+          title="Fit to Screen"
+        >
+          <Maximize className="h-4 w-4" />
+        </Button>
+
+        {/* Alignment tools (visible when 2+ selected) */}
+        {selectedIds.length >= 2 && (
+          <>
+            <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
+            <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" onClick={handleAlignH} title="Align Horizontally">
+              <AlignHorizontalJustifyCenter className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" onClick={handleAlignV} title="Align Vertically">
+              <AlignVerticalJustifyCenter className="h-4 w-4" />
+            </Button>
+          </>
+        )}
         
         {/* Mobile quick actions for selected */}
         {selectedIds.length > 0 && (

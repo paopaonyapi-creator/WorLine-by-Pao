@@ -63,6 +63,35 @@ function SymbolMiniIcon({ symbolType }: { symbolType: string }) {
       return <svg {...common}><circle cx="14" cy="14" r="10" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">kW</text></svg>;
     case "ammeter":
       return <svg {...common}><circle cx="14" cy="14" r="9" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="10" fontWeight="bold">A</text></svg>;
+    // --- New IEC Symbols ---
+    case "switch_disconnector":
+      return <svg {...common}><line x1="14" y1="4" x2="14" y2="10" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="10" x2="22" y2="16" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="18" x2="14" y2="24" stroke={stroke} strokeWidth={sw} /><line x1="18" y1="18" x2="22" y2="16" stroke={stroke} strokeWidth={sw} /><line x1="20" y1="18" x2="22" y2="16" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "earthing_disconnector":
+      return <svg {...common}><line x1="14" y1="4" x2="14" y2="10" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="10" x2="20" y2="16" stroke={stroke} strokeWidth={sw} /><line x1="8" y1="18" x2="20" y2="18" stroke={stroke} strokeWidth={sw} /><line x1="10" y1="21" x2="18" y2="21" stroke={stroke} strokeWidth={sw} /><line x1="12" y1="24" x2="16" y2="24" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "plug_in_switch":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><circle cx="11" cy="14" r="2" stroke={stroke} strokeWidth={sw} /><circle cx="17" cy="14" r="2" stroke={stroke} strokeWidth={sw} /><line x1="11" y1="10" x2="17" y2="18" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "differential_switch":
+      return <svg {...common}><rect x="6" y="6" width="16" height="12" stroke={stroke} strokeWidth={sw} /><line x1="8" y1="10" x2="20" y2="14" stroke={stroke} strokeWidth={sw} /><line x1="8" y1="14" x2="20" y2="10" stroke={stroke} strokeWidth={sw} /><circle cx="14" cy="22" r="3" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "fuse_disconnector":
+      return <svg {...common}><line x1="14" y1="4" x2="14" y2="8" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="8" x2="20" y2="13" stroke={stroke} strokeWidth={sw} /><rect x="10" y="14" width="8" height="8" rx="1" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="22" x2="14" y2="26" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "disconnect_fuse_switch":
+      return <svg {...common}><line x1="14" y1="4" x2="14" y2="8" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="8" x2="20" y2="14" stroke={stroke} strokeWidth={sw} /><rect x="10" y="16" width="8" height="6" rx="1" stroke={stroke} strokeWidth={sw} /><line x1="14" y1="22" x2="14" y2="26" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "contactor_coil":
+      return <svg {...common}><circle cx="14" cy="10" r="6" stroke={stroke} strokeWidth={sw} /><text x="14" y="14" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">K</text><rect x="8" y="18" width="12" height="5" stroke={stroke} strokeWidth={sw} /></svg>;
+    case "thermal_protection":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="12" fontWeight="bold">θ</text></svg>;
+    case "magnetic_protection":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="9" fontWeight="bold">I&gt;</text></svg>;
+    case "instantaneous_overcurrent":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" rx="2" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">I&gt;&gt;</text></svg>;
+    case "relay_coil":
+      return <svg {...common}><rect x="6" y="6" width="16" height="16" stroke={stroke} strokeWidth={sw} /><polyline points="9,14 12,9 16,19 19,14" stroke={stroke} strokeWidth={sw} fill="none" /></svg>;
+    case "timer_relay":
+      return <svg {...common}><circle cx="14" cy="14" r="10" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="10" fontWeight="bold">T</text></svg>;
+    case "voltmeter":
+      return <svg {...common}><circle cx="14" cy="14" r="9" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="10" fontWeight="bold">V</text></svg>;
+    case "frequency_meter":
+      return <svg {...common}><circle cx="14" cy="14" r="9" stroke={stroke} strokeWidth={sw} /><text x="14" y="18" textAnchor="middle" fill={stroke} fontSize="8" fontWeight="bold">Hz</text></svg>;
     default:
       return <svg {...common}><rect x="6" y="6" width="16" height="16" stroke={stroke} strokeWidth={sw} /></svg>;
   }
