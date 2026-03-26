@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Zap, ArrowRight, Shield, Cloud, FileDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
@@ -22,15 +21,19 @@ export default function HomePage() {
             Create, collaborate, and export professional single-line diagrams in minutes.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 glow-primary" asChild>
-              <Link href="/signup">
-                Get Started Free
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="h-12 px-8" asChild>
-              <Link href="/pricing">View Pricing</Link>
-            </Button>
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center h-12 px-8 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors glow-primary"
+            >
+              Get Started Free
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+            <Link
+              href="/pricing"
+              className="inline-flex items-center justify-center h-12 px-8 rounded-md border border-input bg-background font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              View Pricing
+            </Link>
           </div>
         </div>
       </section>
@@ -83,12 +86,13 @@ export default function HomePage() {
           <p className="text-lg text-muted-foreground mb-8">
             Join engineers who trust WorLine for their electrical diagram needs.
           </p>
-          <Button size="lg" className="h-12 px-8 glow-primary" asChild>
-            <Link href="/signup">
-              Start Designing Free
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <Link
+            href="/signup"
+            className="inline-flex items-center justify-center h-12 px-8 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors glow-primary"
+          >
+            Start Designing Free
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </div>
       </section>
     </div>
