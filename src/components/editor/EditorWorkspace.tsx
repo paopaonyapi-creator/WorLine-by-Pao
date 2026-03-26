@@ -12,12 +12,13 @@ import { CrosshairOverlay } from "./CrosshairOverlay";
 import { RulerOverlay } from "./RulerOverlay";
 import { SymbolSearch } from "./SymbolSearch";
 import { LoadCalculator } from "./LoadCalculator";
+import { BOMTable } from "./BOMTable";
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
-import { Calculator } from "lucide-react";
+import { Calculator, FileSpreadsheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
@@ -25,6 +26,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
   const [showLoadCalc, setShowLoadCalc] = useState(false);
+  const [showBOM, setShowBOM] = useState(false);
 
   // Auto-save every 30 seconds (if not readonly)
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
@@ -123,6 +125,9 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
           {/* Load Calculator */}
           {showLoadCalc && <LoadCalculator onClose={() => setShowLoadCalc(false)} />}
 
+          {/* BOM Table */}
+          {showBOM && <BOMTable onClose={() => setShowBOM(false)} />}
+
           {/* Shortcut hints */}
           {!readOnly && (
             <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
@@ -134,17 +139,28 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             </div>
           )}
 
-          {/* Load calculator toggle */}
+          {/* Bottom-right action buttons */}
           {!readOnly && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute bottom-4 right-4 z-10 w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
-              onClick={() => setShowLoadCalc(!showLoadCalc)}
-              title="Load Calculator"
-            >
-              <Calculator className="h-4 w-4" />
-            </Button>
+            <div className="absolute bottom-4 right-4 z-10 flex gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                onClick={() => setShowBOM(!showBOM)}
+                title="Bill of Materials"
+              >
+                <FileSpreadsheet className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-8 h-8 bg-background/80 backdrop-blur-sm border shadow-sm"
+                onClick={() => setShowLoadCalc(!showLoadCalc)}
+                title="Load Calculator"
+              >
+                <Calculator className="h-4 w-4" />
+              </Button>
+            </div>
           )}
 
           {/* Online users indicator */}

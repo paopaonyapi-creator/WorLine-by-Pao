@@ -276,13 +276,13 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
           </SheetContent>
         </Sheet>
 
-        <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" disabled={!canUndo} onClick={undo}>
+        <Button variant="ghost" size="icon" className="w-8 h-8" disabled={!canUndo} onClick={undo}>
           <Undo className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="w-8 h-8 hidden sm:inline-flex" disabled={!canRedo} onClick={redo}>
+        <Button variant="ghost" size="icon" className="w-8 h-8" disabled={!canRedo} onClick={redo}>
           <Redo className="h-4 w-4" />
         </Button>
-        <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
+        <div className="w-px h-6 bg-border mx-1" />
         {/* Tools */}
         <Button 
           variant={activeTool === "select" ? "secondary" : "ghost"} 
