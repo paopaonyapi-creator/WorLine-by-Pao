@@ -51,7 +51,7 @@ export const EditorWorkspace = ({ projectId }: { projectId: string }) => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full overflow-hidden bg-slate-100">
+    <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
       <Toolbar projectId={projectId} />
       <div className="flex flex-1 overflow-hidden relative">
         <Palette />
