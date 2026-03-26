@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Folder, Clock, Trash2, Share2, Link2, Check } from "lucide-react";
+import { Plus, Folder, Clock, Trash2, Share2, Link2, Check, Pencil } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,8 @@ export default function ProjectsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sharingId, setSharingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
   const supabase = createClient();
 
   useEffect(() => {
@@ -108,6 +111,24 @@ export default function ProjectsPage() {
     setSharingId(null);
   };
 
+  const handleRename = async (projectId: string, newName: string) => {
+    if (!newName.trim()) return;
+    const { error } = await supabase
+      .from("projects")
+      .update({ name: newName.trim() })
+      .eq("id", projectId);
+
+    if (error) {
+      toast.error("Failed to rename");
+    } else {
+      setProjects(prev =>
+        prev.map(p => p.id === projectId ? { ...p, name: newName.trim() } : p)
+      );
+      toast.success("Project renamed");
+    }
+    setRenamingId(null);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -157,8 +178,33 @@ export default function ProjectsPage() {
             <Card key={project.id} className="group hover:shadow-lg hover:border-primary/30 transition-all duration-200 relative">
               <Link href={`/app/projects/${project.id}`}>
                 <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    {project.name}
+                <CardTitle className="text-lg flex items-center gap-2">
+                    {renamingId === project.id ? (
+                      <Input
+                        autoFocus
+                        className="h-7 text-lg font-semibold px-1"
+                        value={renameValue}
+                        onChange={(e) => setRenameValue(e.target.value)}
+                        onBlur={() => handleRename(project.id, renameValue)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleRename(project.id, renameValue);
+                          if (e.key === "Escape") setRenamingId(null);
+                        }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      />
+                    ) : (
+                      <span
+                        onDoubleClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setRenamingId(project.id);
+                          setRenameValue(project.name);
+                        }}
+                        title="Double-click to rename"
+                      >
+                        {project.name}
+                      </span>
+                    )}
                     {project.is_public && (
                       <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-normal">
                         Public
