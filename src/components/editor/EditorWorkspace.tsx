@@ -90,12 +90,14 @@ import { SpaceLaunchPulse } from "./SpaceLaunchPulse";
 import { MultiverseTimeline } from "./MultiverseTimeline";
 import { AntimatterUPS } from "./AntimatterUPS";
 import { NeuralinkBCI } from "./NeuralinkBCI";
+import { PluginHub } from "./PluginHub";
 
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
   Calculator, FileSpreadsheet, Sparkles, Paintbrush,
   Cable, FileText, Zap, Shield, MessageSquare,
@@ -115,6 +117,9 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const { initialize, canvas, zoom, panX, panY } = useEditorStore();
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
+  const [showPluginHub, setShowPluginHub] = useState(false);
+  const [showMobilePalette, setShowMobilePalette] = useState(false);
+  const [showMobileProps, setShowMobileProps] = useState(false);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
   const toggle = (key: string) => setPanels(p => ({ ...p, [key]: !p[key] }));
 
@@ -260,112 +265,65 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
 
             {/* Shortcuts */}
             {!readOnly && (
-              <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden lg:flex gap-3">
+              <div className="absolute bottom-20 lg:bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden md:flex gap-3">
                 <span>R rotate</span><span>H/V flip</span><span>Ctrl+K search</span><span>W wire</span><span>T text</span>
               </div>
             )}
 
-            {/* === ACTION BUTTONS — 8 rows === */}
+            {/* Plugin Hub Dialog */}
             {!readOnly && (
-              <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1 items-end">
-                {/* Row 0000: Tier 10 — The Singularity */}
-                <div className="flex gap-1">
-                  <Btn icon={Earth} title="Mars Microgrid" id="mars" />
-                  <Btn icon={Lock} title="Quantum Crypto QKD" id="quantum" />
-                  <Btn icon={Satellite} title="Dyson Swarm Beam" id="dyson" />
-                  <Btn icon={Atom} title="Fusion Reactor Sim" id="fusion" />
-                  <Btn icon={Cpu} title="AGI Grid God-Mode" id="agi" />
-                  <Btn icon={Snowflake} title="Superconductor 0% Drop" id="supercond" />
-                  <Btn icon={Rocket} title="Space Launch Pulse" id="spaceLaunch" />
-                  <Btn icon={Layers} title="Multiverse Timeline" id="multiverse" />
-                  <Btn icon={BatteryWarning} title="Antimatter UPS" id="antimatter" />
-                  <Btn icon={Brain} title="Neuralink BCI" id="neuralink" />
-                </div>
-                {/* Row 000: Tier 9 — Cyber-Physical / Cosmic Grid */}
-                <div className="flex gap-1">
-                  <Btn icon={CarFront} title="EV Fleet V2G Optimizer" id="evFleet" />
-                  <Btn icon={Bitcoin} title="Blockchain P2P Trade" id="blockchain" />
-                  <Btn icon={Skull} title="SCADA Cyber Attack" id="cyber" />
-                  <Btn icon={BrainCircuit} title="AI Failure Predict" id="aiPred" />
-                  <Btn icon={PlaneTakeoff} title="Drone Fleet Path" id="drone" />
-                  <Btn icon={Leaf} title="ESG Carbon Token" id="esg" />
-                  <Btn icon={CloudRainWind} title="Weather Hazard Sim" id="weather" />
-                  <Btn icon={Mic} title="AI Voice Command" id="voiceCmd" />
-                  <Btn icon={Cuboid} title="3D Hologram Export" id="hologram" />
-                  <Btn icon={PowerOff} title="Grid Self-Healing" id="healing" />
-                </div>
-                {/* Row 00: Tier 8 — Digital Twin Omniverse */}
-                <div className="flex gap-1">
-                  <Btn icon={CloudLightning} title="Lightning Protect." id="lightning" />
-                  <Btn icon={Network} title="Earth Grid Calc" id="groundGrid" />
-                  <Btn icon={Wifi} title="IoT MQTT Sensor" id="mqtt" />
-                  <Btn icon={Cpu} title="Relay Logic Sim" id="relaySim" />
-                  <Btn icon={MapIcon} title="GIS Map Overlay" id="gis" />
-                  <Btn icon={Wrench} title="CMMS Maintenance" id="cmms" />
-                  <Btn icon={Thermometer} title="Thermal IR Heatmap" id="thermal" />
-                  <Btn icon={TrendingDown} title="Peak Shaving Sim" id="loadProfile" />
-                  <Btn icon={FileText} title="AI Gen Report" id="aiReport" />
-                  <Btn icon={Glasses} title="WebXR 3D Preview" id="webXr" />
-                </div>
-                {/* Row 0: Tier 7 — God Mode */}
-                <div className="flex gap-1">
-                  <Btn icon={Flame} title="Arc Flash Analysis" id="arcFlash" />
-                  <Btn icon={ActivitySquare} title="Harmonic THD%" id="thd" />
-                  <Btn icon={TrendingDown} title="Motor Start Dip" id="motorStart" />
-                  <Btn icon={Sun} title="Solar PV Sizing" id="solar" />
-                  <Btn icon={CircleDollarSign} title="Cost Estimator" id="cost" />
-                  <Btn icon={Bot} title="AI Generative Design" id="aiGen" />
-                  <Btn icon={Route} title="Smart Auto-Routing" id="autoRout" />
-                  <Btn icon={Box} title="BIM / IFC Export" id="bim" />
-                  <Btn icon={Play} title="SCADA Sim" id="scada" />
-                  <Btn icon={Users} title="Team Chat" id="chat" />
-                </div>
-                {/* Row 1: Tier 6 — Ultimate */}
-                <div className="flex gap-1">
-                  <Btn icon={Gauge} title="PF Correction" id="pfCorrection" />
-                  <Btn icon={Battery} title="Battery Sizing" id="battery" />
-                  <Btn icon={Thermometer} title="Cable Derating" id="derating" />
-                  <Btn icon={LayoutGrid} title="Panel Schedule" id="panelSch" />
-                  <Btn icon={PaletteIcon} title="Theme Presets" id="theme" />
-                  <Btn icon={FileOutput} title="PDF Export" id="pdfExport" />
-                </div>
-                {/* Row 2: Tier 6 — Utility */}
-                <div className="flex gap-1">
-                  <Btn icon={Grid3x3} title="Grid & Snap" id="gridSnap" />
-                  <Btn icon={Image} title="Image Layer" id="imgLayer" />
-                  <Btn icon={History} title="Revision History" id="revHist" />
-                  <Btn icon={Smartphone} title="Touch Controls" id="touch" />
-                  <Btn icon={Brain} title="AI Recognition" id="aiRecog" />
-                  <Btn icon={FolderOpen} title="Templates" id="templates" />
-                </div>
-                {/* Row 3: Tier 5 — SCADA */}
-                <div className="flex gap-1">
-                  <Btn icon={Link2} title="Cross-Reference" id="crossRef" />
-                  <Btn icon={ClipboardCheck} title="Inspection" id="inspect" />
-                  <Btn icon={Database} title="Equipment DB" id="equipDb" />
-                  <Btn icon={CircuitBoard} title="Terminal Strips" id="terminal" />
-                  <Btn icon={TrendingDown} title="Voltage Drop" id="vdrop" />
-                  <Btn icon={Activity} title="Load Flow" id="loadFlow" />
-                </div>
-                {/* Row 4: Core tools */}
-                <div className="flex gap-1">
-                  <DarkCanvasToggle />
-                  <Btn icon={Zap} title="Short Circuit" id="shortCircuit" />
-                  <Btn icon={Shield} title="Protection TCC" id="protection" />
-                  <Btn icon={MessageSquare} title="Comments" id="comments" />
-                  <Btn icon={PenTool} title="Symbol Editor" id="symEditor" />
-                  <Btn icon={GitCompare} title="Version Diff" id="diff" />
-                  <Btn icon={Printer} title="Print Layout" id="print" />
-                  <Btn icon={FileDown} title="DXF Export" id="dxf" />
-                  <Btn icon={FileText} title="Title Block" id="titleBlock" />
-                  <Btn icon={Cable} title="Cable Schedule" id="cable" />
-                  <Btn icon={Paintbrush} title="Custom Symbol" id="symCreator" />
-                  <Btn icon={Sparkles} title="AI Layout" id="aiLayout" />
-                  <Btn icon={FileSpreadsheet} title="BOM" id="bom" />
-                  <Btn icon={Calculator} title="Load Calc" id="loadCalc" />
-                </div>
+              <PluginHub 
+                isOpen={showPluginHub} 
+                onClose={() => setShowPluginHub(false)} 
+                onSelect={(id) => toggle(id)} 
+              />
+            )}
+
+            {/* Floating Action Button for Desktop */}
+            {!readOnly && (
+              <div className="absolute bottom-6 right-6 z-10 hidden lg:block">
+                <Button 
+                  onClick={() => setShowPluginHub(true)} 
+                  size="lg" 
+                  className="rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2 px-6 h-14"
+                >
+                  <LayoutGrid className="w-5 h-5" />
+                  <span className="font-bold">App Store & Plugins</span>
+                  <div className="ml-2 bg-indigo-800 text-indigo-100 text-[10px] px-2 py-0.5 rounded-full font-mono">99</div>
+                </Button>
               </div>
             )}
+
+            {/* Mobile Bottom Navigation */}
+            {!readOnly && (
+              <div className="lg:hidden absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur border-t p-1 px-2 flex justify-around items-center z-40 pb-safe">
+                <Button variant="ghost" className="flex flex-col items-center gap-1 h-14 w-full text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobilePalette(true)}>
+                  <FolderOpen className="w-5 h-5" />
+                  <span className="text-[10px] font-medium leading-none mt-1">Library</span>
+                </Button>
+                <Button variant="ghost" className="flex flex-col items-center gap-1 h-14 w-full text-indigo-500 hover:text-indigo-400 hover:bg-indigo-500/10" onClick={() => setShowPluginHub(true)}>
+                  <LayoutGrid className="w-5 h-5" />
+                  <span className="text-[10px] font-medium leading-none mt-1">Plugins</span>
+                </Button>
+                <Button variant="ghost" className="flex flex-col items-center gap-1 h-14 w-full text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobileProps(true)}>
+                  <Wrench className="w-5 h-5" />
+                  <span className="text-[10px] font-medium leading-none mt-1">Props</span>
+                </Button>
+              </div>
+            )}
+
+            {/* Mobile Drawers (Sheets) */}
+            <Sheet open={showMobilePalette} onOpenChange={setShowMobilePalette}>
+              <SheetContent side="left" className="w-[85vw] sm:w-[400px] p-0 border-r">
+                <div className="h-full flex flex-col pt-8"><Palette /></div>
+              </SheetContent>
+            </Sheet>
+
+            <Sheet open={showMobileProps} onOpenChange={setShowMobileProps}>
+              <SheetContent side="right" className="w-[85vw] sm:w-[400px] p-0 border-l">
+                <div className="h-full flex flex-col pt-8"><PropertiesPanel /></div>
+              </SheetContent>
+            </Sheet>
 
             {/* Online users */}
             {!readOnly && cursors.length > 0 && (
