@@ -2,21 +2,26 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Folder, Clock, Trash2 } from "lucide-react";
+import { Plus, Folder, Clock, Trash2, Share2, Link2, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
 interface Project {
   id: string;
   name: string;
   updated_at: string;
   created_at: string;
+  is_public?: boolean;
 }
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [sharingId, setSharingId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -49,6 +54,58 @@ export default function ProjectsPage() {
     if (data) {
       window.location.href = `/app/projects/${data.id}`;
     }
+  };
+
+  const handleDelete = async (projectId: string, projectName: string) => {
+    if (!confirm(`Delete "${projectName}"? This cannot be undone.`)) return;
+
+    setDeletingId(projectId);
+    const { error } = await supabase
+      .from("projects")
+      .delete()
+      .eq("id", projectId);
+
+    if (error) {
+      toast.error("Failed to delete project");
+    } else {
+      setProjects(prev => prev.filter(p => p.id !== projectId));
+      toast.success(`"${projectName}" deleted`);
+    }
+    setDeletingId(null);
+  };
+
+  const handleShare = async (projectId: string, currentlyPublic: boolean) => {
+    setSharingId(projectId);
+    const newState = !currentlyPublic;
+
+    try {
+      const res = await fetch("/api/projects/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId, isPublic: newState }),
+      });
+
+      if (res.ok) {
+        setProjects(prev =>
+          prev.map(p => p.id === projectId ? { ...p, is_public: newState } : p)
+        );
+
+        if (newState) {
+          const shareUrl = `${window.location.origin}/share/${projectId}`;
+          await navigator.clipboard.writeText(shareUrl);
+          setCopiedId(projectId);
+          setTimeout(() => setCopiedId(null), 2000);
+          toast.success("Share link copied to clipboard!");
+        } else {
+          toast.success("Project is now private");
+        }
+      } else {
+        toast.error("Failed to update sharing");
+      }
+    } catch {
+      toast.error("Failed to update sharing");
+    }
+    setSharingId(null);
   };
 
   return (
@@ -97,10 +154,17 @@ export default function ProjectsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <Link key={project.id} href={`/app/projects/${project.id}`}>
-              <Card className="cursor-pointer hover:shadow-lg hover:border-primary/30 transition-all duration-200">
+            <Card key={project.id} className="group hover:shadow-lg hover:border-primary/30 transition-all duration-200 relative">
+              <Link href={`/app/projects/${project.id}`}>
                 <CardHeader>
-                  <CardTitle className="text-lg">{project.name}</CardTitle>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    {project.name}
+                    {project.is_public && (
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-normal">
+                        Public
+                      </span>
+                    )}
+                  </CardTitle>
                   <CardDescription className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {new Date(project.updated_at).toLocaleDateString()}
@@ -111,8 +175,44 @@ export default function ProjectsPage() {
                     [Diagram Preview]
                   </div>
                 </CardContent>
-              </Card>
-            </Link>
+              </Link>
+
+              {/* Action Buttons */}
+              <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-primary/10"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleShare(project.id, !!project.is_public);
+                  }}
+                  disabled={sharingId === project.id}
+                >
+                  {copiedId === project.id ? (
+                    <Check className="h-4 w-4 text-green-500" />
+                  ) : project.is_public ? (
+                    <Link2 className="h-4 w-4 text-primary" />
+                  ) : (
+                    <Share2 className="h-4 w-4" />
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-destructive/10 hover:text-destructive"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDelete(project.id, project.name);
+                  }}
+                  disabled={deletingId === project.id}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </Card>
           ))}
         </div>
       )}
