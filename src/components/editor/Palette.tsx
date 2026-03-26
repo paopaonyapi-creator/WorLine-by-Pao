@@ -143,24 +143,24 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
     const def = symbolRegistry[symbolId];
     if (!def) return;
 
-    // Try to get actual canvas container size; fall back to window size
-    const canvasContainer = document.getElementById("canvas-container");
-    const rect = canvasContainer?.getBoundingClientRect();
-    // Use nonzero dimensions only
-    const w = (rect && rect.width > 50) ? rect.width : window.innerWidth;
-    const h = (rect && rect.height > 50) ? rect.height : window.innerHeight;
+    // Get fresh state directly (avoids stale closure capture)
+    const st = useEditorStore.getState();
+    const px = st.panX;
+    const py = st.panY;
+    const z  = st.zoom ?? 1;
+    // Use the logical canvas size from state — always valid, never zero
+    const cw = st.canvas?.width  || 2000;
+    const ch = st.canvas?.height || 2000;
 
-    // Get latest zoom/pan from store (direct state access, works outside React render)
-    const { panX: px, panY: py, zoom: z } = useEditorStore.getState();
+    // Convert canvas-space center from the panned & zoomed coordinate system
+    const centerX = -px / z + (cw / 2);
+    const centerY = -py / z + (ch / 2);
 
-    const centerX = -px / z + (w / 2) / z;
-    const centerY = -py / z + (h / 2) / z;
-
-    addObject({
+    st.addObject({
       type: "symbol",
       symbolId,
-      x: centerX - def.width / 2,
-      y: centerY - def.height / 2,
+      x: Math.round(centerX - def.width / 2),
+      y: Math.round(centerY - def.height / 2),
       rotation: 0,
       zIndex: 1,
       width: def.width,
