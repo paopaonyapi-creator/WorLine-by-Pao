@@ -90,6 +90,9 @@ export default function LoginPage() {
                 "Sign In"
               )}
             </Button>
+            <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-primary transition-colors text-center">
+              Forgot your password?
+            </Link>
             <div className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
               <Link href="/signup" className="text-primary hover:underline font-medium">
