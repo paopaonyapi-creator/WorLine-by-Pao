@@ -2,10 +2,15 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code')
-  const type = searchParams.get('type')
-  const next = searchParams.get('next') ?? '/app'
+  const requestUrl = new URL(request.url)
+  const code = requestUrl.searchParams.get('code')
+  const type = requestUrl.searchParams.get('type')
+  const next = requestUrl.searchParams.get('next') ?? '/app'
+
+  // Fix for proxy environments (Railway) where request.url origin is 0.0.0.0:8080
+  const forwardedHost = request.headers.get('x-forwarded-host') || request.headers.get('host')
+  const protocol = request.headers.get('x-forwarded-proto') || (forwardedHost?.includes('localhost') ? 'http' : 'https')
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${forwardedHost}`
 
   if (code) {
     const supabase = await createClient()
