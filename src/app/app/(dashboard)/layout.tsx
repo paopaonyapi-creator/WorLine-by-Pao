@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, LayoutDashboard, Folder, LayoutTemplate, Settings, LogOut } from "lucide-react";
+import { Zap, LayoutDashboard, Folder, LayoutTemplate, Settings, LogOut, User, BookOpen } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,8 @@ export default function DashboardLayout({
     { name: "Projects", href: "/app/projects", icon: Folder },
     { name: "Templates", href: "/app/templates", icon: LayoutTemplate },
     { name: "Settings", href: "/app/settings", icon: Settings },
+    { name: "Profile", href: "/app/settings/profile", icon: User },
+    { name: "Help", href: "/guide", icon: BookOpen },
   ];
 
   return (

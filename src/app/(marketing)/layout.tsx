@@ -6,11 +6,13 @@ import { Zap, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useState } from "react";
 
 const navLinks = [
   { name: "Features", href: "/features" },
   { name: "Pricing", href: "/pricing" },
+  { name: "Guide", href: "/guide" },
 ];
 
 export default function MarketingLayout({
@@ -61,6 +63,7 @@ export default function MarketingLayout({
 
             <nav className="flex items-center space-x-1">
               <ThemeToggle />
+              <LanguageSwitcher />
               <div className="hidden md:flex items-center space-x-2">
                 <Link href="/login">
                   <Button variant="ghost" size="sm" className="h-9 px-4">Log in</Button>
@@ -132,6 +135,7 @@ export default function MarketingLayout({
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link href="/features" className="hover:text-foreground transition-colors">Features</Link></li>
                 <li><Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
+                <li><Link href="/guide" className="hover:text-foreground transition-colors">User Guide</Link></li>
               </ul>
             </div>
 
