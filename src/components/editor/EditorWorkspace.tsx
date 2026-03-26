@@ -57,6 +57,17 @@ import { SmartAutoRouting } from "./SmartAutoRouting";
 import { BIMExport } from "./BIMExport";
 import { LiveCostEstimator } from "./LiveCostEstimator";
 import { CollaborationChat } from "./CollaborationChat";
+// Tier 8
+import { LightningProtection } from "./LightningProtection";
+import { GroundGridCalc } from "./GroundGridCalc";
+import { IoTMqttBinding } from "./IoTMqttBinding";
+import { RelayLogicSimulator } from "./RelayLogicSimulator";
+import { GISMapOverlay } from "./GISMapOverlay";
+import { CMMSTagging } from "./CMMSTagging";
+import { ThermalIRMap } from "./ThermalIRMap";
+import { LoadProfileSim } from "./LoadProfileSim";
+import { AIGenerativeReport } from "./AIGenerativeReport";
+import { WebXRPreview } from "./WebXRPreview";
 
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
@@ -72,6 +83,7 @@ import {
   Gauge, Battery, Thermometer, LayoutGrid, Palette as PaletteIcon,
   Grid3x3, Image, History, Smartphone, FileOutput,
   Flame, ActivitySquare, Sun, Play, Bot, Route, Box, CircleDollarSign, Users,
+  CloudLightning, Network, Wifi, Cpu, Map as MapIcon, Wrench, Glasses,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -188,6 +200,17 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.bim && <BIMExport onClose={() => toggle("bim")} />}
             {panels.cost && <LiveCostEstimator onClose={() => toggle("cost")} />}
             {panels.chat && <CollaborationChat onClose={() => toggle("chat")} />}
+            {/* Tier 8 */}
+            {panels.lightning && <LightningProtection onClose={() => toggle("lightning")} />}
+            {panels.groundGrid && <GroundGridCalc onClose={() => toggle("groundGrid")} />}
+            {panels.mqtt && <IoTMqttBinding onClose={() => toggle("mqtt")} />}
+            {panels.relaySim && <RelayLogicSimulator onClose={() => toggle("relaySim")} />}
+            {panels.gis && <GISMapOverlay onClose={() => toggle("gis")} />}
+            {panels.cmms && <CMMSTagging onClose={() => toggle("cmms")} />}
+            {panels.thermal && <ThermalIRMap onClose={() => toggle("thermal")} />}
+            {panels.loadProfile && <LoadProfileSim onClose={() => toggle("loadProfile")} />}
+            {panels.aiReport && <AIGenerativeReport onClose={() => toggle("aiReport")} />}
+            {panels.webXr && <WebXRPreview onClose={() => toggle("webXr")} />}
 
             {/* Shortcuts */}
             {!readOnly && (
@@ -196,9 +219,22 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               </div>
             )}
 
-            {/* === ACTION BUTTONS — 5 rows === */}
+            {/* === ACTION BUTTONS — 6 rows === */}
             {!readOnly && (
               <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1 items-end">
+                {/* Row 00: Tier 8 — Digital Twin Omniverse */}
+                <div className="flex gap-1">
+                  <Btn icon={CloudLightning} title="Lightning Protect." id="lightning" />
+                  <Btn icon={Network} title="Earth Grid Calc" id="groundGrid" />
+                  <Btn icon={Wifi} title="IoT MQTT Sensor" id="mqtt" />
+                  <Btn icon={Cpu} title="Relay Logic Sim" id="relaySim" />
+                  <Btn icon={MapIcon} title="GIS Map Overlay" id="gis" />
+                  <Btn icon={Wrench} title="CMMS Maintenance" id="cmms" />
+                  <Btn icon={Thermometer} title="Thermal IR Heatmap" id="thermal" />
+                  <Btn icon={TrendingDown} title="Peak Shaving Sim" id="loadProfile" />
+                  <Btn icon={FileText} title="AI Gen Report" id="aiReport" />
+                  <Btn icon={Glasses} title="WebXR 3D Preview" id="webXr" />
+                </div>
                 {/* Row 0: Tier 7 — God Mode */}
                 <div className="flex gap-1">
                   <Btn icon={Flame} title="Arc Flash Analysis" id="arcFlash" />
