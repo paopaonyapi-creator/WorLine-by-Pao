@@ -320,7 +320,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {/* Mobile Drawers (Sheets) */}
             <Sheet open={showMobilePalette} onOpenChange={setShowMobilePalette}>
               <SheetContent side="left" className="w-[85vw] sm:w-[400px] p-0 border-r">
-                <div className="h-full flex flex-col pt-8"><Palette /></div>
+                <div className="h-full flex flex-col pt-8"><Palette onClose={() => setShowMobilePalette(false)} /></div>
               </SheetContent>
             </Sheet>
 

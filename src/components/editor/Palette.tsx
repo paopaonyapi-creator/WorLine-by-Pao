@@ -111,7 +111,7 @@ type UserSymbol = {
   symbol_data: any;
 };
 
-export const Palette = () => {
+export const Palette = ({ onClose }: { onClose?: () => void }) => {
   const { addObject, panX, panY, zoom, selectedIds, canvas } = useEditorStore();
   const [userSymbols, setUserSymbols] = useState<UserSymbol[]>([]);
   const supabase = createClient();
@@ -129,16 +129,32 @@ export const Palette = () => {
   }, []);
 
   const handleAddCenter = (symbolId: string) => {
-    const canvasContainer = document.getElementById("canvas-container");
-    const rect = canvasContainer?.getBoundingClientRect();
-    const w = rect ? rect.width : window.innerWidth;
-    const h = rect ? rect.height : window.innerHeight;
+    // On mobile: close the sheet first, then place after canvas is visible
+    if (onClose) {
+      onClose();
+      // Wait for sheet animation (300ms) before calculating canvas bounds
+      setTimeout(() => placeSymbol(symbolId), 350);
+    } else {
+      placeSymbol(symbolId);
+    }
+  };
 
-    const centerX = -panX / zoom + (w / 2) / zoom;
-    const centerY = -panY / zoom + (h / 2) / zoom;
-
+  const placeSymbol = (symbolId: string) => {
     const def = symbolRegistry[symbolId];
     if (!def) return;
+
+    // Try to get actual canvas container size; fall back to window size
+    const canvasContainer = document.getElementById("canvas-container");
+    const rect = canvasContainer?.getBoundingClientRect();
+    // Use nonzero dimensions only
+    const w = (rect && rect.width > 50) ? rect.width : window.innerWidth;
+    const h = (rect && rect.height > 50) ? rect.height : window.innerHeight;
+
+    // Get latest zoom/pan from store (direct state access, works outside React render)
+    const { panX: px, panY: py, zoom: z } = useEditorStore.getState();
+
+    const centerX = -px / z + (w / 2) / z;
+    const centerY = -py / z + (h / 2) / z;
 
     addObject({
       type: "symbol",
@@ -147,6 +163,9 @@ export const Palette = () => {
       y: centerY - def.height / 2,
       rotation: 0,
       zIndex: 1,
+      width: def.width,
+      height: def.height,
+      label: def.customData?.label || "",
       connections: [],
     } as any);
   };
@@ -203,6 +222,10 @@ export const Palette = () => {
       });
     });
     toast.success(`Placed "${us.name}"`);
+
+    if (onClose) {
+      onClose(); // Auto-close sheet on mobile
+    }
   };
 
   const handleDeleteUserSymbol = async (id: string) => {
