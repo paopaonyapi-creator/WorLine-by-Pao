@@ -46,6 +46,17 @@ import { ImageLayer } from "./ImageLayer";
 import { RevisionHistory as DrawingRevisionHistory } from "./DrawingRevisionHistory";
 import { MobileTouchDraw } from "./MobileTouchDraw";
 import { PDFBatchExport } from "./PDFBatchExport";
+// Tier 7
+import { ArcFlashAnalysis } from "./ArcFlashAnalysis";
+import { HarmonicDistortion } from "./HarmonicDistortion";
+import { MotorStartVoltdrop } from "./MotorStartVoltdrop";
+import { SolarPVSizing } from "./SolarPVSizing";
+import { SCADASimulation } from "./SCADASimulation";
+import { AIGenerativeDesign } from "./AIGenerativeDesign";
+import { SmartAutoRouting } from "./SmartAutoRouting";
+import { BIMExport } from "./BIMExport";
+import { LiveCostEstimator } from "./LiveCostEstimator";
+import { CollaborationChat } from "./CollaborationChat";
 
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
@@ -60,6 +71,7 @@ import {
   ClipboardCheck, Link2, FolderOpen, Brain,
   Gauge, Battery, Thermometer, LayoutGrid, Palette as PaletteIcon,
   Grid3x3, Image, History, Smartphone, FileOutput,
+  Flame, ActivitySquare, Sun, Play, Bot, Route, Box, CircleDollarSign, Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -165,6 +177,17 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.revHist && <DrawingRevisionHistory onClose={() => toggle("revHist")} />}
             {panels.touch && <MobileTouchDraw onClose={() => toggle("touch")} />}
             {panels.pdfExport && <PDFBatchExport onClose={() => toggle("pdfExport")} />}
+            {/* Tier 7 */}
+            {panels.arcFlash && <ArcFlashAnalysis onClose={() => toggle("arcFlash")} />}
+            {panels.thd && <HarmonicDistortion onClose={() => toggle("thd")} />}
+            {panels.motorStart && <MotorStartVoltdrop onClose={() => toggle("motorStart")} />}
+            {panels.solar && <SolarPVSizing onClose={() => toggle("solar")} />}
+            {panels.scada && <SCADASimulation onClose={() => toggle("scada")} />}
+            {panels.aiGen && <AIGenerativeDesign onClose={() => toggle("aiGen")} />}
+            {panels.autoRout && <SmartAutoRouting onClose={() => toggle("autoRout")} />}
+            {panels.bim && <BIMExport onClose={() => toggle("bim")} />}
+            {panels.cost && <LiveCostEstimator onClose={() => toggle("cost")} />}
+            {panels.chat && <CollaborationChat onClose={() => toggle("chat")} />}
 
             {/* Shortcuts */}
             {!readOnly && (
@@ -173,9 +196,22 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               </div>
             )}
 
-            {/* === ACTION BUTTONS — 4 rows === */}
+            {/* === ACTION BUTTONS — 5 rows === */}
             {!readOnly && (
               <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1 items-end">
+                {/* Row 0: Tier 7 — God Mode */}
+                <div className="flex gap-1">
+                  <Btn icon={Flame} title="Arc Flash Analysis" id="arcFlash" />
+                  <Btn icon={ActivitySquare} title="Harmonic THD%" id="thd" />
+                  <Btn icon={TrendingDown} title="Motor Start Dip" id="motorStart" />
+                  <Btn icon={Sun} title="Solar PV Sizing" id="solar" />
+                  <Btn icon={CircleDollarSign} title="Cost Estimator" id="cost" />
+                  <Btn icon={Bot} title="AI Generative Design" id="aiGen" />
+                  <Btn icon={Route} title="Smart Auto-Routing" id="autoRout" />
+                  <Btn icon={Box} title="BIM / IFC Export" id="bim" />
+                  <Btn icon={Play} title="SCADA Sim" id="scada" />
+                  <Btn icon={Users} title="Team Chat" id="chat" />
+                </div>
                 {/* Row 1: Tier 6 — Ultimate */}
                 <div className="flex gap-1">
                   <Btn icon={Gauge} title="PF Correction" id="pfCorrection" />
