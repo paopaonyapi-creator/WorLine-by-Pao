@@ -267,6 +267,20 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
               <Share2 className="h-4 w-4 mr-2" /> Share
             </DropdownMenuItem>
             <DropdownMenuSeparator />
+            {selectedIds.length > 0 && (
+              <>
+                <DropdownMenuItem onClick={rotateSelected}>
+                  <RotateCw className="h-4 w-4 mr-2" /> Rotate 90°
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={flipSelectedH}>
+                  <FlipHorizontal className="h-4 w-4 mr-2" /> Flip Horizontal
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={flipSelectedV}>
+                  <FlipVertical className="h-4 w-4 mr-2" /> Flip Vertical
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuItem onClick={handleToggleGrid}>
               <Grid3x3 className="h-4 w-4 mr-2" /> {gridVisible ? "Hide Grid" : "Show Grid"}
             </DropdownMenuItem>
