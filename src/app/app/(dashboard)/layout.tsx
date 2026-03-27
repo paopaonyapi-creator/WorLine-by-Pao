@@ -104,7 +104,7 @@ export default function DashboardLayout({
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/app/projects" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />
-            <span className="font-bold">WorLine</span>
+            <span className="font-bold">WorLine <span className="text-xs font-normal text-muted-foreground">by Pao</span></span>
           </Link>
         </div>
         <div className="flex-1">
@@ -128,7 +128,7 @@ export default function DashboardLayout({
         <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
           <Link href="/app/projects" className="flex items-center gap-2 font-semibold">
             <Zap className="h-6 w-6 text-primary" />
-            <span>WorLine</span>
+            <span className="font-bold">WorLine</span>
           </Link>
           <div className="flex items-center gap-1">
             <ThemeToggle />
@@ -141,7 +141,7 @@ export default function DashboardLayout({
               <SheetContent side="left" className="w-72 pt-8">
                 <div className="flex items-center gap-2 mb-2 px-2">
                   <Zap className="h-6 w-6 text-primary" />
-                  <span className="font-bold text-lg">WorLine</span>
+                  <span className="font-bold text-lg">WorLine <span className="text-xs font-normal text-muted-foreground">by Pao</span></span>
                 </div>
                 <NavLinks onNavigate={() => setMobileOpen(false)} />
                 <div className="absolute bottom-6 left-4 right-4">

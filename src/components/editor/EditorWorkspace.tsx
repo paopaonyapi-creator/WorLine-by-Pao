@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { CanvasArea } from "./CanvasArea";
 import { Palette } from "./Palette";
 import { Toolbar } from "./Toolbar";
@@ -11,12 +11,15 @@ import { CursorOverlay } from "./CursorOverlay";
 import { CrosshairOverlay } from "./CrosshairOverlay";
 import { RulerOverlay } from "./RulerOverlay";
 import { SymbolSearch } from "./SymbolSearch";
+import { SheetTabs } from "./SheetTabs";
+import { DrawingToolbar } from "./DrawingToolbar";
+import { PluginHub } from "./PluginHub";
+
+// Tier 1-5
 import { LoadCalculator } from "./LoadCalculator";
 import { BOMTable } from "./BOMTable";
-import { SheetTabs } from "./SheetTabs";
 import { AIAutoLayout } from "./AIAutoLayout";
 import { CustomSymbolCreator } from "./CustomSymbolCreator";
-import { DrawingToolbar } from "./DrawingToolbar";
 import { CableSchedule } from "./CableSchedule";
 import { TitleBlockEditor } from "./TitleBlockEditor";
 import { ShortCircuitCalc } from "./ShortCircuitCalc";
@@ -26,7 +29,6 @@ import { PrintLayout } from "./PrintLayout";
 import { DXFExport } from "./DXFExport";
 import { VersionDiffView } from "./VersionDiffView";
 import { SymbolEditorPro } from "./SymbolEditorPro";
-import { DarkCanvasToggle } from "./DarkCanvasToggle";
 import { TerminalStripDesigner } from "./TerminalStripDesigner";
 import { VoltageDropCalc } from "./VoltageDropCalc";
 import { LoadFlowAnalysis } from "./LoadFlowAnalysis";
@@ -90,28 +92,31 @@ import { SpaceLaunchPulse } from "./SpaceLaunchPulse";
 import { MultiverseTimeline } from "./MultiverseTimeline";
 import { AntimatterUPS } from "./AntimatterUPS";
 import { NeuralinkBCI } from "./NeuralinkBCI";
-import { PluginHub } from "./PluginHub";
+import { DarkCanvasToggle } from "./DarkCanvasToggle";
 
 import { useEditorStore } from "@/store/editorStore";
 import { useEditorShortcuts } from "@/hooks/useEditorShortcuts";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useRealtimeCollaboration } from "@/hooks/useRealtimeCollaboration";
 import { createClient } from "@/lib/supabase/client";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
-  Calculator, FileSpreadsheet, Sparkles, Paintbrush,
-  Cable, FileText, Zap, Shield, MessageSquare,
-  Printer, FileDown, GitCompare, PenTool,
-  CircuitBoard, TrendingDown, Activity, Database,
-  ClipboardCheck, Link2, FolderOpen, Brain,
-  Gauge, Battery, Thermometer, LayoutGrid, Palette as PaletteIcon,
-  Grid3x3, Image, History, Smartphone, FileOutput,
-  Flame, ActivitySquare, Sun, Play, Bot, Route, Box, CircleDollarSign, Users,
-  CloudLightning, Network, Wifi, Cpu, Map as MapIcon, Wrench, Glasses,
-  CarFront, Bitcoin, Skull, BrainCircuit, PlaneTakeoff, Leaf, CloudRainWind, Mic, Cuboid, PowerOff,
-  Earth, Lock, Satellite, Atom, Snowflake, Rocket, Layers, BatteryWarning
+  FolderOpen, LayoutGrid, Wrench, Plus, X,
+  MousePointer2, Cable, Type, Shapes
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+// Hook to detect mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+};
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
   const { initialize, canvas, zoom, panX, panY } = useEditorStore();
@@ -120,8 +125,11 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const [showPluginHub, setShowPluginHub] = useState(false);
   const [showMobilePalette, setShowMobilePalette] = useState(false);
   const [showMobileProps, setShowMobileProps] = useState(false);
+  const [showMobileFAB, setShowMobileFAB] = useState(false);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
-  const toggle = (key: string) => setPanels(p => ({ ...p, [key]: !p[key] }));
+  const isMobile = useIsMobile();
+
+  const toggle = useCallback((key: string) => setPanels(p => ({ ...p, [key]: !p[key] })), []);
 
   const { save: manualSave } = useAutoSave(readOnly ? null : projectId);
   const { cursors } = useRealtimeCollaboration(readOnly ? null : projectId);
@@ -154,42 +162,52 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <span className="text-sm text-muted-foreground">Loading editor...</span>
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-primary border-t-transparent" />
+          <span className="text-sm text-muted-foreground font-medium">Loading editor...</span>
         </div>
       </div>
     );
   }
 
-  const Btn = ({ icon: Icon, title, id }: { icon: any; title: string; id: string }) => (
-    <Button variant={panels[id] ? "secondary" : "ghost"} size="icon" className="w-7 h-7 bg-background/80 backdrop-blur-sm border shadow-sm" onClick={() => toggle(id)} title={title}>
-      <Icon className="h-3.5 w-3.5" />
-    </Button>
-  );
-
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
+      {/* Top Toolbar */}
       {!readOnly && <Toolbar projectId={projectId} />}
+
       <div className="flex flex-1 overflow-hidden relative">
-        {!readOnly && <div className="hidden md:flex w-64 flex-none border-r border-border/50"><Palette /></div>}
-        {/* Mobile-friendly Floating Toolbar */}
+        {/* Desktop: Left Palette */}
         {!readOnly && (
-          <div className="absolute left-0 top-16 md:relative md:top-0 md:left-0 flex-none z-40">
-            <DrawingToolbar />
+          <div className="hidden md:flex w-60 lg:w-64 flex-none border-r border-border/50 bg-background">
+            <Palette />
           </div>
         )}
+
+        {/* Canvas Area */}
         <div className="flex-1 overflow-hidden relative flex flex-col">
-          <div className="flex-1 overflow-hidden relative" id="canvas-container" style={{ pointerEvents: readOnly ? 'none' : 'auto' }}>
+          {/* Desktop Drawing Toolbar */}
+          {!readOnly && !isMobile && (
+            <div className="absolute left-3 top-3 z-30">
+              <DrawingToolbar />
+            </div>
+          )}
+
+          <div
+            className="flex-1 overflow-hidden relative"
+            id="canvas-container"
+            style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
+          >
             <CanvasArea />
             <ZoomControls />
-            {!readOnly && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
-            {!readOnly && <CrosshairOverlay />}
+
+            {/* Ruler: desktop only */}
+            {!readOnly && !isMobile && <RulerOverlay zoom={zoom} panX={panX} panY={panY} />}
+            {!readOnly && !isMobile && <CrosshairOverlay />}
             {!readOnly && <VersionHistory projectId={projectId} />}
             {!readOnly && <CursorOverlay cursors={cursors} zoom={zoom} panX={panX} panY={panY} />}
 
-            {/* === ALL OVERLAY PANELS === */}
+            {/* ALL OVERLAY PANELS (lazy-loaded on toggle) */}
             {showSearch && <SymbolSearch onClose={() => setShowSearch(false)} />}
             {panels.loadCalc && <LoadCalculator onClose={() => toggle("loadCalc")} />}
             {panels.bom && <BOMTable onClose={() => toggle("bom")} />}
@@ -212,7 +230,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.crossRef && <HyperlinkCrossRef onClose={() => toggle("crossRef")} />}
             {panels.templates && <ProjectTemplateLibrary onClose={() => toggle("templates")} />}
             {panels.aiRecog && <AIDiagramRecognition onClose={() => toggle("aiRecog")} />}
-            {/* Tier 6 */}
             {panels.pfCorrection && <PowerFactorCorrection onClose={() => toggle("pfCorrection")} />}
             {panels.battery && <BatterySizingCalc onClose={() => toggle("battery")} />}
             {panels.derating && <CableDeratingCalc onClose={() => toggle("derating")} />}
@@ -223,7 +240,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.revHist && <DrawingRevisionHistory onClose={() => toggle("revHist")} />}
             {panels.touch && <MobileTouchDraw onClose={() => toggle("touch")} />}
             {panels.pdfExport && <PDFBatchExport onClose={() => toggle("pdfExport")} />}
-            {/* Tier 7 */}
             {panels.arcFlash && <ArcFlashAnalysis onClose={() => toggle("arcFlash")} />}
             {panels.thd && <HarmonicDistortion onClose={() => toggle("thd")} />}
             {panels.motorStart && <MotorStartVoltdrop onClose={() => toggle("motorStart")} />}
@@ -234,7 +250,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.bim && <BIMExport onClose={() => toggle("bim")} />}
             {panels.cost && <LiveCostEstimator onClose={() => toggle("cost")} />}
             {panels.chat && <CollaborationChat onClose={() => toggle("chat")} />}
-            {/* Tier 8 */}
             {panels.lightning && <LightningProtection onClose={() => toggle("lightning")} />}
             {panels.groundGrid && <GroundGridCalc onClose={() => toggle("groundGrid")} />}
             {panels.mqtt && <IoTMqttBinding onClose={() => toggle("mqtt")} />}
@@ -245,7 +260,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.loadProfile && <LoadProfileSim onClose={() => toggle("loadProfile")} />}
             {panels.aiReport && <AIGenerativeReport onClose={() => toggle("aiReport")} />}
             {panels.webXr && <WebXRPreview onClose={() => toggle("webXr")} />}
-            {/* Tier 9 */}
             {panels.evFleet && <EVFleetOptimizer onClose={() => toggle("evFleet")} />}
             {panels.blockchain && <BlockchainP2PEnergy onClose={() => toggle("blockchain")} />}
             {panels.cyber && <CyberAttackSim onClose={() => toggle("cyber")} />}
@@ -256,7 +270,6 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.voiceCmd && <GenerativeVoiceCommand onClose={() => toggle("voiceCmd")} />}
             {panels.hologram && <HologramDisplayExport onClose={() => toggle("hologram")} />}
             {panels.healing && <AutoGridHealing onClose={() => toggle("healing")} />}
-            {/* Tier 10 */}
             {panels.mars && <MarsMicrogridDesigner onClose={() => toggle("mars")} />}
             {panels.quantum && <QuantumCryptoRouting onClose={() => toggle("quantum")} />}
             {panels.dyson && <DysonSwarmBeam onClose={() => toggle("dyson")} />}
@@ -268,74 +281,85 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {panels.antimatter && <AntimatterUPS onClose={() => toggle("antimatter")} />}
             {panels.neuralink && <NeuralinkBCI onClose={() => toggle("neuralink")} />}
 
-            {/* Shortcuts */}
-            {!readOnly && (
-              <div className="absolute bottom-20 lg:bottom-4 left-4 z-10 text-[10px] text-muted-foreground/50 hidden md:flex gap-3">
+            {/* Desktop keyboard shortcuts */}
+            {!readOnly && !isMobile && (
+              <div className="absolute bottom-4 left-4 z-10 text-[10px] text-muted-foreground/40 flex gap-3">
                 <span>R rotate</span><span>H/V flip</span><span>Ctrl+K search</span><span>W wire</span><span>T text</span>
               </div>
             )}
 
             {/* Plugin Hub Dialog */}
             {!readOnly && (
-              <PluginHub 
-                isOpen={showPluginHub} 
-                onClose={() => setShowPluginHub(false)} 
-                onSelect={(id) => toggle(id)} 
+              <PluginHub
+                isOpen={showPluginHub}
+                onClose={() => setShowPluginHub(false)}
+                onSelect={(id) => toggle(id)}
               />
             )}
 
-            {/* Floating Action Button for Desktop */}
-            {!readOnly && (
-              <div className="absolute bottom-6 right-6 z-10 hidden lg:block">
-                <Button 
-                  onClick={() => setShowPluginHub(true)} 
-                  size="lg" 
-                  className="rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2 px-6 h-14"
+            {/* Desktop: FAB for Plugins */}
+            {!readOnly && !isMobile && (
+              <div className="absolute bottom-6 right-6 z-10">
+                <Button
+                  onClick={() => setShowPluginHub(true)}
+                  size="lg"
+                  className="rounded-full shadow-2xl bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-5 h-12"
                 >
-                  <LayoutGrid className="w-5 h-5" />
-                  <span className="font-bold">App Store & Plugins</span>
-                  <div className="ml-2 bg-indigo-800 text-indigo-100 text-[10px] px-2 py-0.5 rounded-full font-mono">99</div>
+                  <LayoutGrid className="w-4 h-4" />
+                  <span className="text-sm font-semibold">Plugins</span>
+                  <span className="ml-1 bg-primary-foreground/20 text-[10px] px-1.5 py-0.5 rounded-full font-mono">99</span>
                 </Button>
               </div>
             )}
 
-            {/* Mobile Bottom Navigation */}
-            {!readOnly && (
-              <div className="lg:hidden absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur border-t p-1 px-2 flex justify-around items-center z-40 pb-safe">
-                <Button variant="ghost" className="flex-1 flex flex-col items-center justify-center gap-1 h-14 text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobilePalette(true)}>
-                  <FolderOpen className="w-5 h-5" />
-                  <span className="text-[10px] font-medium leading-none mt-1">Library</span>
-                </Button>
-                <Button variant="ghost" className="flex-1 flex flex-col items-center justify-center gap-1 h-14 text-indigo-500 hover:text-indigo-400 hover:bg-indigo-500/10" onClick={() => setShowPluginHub(true)}>
-                  <LayoutGrid className="w-5 h-5" />
-                  <span className="text-[10px] font-medium leading-none mt-1">Plugins</span>
-                </Button>
-                <Button variant="ghost" className="flex-1 flex flex-col items-center justify-center gap-1 h-14 text-muted-foreground hover:bg-muted/50" onClick={() => setShowMobileProps(true)}>
-                  <Wrench className="w-5 h-5" />
-                  <span className="text-[10px] font-medium leading-none mt-1">Props</span>
-                </Button>
+            {/* ===== MOBILE BOTTOM BAR ===== */}
+            {!readOnly && isMobile && (
+              <div className="absolute bottom-0 left-0 right-0 z-40">
+                {/* FAB menu (expandable) */}
+                {showMobileFAB && (
+                  <div className="absolute bottom-16 right-3 flex flex-col gap-2 animate-in slide-in-from-bottom-4 duration-200">
+                    <MobileFABItem
+                      icon={FolderOpen}
+                      label="Library"
+                      onClick={() => { setShowMobilePalette(true); setShowMobileFAB(false); }}
+                    />
+                    <MobileFABItem
+                      icon={LayoutGrid}
+                      label="Plugins"
+                      onClick={() => { setShowPluginHub(true); setShowMobileFAB(false); }}
+                    />
+                    <MobileFABItem
+                      icon={Wrench}
+                      label="Properties"
+                      onClick={() => { setShowMobileProps(true); setShowMobileFAB(false); }}
+                    />
+                  </div>
+                )}
+
+                {/* Floating Action Button */}
+                <div className="absolute bottom-4 right-3">
+                  <Button
+                    onClick={() => setShowMobileFAB(!showMobileFAB)}
+                    size="icon"
+                    className="w-12 h-12 rounded-full shadow-xl bg-primary text-primary-foreground"
+                  >
+                    {showMobileFAB ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                  </Button>
+                </div>
               </div>
             )}
 
-            {/* Mobile Drawers (Sheets) */}
-            <Sheet open={showMobilePalette} onOpenChange={setShowMobilePalette}>
-              <SheetContent side="left" className="w-[85vw] sm:w-[400px] p-0 border-r">
-                <div className="h-full flex flex-col pt-8"><Palette onClose={() => setShowMobilePalette(false)} /></div>
-              </SheetContent>
-            </Sheet>
-
-            <Sheet open={showMobileProps} onOpenChange={setShowMobileProps}>
-              <SheetContent side="right" className="w-[85vw] sm:w-[400px] p-0 border-l">
-                <div className="h-full flex flex-col pt-8"><PropertiesPanel /></div>
-              </SheetContent>
-            </Sheet>
-
-            {/* Online users */}
+            {/* Online users badge */}
             {!readOnly && cursors.length > 0 && (
-              <div className="absolute top-24 left-4 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
+              <div className="absolute top-3 right-3 z-20 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full border shadow-sm">
                 <div className="flex -space-x-1">
                   {cursors.slice(0, 3).map((c) => (
-                    <div key={c.userId} className="w-5 h-5 rounded-full border-2 border-background flex items-center justify-center text-[8px] font-bold text-white" style={{ backgroundColor: c.color }} title={c.name}>
+                    <div
+                      key={c.userId}
+                      className="w-5 h-5 rounded-full border-2 border-background flex items-center justify-center text-[8px] font-bold text-white"
+                      style={{ backgroundColor: c.color }}
+                      title={c.name}
+                    >
                       {c.name.charAt(0).toUpperCase()}
                     </div>
                   ))}
@@ -344,10 +368,48 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               </div>
             )}
           </div>
-          {!readOnly && <SheetTabs />}
+
+          {/* Sheet tabs: desktop only */}
+          {!readOnly && !isMobile && <SheetTabs />}
         </div>
-        {!readOnly && <div className="hidden lg:flex w-64 flex-none border-l border-border/50"><PropertiesPanel /></div>}
+
+        {/* Desktop: Right Properties Panel */}
+        {!readOnly && (
+          <div className="hidden lg:flex w-60 xl:w-64 flex-none border-l border-border/50 bg-background">
+            <PropertiesPanel />
+          </div>
+        )}
       </div>
+
+      {/* ===== MOBILE DRAWERS ===== */}
+      <Sheet open={showMobilePalette} onOpenChange={setShowMobilePalette}>
+        <SheetContent side="left" className="w-[88vw] sm:w-[380px] p-0 border-r">
+          <div className="h-full flex flex-col pt-6">
+            <Palette onClose={() => setShowMobilePalette(false)} />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={showMobileProps} onOpenChange={setShowMobileProps}>
+        <SheetContent side="right" className="w-[88vw] sm:w-[380px] p-0 border-l">
+          <div className="h-full flex flex-col pt-6">
+            <PropertiesPanel />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
+
+// Mobile FAB menu item
+function MobileFABItem({ icon: Icon, label, onClick }: { icon: any; label: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2.5 bg-background border shadow-lg rounded-full pl-4 pr-5 py-2.5 hover:bg-muted transition-colors"
+    >
+      <Icon className="w-4 h-4 text-primary" />
+      <span className="text-sm font-medium">{label}</span>
+    </button>
+  );
+}

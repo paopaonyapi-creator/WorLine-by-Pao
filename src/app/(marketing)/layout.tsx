@@ -37,6 +37,7 @@ export default function MarketingLayout({
               </div>
               <span className="font-bold text-lg tracking-tight">
                 Wor<span className="text-primary">Line</span>
+                <span className="text-xs font-normal text-muted-foreground ml-1 hidden lg:inline">by Pao</span>
               </span>
             </Link>
             <nav className="flex items-center space-x-1 text-sm font-medium">
@@ -60,7 +61,7 @@ export default function MarketingLayout({
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <Zap className="h-3.5 w-3.5" />
               </div>
-              <span className="font-bold">WorLine</span>
+              <span className="font-bold">WorLine <span className="text-xs font-normal text-muted-foreground">by Pao</span></span>
             </Link>
 
             <nav className="flex items-center space-x-1">
