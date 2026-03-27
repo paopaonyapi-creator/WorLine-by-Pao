@@ -122,7 +122,7 @@ export const translations = {
 
   // ── Features list ──
   feat_unlimited: { en: "Unlimited projects", th: "สร้างโปรเจคไม่จำกัด" },
-  feat_symbols: { en: "Full symbol library (20 symbols)", th: "สัญลักษณ์ครบ 20 ตัว" },
+  feat_symbols: { en: "Full symbol library (100+ symbols)", th: "คลังสัญลักษณ์ครบ 100+ ตัว" },
   feat_templates: { en: "All premium templates", th: "เทมเพลตพรีเมี่ยมทั้งหมด" },
   feat_pdf: { en: "PDF export (no watermark)", th: "ส่งออก PDF (ไม่มีลายน้ำ)" },
   feat_cloud: { en: "Auto-save & cloud sync", th: "บันทึกอัตโนมัติ & ซิงค์คลาวด์" },

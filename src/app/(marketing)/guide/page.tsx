@@ -19,8 +19,8 @@ const steps = [
     icon: MousePointer2,
     title: "2. Place Symbols / วางสัญลักษณ์",
     titleTh: "ลากสัญลักษณ์จากแถบด้านซ้ายวางบนผืนผ้าใบ",
-    desc: "The left Palette has 26 symbols in 7 categories. Drag & drop any symbol onto the canvas. Symbols automatically snap to the grid.",
-    descTh: "แถบด้านซ้ายมี 26 สัญลักษณ์ใน 7 หมวด ลากแล้ววางบน Canvas สัญลักษณ์จะล็อกตำแหน่งตาม Grid อัตโนมัติ",
+    desc: "The left Palette has 100+ symbols in 7 categories. Drag & drop any symbol onto the canvas. Symbols automatically snap to the grid.",
+    descTh: "แถบด้านซ้ายมี 100+ สัญลักษณ์ใน 7 หมวด ลากแล้ววางบน Canvas สัญลักษณ์จะล็อกตำแหน่งตาม Grid อัตโนมัติ",
   },
   {
     icon: Cable,
