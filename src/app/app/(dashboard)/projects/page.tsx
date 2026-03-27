@@ -268,8 +268,15 @@ export default function ProjectsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-muted w-full h-24 rounded flex items-center justify-center text-sm text-muted-foreground">
-                    [Diagram Preview]
+                  <div className="bg-gradient-to-br from-muted/60 to-muted w-full h-24 rounded-lg flex items-center justify-center gap-3 border border-border/40">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-muted-foreground/50">
+                      <circle cx="16" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
+                      <text x="16" y="11" textAnchor="middle" fill="currentColor" fontSize="7" fontWeight="bold">G</text>
+                      <line x1="16" y1="14" x2="16" y2="20" stroke="currentColor" strokeWidth="1.5" />
+                      <rect x="10" y="20" width="12" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                      <line x1="16" y1="26" x2="16" y2="30" stroke="currentColor" strokeWidth="1.5" />
+                    </svg>
+                    <span className="text-xs text-muted-foreground/60 font-medium">Single-Line Diagram</span>
                   </div>
                 </CardContent>
               </Link>
