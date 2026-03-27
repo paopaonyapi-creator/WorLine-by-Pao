@@ -315,6 +315,14 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
             {/* ===== MOBILE BOTTOM BAR ===== */}
             {!readOnly && isMobile && (
               <div className="absolute bottom-0 left-0 right-0 z-40">
+                {/* Mobile quick-tools bar */}
+                <div className="absolute bottom-4 left-3 flex gap-1.5 bg-background/90 backdrop-blur-md border rounded-full px-1.5 py-1 shadow-lg">
+                  <MobileToolBtn icon={MousePointer2} label="Select" active={useEditorStore.getState().activeTool === 'select'} onClick={() => useEditorStore.getState().setActiveTool('select')} />
+                  <MobileToolBtn icon={Cable} label="Wire" active={useEditorStore.getState().activeTool === 'wire'} onClick={() => useEditorStore.getState().setActiveTool('wire')} />
+                  <MobileToolBtn icon={Type} label="Text" active={useEditorStore.getState().activeTool === 'text'} onClick={() => useEditorStore.getState().setActiveTool('text')} />
+                  <MobileToolBtn icon={Shapes} label="Shape" active={useEditorStore.getState().activeTool === 'shape'} onClick={() => useEditorStore.getState().setActiveTool('shape')} />
+                </div>
+
                 {/* FAB menu (expandable) */}
                 {showMobileFAB && (
                   <div className="absolute bottom-16 right-3 flex flex-col gap-2 animate-in slide-in-from-bottom-4 duration-200">
@@ -410,6 +418,24 @@ function MobileFABItem({ icon: Icon, label, onClick }: { icon: any; label: strin
     >
       <Icon className="w-4 h-4 text-primary" />
       <span className="text-sm font-medium">{label}</span>
+    </button>
+  );
+}
+
+// Mobile quick-tool button
+function MobileToolBtn({ icon: Icon, label, active, onClick }: { icon: any; label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center w-11 h-11 rounded-full transition-all ${
+        active
+          ? "bg-primary text-primary-foreground shadow-md"
+          : "text-muted-foreground hover:bg-muted"
+      }`}
+      title={label}
+    >
+      <Icon className="w-4 h-4" />
+      <span className="text-[8px] mt-0.5 font-medium leading-none">{label}</span>
     </button>
   );
 }

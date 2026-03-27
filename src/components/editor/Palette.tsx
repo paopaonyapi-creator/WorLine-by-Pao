@@ -114,9 +114,10 @@ const CATEGORY_META: Record<string, { icon: any, color: string, desc: string }> 
   "Metering": { icon: Gauge, color: "text-cyan-500", desc: "Voltmeters, Ammeters" },
   "Core Systems": { icon: Cpu, color: "text-indigo-500", desc: "Logic, Analysis" },
   "AI Engines": { icon: Brain, color: "text-violet-500", desc: "Automation, Predict" },
-  "SCADA": { icon: MonitorSmartphone, color: "text-sky-500", desc: "HMI, RTUs" },
+  "SCADA Modules": { icon: MonitorSmartphone, color: "text-sky-500", desc: "PLC, HMI, RTU" },
   "Future Tech": { icon: Rocket, color: "text-pink-500", desc: "Microgrids, Nano" },
-  "Simulators": { icon: PlayCircle, color: "text-teal-500", desc: "Faults, Weather" }
+  "Simulators": { icon: PlayCircle, color: "text-teal-500", desc: "Faults, Weather" },
+  "Utility Nodes": { icon: Waypoints, color: "text-gray-500", desc: "BOM, Export, Tools" },
 };
 
 type UserSymbol = {
