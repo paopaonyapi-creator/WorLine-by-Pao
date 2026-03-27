@@ -7,20 +7,13 @@ import { AnyDiagramObject, SymbolObject, TextObject, WireObject } from "@/lib/ed
 import { useEffect, useRef, useState, useCallback } from "react";
 import { symbolRegistry } from "@/lib/editor/symbols/registry";
 
+import { getTerminalWorldPositions } from "@/lib/editor/routing";
+
 // ─── Grid Snap Utility ─────────────────────────────────
 const snapToGrid = (val: number, gridSize: number) => Math.round(val / gridSize) * gridSize;
 
-// ─── Terminal positions for symbols (top, bottom center) ──
-const getTerminals = (obj: SymbolObject) => {
-  const w = obj.width || 60;
-  const h = obj.height || 60;
-  return [
-    { id: "top", x: obj.x + w / 2, y: obj.y },
-    { id: "bottom", x: obj.x + w / 2, y: obj.y + h },
-    { id: "left", x: obj.x, y: obj.y + h / 2 },
-    { id: "right", x: obj.x + w, y: obj.y + h / 2 },
-  ];
-};
+// ─── Terminal positions for symbols (rotation-aware) ──
+const getTerminals = (obj: SymbolObject) => getTerminalWorldPositions(obj);
 
 // ─── Grid Overlay Component ─────────────────────────────
 const GridOverlay = ({ width, height, gridSize }: { width: number; height: number; gridSize: number }) => {

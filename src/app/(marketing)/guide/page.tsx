@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "User Guide | WorLine by Pao",
+  title: "User Guide",
   description: "วิธีใช้ WorLine เครื่องมือวาดผังไฟฟ้า Single-Line Diagram ออนไลน์ — How to use WorLine",
 };
 
