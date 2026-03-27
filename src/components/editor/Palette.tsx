@@ -105,19 +105,17 @@ function SymbolMiniIcon({ symbolType }: { symbolType: string }) {
 }
 
 const CATEGORY_META: Record<string, { icon: any, color: string, desc: string }> = {
-  "Power Sources": { icon: Zap, color: "text-amber-500", desc: "Generators, Batteries" },
-  "Switchgear": { icon: ToggleRight, color: "text-blue-500", desc: "Breakers, Switches" },
-  "Transformers": { icon: Activity, color: "text-emerald-500", desc: "Step-up, Isolation" },
-  "Loads": { icon: Lightbulb, color: "text-orange-500", desc: "Motors, Lighting" },
-  "Protection": { icon: Shield, color: "text-red-500", desc: "Relays, Surge" },
-  "Connections": { icon: Waypoints, color: "text-slate-500", desc: "Busbars, Nodes" },
-  "Metering": { icon: Gauge, color: "text-cyan-500", desc: "Voltmeters, Ammeters" },
-  "Core Systems": { icon: Cpu, color: "text-indigo-500", desc: "Logic, Analysis" },
-  "AI Engines": { icon: Brain, color: "text-violet-500", desc: "Automation, Predict" },
-  "SCADA Modules": { icon: MonitorSmartphone, color: "text-sky-500", desc: "PLC, HMI, RTU" },
-  "Future Tech": { icon: Rocket, color: "text-pink-500", desc: "Microgrids, Nano" },
-  "Simulators": { icon: PlayCircle, color: "text-teal-500", desc: "Faults, Weather" },
-  "Utility Nodes": { icon: Waypoints, color: "text-gray-500", desc: "BOM, Export, Tools" },
+  "Power Sources": { icon: Zap, color: "text-amber-500", desc: "PV, Batteries, Fuel Cells" },
+  "Transformers": { icon: Activity, color: "text-emerald-500", desc: "Step-up, PT/CT, Zig-Zag" },
+  "Motors and Generators": { icon: Cpu, color: "text-indigo-500", desc: "Sync, Async, DC, Stepper" },
+  "Connections and Junctions": { icon: Waypoints, color: "text-slate-500", desc: "Busbars, Earth, Nodes" },
+  "Switches and Disconnectors": { icon: ToggleRight, color: "text-blue-500", desc: "LBS, Disconnectors, ATS" },
+  "Breakers and Protection": { icon: Shield, color: "text-red-500", desc: "ACB, VCB, MCB, RCD, SPD" },
+  "Fuses": { icon: Zap, color: "text-orange-500", desc: "Inline, Link, Disconnectors" },
+  "Relays and Contactors": { icon: Brain, color: "text-violet-500", desc: "Relays, Contactors, Coils" },
+  "Metering": { icon: Gauge, color: "text-cyan-500", desc: "Amps, Volts, kW, Smart Meter" },
+  "Indicators and Lamps": { icon: Lightbulb, color: "text-yellow-500", desc: "Lamps, Resistors, VFD" },
+  "Terminals and Connectors": { icon: Waypoints, color: "text-gray-500", desc: "Blocks, Plugs, Sockets" },
 };
 
 type UserSymbol = {

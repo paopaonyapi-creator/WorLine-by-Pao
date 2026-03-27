@@ -13,6 +13,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { generateSVG } from "@/lib/editor/export";
 import { toast } from "sonner";
+import { LayoutGrid } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { symbolRegistry } from "@/lib/editor/symbols/registry";
 import { SymbolObject } from "@/lib/editor/types";
@@ -41,7 +42,7 @@ const ToolBtn = ({ icon: Icon, label, active, onClick, className, disabled }: {
   </Tooltip>
 );
 
-export const Toolbar = ({ projectId }: { projectId: string }) => {
+export const Toolbar = ({ projectId, onOpenPlugins }: { projectId: string, onOpenPlugins?: () => void }) => {
   const {
     undo, redo, canvas, history, currentHistoryIndex,
     activeTool, setActiveTool, selectedIds, deleteObjects,
@@ -226,6 +227,13 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
 
       {/* RIGHT: Actions */}
       <div className="flex items-center gap-1 shrink-0">
+        {onOpenPlugins && (
+          <Button onClick={onOpenPlugins} variant="ghost" size="sm" className="gap-1.5 h-8 px-2 md:px-3 text-primary hidden sm:flex hover:bg-primary/10">
+            <LayoutGrid className="h-4 w-4" />
+            <span className="text-xs font-semibold">Plugins</span>
+          </Button>
+        )}
+
         {/* Desktop share/save */}
         <div className="hidden md:flex items-center gap-1">
           <Button onClick={handleShare} disabled={sharing} variant="ghost" size="sm" className="gap-1.5 h-8 px-2.5">
@@ -263,6 +271,10 @@ export const Toolbar = ({ projectId }: { projectId: string }) => {
             </Button>
           } />
           <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem onClick={onOpenPlugins}>
+              <LayoutGrid className="h-4 w-4 mr-2 text-primary" /> <span className="text-primary font-medium">Plugins</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleShare}>
               <Share2 className="h-4 w-4 mr-2" /> Share
             </DropdownMenuItem>

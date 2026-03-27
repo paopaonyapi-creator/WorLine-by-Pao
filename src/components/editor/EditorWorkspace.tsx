@@ -119,7 +119,7 @@ const useIsMobile = () => {
 };
 
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
-  const { initialize, canvas, zoom, panX, panY } = useEditorStore();
+  const { initialize, canvas, zoom, panX, panY, selectedIds } = useEditorStore();
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
   const [showPluginHub, setShowPluginHub] = useState(false);
@@ -174,7 +174,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
       {/* Top Toolbar */}
-      {!readOnly && <Toolbar projectId={projectId} />}
+      {!readOnly && <Toolbar projectId={projectId} onOpenPlugins={() => setShowPluginHub(true)} />}
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Desktop: Left Palette */}
@@ -297,26 +297,11 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               />
             )}
 
-            {/* Desktop: FAB for Plugins */}
-            {!readOnly && !isMobile && (
-              <div className="absolute bottom-6 right-6 z-10">
-                <Button
-                  onClick={() => setShowPluginHub(true)}
-                  size="lg"
-                  className="rounded-full shadow-2xl bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-5 h-12"
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                  <span className="text-sm font-semibold">Plugins</span>
-                  <span className="ml-1 bg-primary-foreground/20 text-[10px] px-1.5 py-0.5 rounded-full font-mono">99</span>
-                </Button>
-              </div>
-            )}
-
             {/* ===== MOBILE BOTTOM BAR ===== */}
             {!readOnly && isMobile && (
-              <div className="absolute bottom-0 left-0 right-0 z-40">
+              <div className="absolute bottom-4 left-0 right-0 z-40 pb-[env(safe-area-inset-bottom)] pointer-events-none">
                 {/* Mobile quick-tools bar */}
-                <div className="absolute bottom-4 left-3 flex gap-1.5 bg-background/90 backdrop-blur-md border rounded-full px-1.5 py-1 shadow-lg">
+                <div className="absolute bottom-0 left-3 flex gap-1.5 bg-background/90 backdrop-blur-md border rounded-full px-1.5 py-1 shadow-lg pointer-events-auto">
                   <MobileToolBtn icon={MousePointer2} label="Select" active={useEditorStore.getState().activeTool === 'select'} onClick={() => useEditorStore.getState().setActiveTool('select')} />
                   <MobileToolBtn icon={Cable} label="Wire" active={useEditorStore.getState().activeTool === 'wire'} onClick={() => useEditorStore.getState().setActiveTool('wire')} />
                   <MobileToolBtn icon={Type} label="Text" active={useEditorStore.getState().activeTool === 'text'} onClick={() => useEditorStore.getState().setActiveTool('text')} />
@@ -325,7 +310,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
 
                 {/* FAB menu (expandable) */}
                 {showMobileFAB && (
-                  <div className="absolute bottom-16 right-3 flex flex-col gap-2 animate-in slide-in-from-bottom-4 duration-200">
+                  <div className="absolute bottom-14 right-3 flex flex-col gap-2 animate-in slide-in-from-bottom-4 duration-200 pointer-events-auto">
                     <MobileFABItem
                       icon={FolderOpen}
                       label="Library"
@@ -345,7 +330,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
                 )}
 
                 {/* Floating Action Button */}
-                <div className="absolute bottom-4 right-3">
+                <div className="absolute bottom-0 right-3 pointer-events-auto">
                   <Button
                     onClick={() => setShowMobileFAB(!showMobileFAB)}
                     size="icon"
@@ -382,8 +367,8 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
         </div>
 
         {/* Desktop: Right Properties Panel */}
-        {!readOnly && (
-          <div className="hidden lg:flex w-60 xl:w-64 flex-none border-l border-border/50 bg-background">
+        {!readOnly && selectedIds.length > 0 && (
+          <div className="hidden lg:flex w-60 xl:w-64 flex-none border-l border-border/50 bg-background animate-in slide-in-from-right-10 fade-in zoom-in-95 duration-200">
             <PropertiesPanel />
           </div>
         )}
