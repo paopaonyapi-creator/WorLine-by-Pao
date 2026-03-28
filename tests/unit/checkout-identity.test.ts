@@ -35,8 +35,11 @@ vi.mock('../../src/lib/supabase/server', () => {
 
 import { POST } from '../../src/app/api/checkout/route';
 import { NextResponse } from 'next/server';
+import { mockEnv } from './helpers/env';
 
 describe('Checkout Identity Hardening', () => {
+  mockEnv();
+
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';

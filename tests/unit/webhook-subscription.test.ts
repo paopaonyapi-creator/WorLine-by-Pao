@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from '@/app/api/stripe/webhook/route';
+import { mockEnv } from './helpers/env';
 
 // Mocks configured for Webhook Unit Tests
 // Covers: checkout.session.completed, customer.subscription.updated/deleted
@@ -51,6 +52,8 @@ vi.mock('@supabase/supabase-js', () => ({
 }));
 
 describe('Webhook Billing Subscriptions Lifecycle', () => {
+  mockEnv();
+
   beforeEach(() => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_mock';
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_mock';
