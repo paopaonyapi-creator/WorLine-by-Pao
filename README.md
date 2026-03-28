@@ -104,14 +104,24 @@ railway variables set ADMIN_EMAILS=admin@example.com
 railway up
 ```
 
-### Post-deployment checklist
+## Production Deployment Smoke Test
 
-- [ ] Verify health endpoint: `https://your-app.up.railway.app/api/health`
-- [ ] Configure Stripe webhook endpoint: `https://your-app.up.railway.app/api/stripe/webhook`
-- [ ] Test signup → login → create project → editor flow
-- [ ] Verify PDF/PNG export works in production
+After every production deployment, follow this sequential behavior checklist to confirm critical environments are running cleanly:
 
-> **Note**: For access to `/admin`, your email must be included in `ADMIN_EMAILS`.
+- [ ] **Home Page**: Open the production root URL and ensure the marketing layout loads without 500 errors.
+- [ ] **Health API**: Visit `/api/health` and verify it returns a 200 JSON object.
+- [ ] **Auth Sign-in**: Create a test user via signup and log in successfully.
+- [ ] **Protected Boundaries**: Attempt to visit `/app` while logged out; ensure you are redirected to `/login` natively.
+- [ ] **Admin Segmentation**: Navigate to `/admin`.
+      - As a standard user: Verify you are bounced to `/app`.
+      - As an authorized admin (listed in `ADMIN_EMAILS`): Verify successful dashboard access.
+- [ ] **Billing Settings**: Load `/app/settings/billing` and ensure no generic fallback prices crash the UI.
+- [ ] **Stripe Checkout**: Click the subscribe/upgrade button to confirm a Stripe Session ID is created and displays the payment portal reliably. 
+- [ ] **Webhook Binding**: Inside your Stripe Dashboard, execute a test event to confirm your endpoint acknowledges receipt.
+- [ ] **Subscription Storage**: Complete a simulated checkout and verify the `subscriptions` row updates inside your Supabase project correctly.
+- [ ] **Editor Engine**: Open a Workspace canvas and verify the PDF/PNG export successfully processes client-side.
+
+*See `docs/production-runbook.md` for extended recovery rules and runtime validation documentation.*
 
 ---
 
