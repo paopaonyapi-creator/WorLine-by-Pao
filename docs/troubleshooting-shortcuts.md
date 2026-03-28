@@ -44,6 +44,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **Billing badge shows wrong plan** → [Incident: Billing Badge Wrong](incidents/billing-status-badge-wrong.md)
 - **Subscription row missing** → [Incident: Subscription Row Missing](incidents/subscription-row-missing.md)
 - **Stripe paid but Supabase canceled** → [Incident: Paid vs Canceled](incidents/stripe-paid-supabase-canceled.md)
+- **Stripe canceled but Supabase active** → [Incident: Canceled vs Active](incidents/stripe-canceled-supabase-active.md)
 - **Admin access denied** → [Incident: Admin Access Fails](incidents/admin-access-fails.md)
 - **Editor save fails** → [Incident: Editor Save Fails](incidents/editor-save-fails.md)
 - **PNG/PDF export fails** → [Incident: Export Fails](incidents/export-fails-png-pdf.md)
