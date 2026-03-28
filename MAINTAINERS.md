@@ -52,4 +52,4 @@ Before executing `git push` on a release tag, you must verify the operational ch
 - **[Production Runbook](docs/production-runbook.md):** What to do if `/api/health` 500s directly after a deployment.
 
 ## 8. Reporting Regressions
-If you discover a breakage in Auth, Billing, Editor, or Deploy — first check the [Troubleshooting Shortcuts](docs/troubleshooting-shortcuts.md) for a known fix. If the issue persists, file it using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and complete the regression checklist so triage can start immediately. Label the issue using the [Triage Taxonomy](docs/triage-taxonomy.md).
+If you discover a breakage in Auth, Billing, Editor, or Deploy — first check the [Troubleshooting Shortcuts](docs/troubleshooting-shortcuts.md) for a known fix. If the issue persists, file it using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and complete the regression checklist so triage can start immediately. Label the issue using the [Triage Taxonomy](docs/triage-taxonomy.md). After resolving a production incident, document what happened using the [Postmortem Template](docs/postmortem-template.md).

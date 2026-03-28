@@ -35,6 +35,8 @@ Use this feature map to quickly locate the correct bounded document.
   Quick definitions for Supabase, Stripe, Konva, RLS, Railway, and other repo-specific terms.
 - **[Triage Taxonomy](triage-taxonomy.md)**
   Label definitions and severity guidance for consistent issue triage.
+- **[Postmortem Template](postmortem-template.md)**
+  Lightweight incident write-up template. Copy into `docs/postmortems/` after any production or staging failure.
 - **[Local Test Seed Workflow](local-test-seed-workflow.md)**
   Explains how to quickly spin up localized `user@example.com` and administrative credentials required to power the end-to-end testing matrix.
 
