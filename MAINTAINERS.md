@@ -13,7 +13,8 @@ Do not rewrite core logic before understanding the existing architecture.
 - 📖 **[Debugging Glossary](docs/debugging-glossary.md):** Quick definitions for Supabase, Stripe, Konva, RLS, and other repo-specific terms.
 
 ## 3. High-Risk Areas to Change Carefully
-If you touch the following files, test extensively.
+If you touch the following files, test extensively. Before modifying a core file, consult the [File Risk Map](docs/file-risk-map.md) to understand its safety level and minimum required checks.
+
 - `src/lib/supabase/middleware.ts` — The gatekeeper. Missing env vars or bad sessions will crash the app into a redirect loop here.
 - `src/app/api/checkout/route.ts` — The Stripe link. Never trust client payloads. The `user.id` is pulled exclusively from the server session.
 - `src/components/editor/EditorWorkspace.tsx` — The Drawing Engine. Zustand state mapping dictates physical polygon bounds on the Konva canvas.
