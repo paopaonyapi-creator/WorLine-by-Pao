@@ -23,7 +23,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See **[Admin Plays](incidents/admin-access-fails.md)**. |
 | 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID`. See **[Checkout Plays](incidents/checkout-returns-500.md)**. |
 | 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. See **[Billing Plays](incidents/billing-still-free-after-payment.md)**. |
-| 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
+| 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status`. See **[Badge Plays](incidents/billing-status-badge-wrong.md)**. |
 | 8 | Editor save fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Supabase → Table Editor → `projects` | Check browser console for Supabase RLS errors. Confirm user owns project. See **[Save Plays](incidents/editor-save-fails.md)**. |
 | 9 | PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. See **[Export Plays](incidents/export-fails-png-pdf.md)**. |
 | 10 | Mobile nav or app shell breaks | Responsive | `src/app/app/(dashboard)/layout.tsx` | Browser → DevTools → Toggle Device | Check if `<SheetTrigger>` renders. See **[Responsive Plays](incidents/mobile-nav-or-app-shell-breaks.md)**. |
@@ -41,6 +41,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **Webhooks failing (400)** → [Incident: Webhooks Return 400](incidents/webhook-deliveries-return-400.md)
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
 - **App redirects to /login** → [Incident: Redirect to Login](incidents/app-redirects-to-login.md)
+- **Billing badge shows wrong plan** → [Incident: Billing Badge Wrong](incidents/billing-status-badge-wrong.md)
 - **Admin access denied** → [Incident: Admin Access Fails](incidents/admin-access-fails.md)
 - **Editor save fails** → [Incident: Editor Save Fails](incidents/editor-save-fails.md)
 - **PNG/PDF export fails** → [Incident: Export Fails](incidents/export-fails-png-pdf.md)
