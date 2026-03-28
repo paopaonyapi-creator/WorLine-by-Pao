@@ -12,7 +12,7 @@ export const ZoomControls = () => {
   const fitToScreen = () => setZoom(1);
 
   return (
-    <div className="absolute bottom-20 md:bottom-4 right-4 z-10 flex items-center gap-1 bg-background/90 backdrop-blur-sm border rounded-lg shadow-lg p-1">
+    <div className="absolute bottom-20 md:bottom-4 right-4 z-10 hidden md:flex items-center gap-1 bg-background/90 backdrop-blur-sm border rounded-lg shadow-lg p-1">
       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={zoomOut}>
         <ZoomOut className="h-4 w-4" />
       </Button>

@@ -127,7 +127,22 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   const [showMobileProps, setShowMobileProps] = useState(false);
   const [showMobileFAB, setShowMobileFAB] = useState(false);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
+  const [showHints, setShowHints] = useState(true);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    // Auto-hide hints after 8 seconds or if they've already seen it
+    const seen = localStorage.getItem("worline_mobile_hints_seen");
+    if (seen) {
+      setShowHints(false);
+    } else {
+      const t = setTimeout(() => {
+        setShowHints(false);
+        localStorage.setItem("worline_mobile_hints_seen", "true");
+      }, 10000);
+      return () => clearTimeout(t);
+    }
+  }, []);
 
   const toggle = useCallback((key: string) => setPanels(p => ({ ...p, [key]: !p[key] })), []);
 
@@ -172,9 +187,9 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
   }
 
   return (
-    <div className="flex flex-col h-full w-full overflow-hidden bg-muted">
+    <div className="flex flex-col h-[100dvh] w-full overflow-hidden bg-muted">
       {/* Top Toolbar */}
-      {!readOnly && <Toolbar projectId={projectId} onOpenPlugins={() => setShowPluginHub(true)} />}
+      {!readOnly && <Toolbar projectId={projectId} onOpenPlugins={() => setShowPluginHub(true)} onOpenLibrary={() => setShowMobilePalette(true)} />}
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Desktop: Left Palette */}
@@ -297,47 +312,31 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
               />
             )}
 
-            {/* ===== MOBILE BOTTOM BAR ===== */}
-            {!readOnly && isMobile && (
-              <div className="absolute bottom-4 left-0 right-0 z-40 pb-[env(safe-area-inset-bottom)] pointer-events-none">
-                {/* Mobile quick-tools bar */}
-                <div className="absolute bottom-0 left-3 flex gap-1.5 bg-background/90 backdrop-blur-md border rounded-full px-1.5 py-1 shadow-lg pointer-events-auto">
-                  <MobileToolBtn icon={MousePointer2} label="Select" active={useEditorStore.getState().activeTool === 'select'} onClick={() => useEditorStore.getState().setActiveTool('select')} />
-                  <MobileToolBtn icon={Cable} label="Wire" active={useEditorStore.getState().activeTool === 'wire'} onClick={() => useEditorStore.getState().setActiveTool('wire')} />
-                  <MobileToolBtn icon={Type} label="Text" active={useEditorStore.getState().activeTool === 'text'} onClick={() => useEditorStore.getState().setActiveTool('text')} />
-                  <MobileToolBtn icon={Shapes} label="Shape" active={useEditorStore.getState().activeTool === 'shape'} onClick={() => useEditorStore.getState().setActiveTool('shape')} />
-                </div>
+            {/* ===== MOBILE CONTEXTUAL ACTION ===== */}
+            {!readOnly && isMobile && selectedIds.length > 0 && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 pb-[env(safe-area-inset-bottom)] pointer-events-none">
+                <Button
+                  onClick={() => setShowMobileProps(true)}
+                  className="rounded-full shadow-xl bg-primary text-primary-foreground gap-2 px-6 h-12 pointer-events-auto animate-in slide-in-from-bottom-4 duration-200"
+                >
+                  <Wrench className="w-5 h-5" />
+                  <span className="font-semibold text-sm">Edit Properties</span>
+                </Button>
+              </div>
+            )}
 
-                {/* FAB menu (expandable) */}
-                {showMobileFAB && (
-                  <div className="absolute bottom-14 right-3 flex flex-col gap-2 animate-in slide-in-from-bottom-4 duration-200 pointer-events-auto">
-                    <MobileFABItem
-                      icon={FolderOpen}
-                      label="Library"
-                      onClick={() => { setShowMobilePalette(true); setShowMobileFAB(false); }}
-                    />
-                    <MobileFABItem
-                      icon={LayoutGrid}
-                      label="Plugins"
-                      onClick={() => { setShowPluginHub(true); setShowMobileFAB(false); }}
-                    />
-                    <MobileFABItem
-                      icon={Wrench}
-                      label="Properties"
-                      onClick={() => { setShowMobileProps(true); setShowMobileFAB(false); }}
-                    />
-                  </div>
-                )}
-
-                {/* Floating Action Button */}
-                <div className="absolute bottom-0 right-3 pointer-events-auto">
-                  <Button
-                    onClick={() => setShowMobileFAB(!showMobileFAB)}
-                    size="icon"
-                    className="w-12 h-12 rounded-full shadow-xl bg-primary text-primary-foreground"
-                  >
-                    {showMobileFAB ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
-                  </Button>
+            {/* ===== FIRST-USE MOBILE HINTS ===== */}
+            {!readOnly && isMobile && showHints && selectedIds.length === 0 && (
+              <div className="absolute bottom-16 left-4 right-4 z-30 pointer-events-none animate-in fade-in duration-500">
+                <div className="bg-background/95 backdrop-blur-md border shadow-lg rounded-xl p-3 text-xs text-muted-foreground pointer-events-auto relative">
+                  <button onClick={() => { setShowHints(false); localStorage.setItem("worline_mobile_hints_seen", "true"); }} className="absolute top-2 right-2 p-1 hover:bg-muted rounded-md"><X className="w-3 h-3" /></button>
+                  <p className="font-semibold text-foreground mb-1">Editor Tips:</p>
+                  <ul className="list-disc pl-4 space-y-0.5">
+                    <li>Tap <strong className="text-foreground">+</strong> to add symbol, line, text, or shape</li>
+                    <li>Tap an object to edit it</li>
+                    <li>Use <strong className="text-foreground">More (...)</strong> for advanced tools</li>
+                    <li>Save from the top bar</li>
+                  </ul>
                 </div>
               </div>
             )}

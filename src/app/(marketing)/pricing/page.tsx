@@ -15,10 +15,10 @@ export default function PricingPage() {
   const { t } = useLocale();
 
   return (
-    <div className="py-24 sm:py-32">
+    <div className="py-12 sm:py-32 min-h-[100dvh]">
       <div className="container mx-auto px-4 md:px-8">
         {/* Header */}
-        <div className="mx-auto max-w-3xl text-center mb-20">
+        <div className="mx-auto max-w-3xl text-center mb-12 sm:mb-20">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400 mb-6">
             <Gift className="h-4 w-4" />
             {t("pricing_badge")}

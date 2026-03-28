@@ -98,7 +98,7 @@ export default function DashboardLayout({
   );
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-[100dvh]">
       {/* Desktop Sidebar */}
       <aside className="w-64 border-r bg-muted/40 hidden md:flex md:flex-col" role="complementary" aria-label="Sidebar">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">

@@ -16,6 +16,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   title: {
     default: "WorLine by Pao — Professional Single-Line Diagram Editor",
@@ -56,8 +63,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
-      <body className="flex min-h-full flex-col font-sans">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-[100dvh] w-full overflow-hidden antialiased`} suppressHydrationWarning>
+      <body className="flex h-[100dvh] w-full flex-col font-sans overflow-y-auto">
         {/* Google Analytics */}
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>

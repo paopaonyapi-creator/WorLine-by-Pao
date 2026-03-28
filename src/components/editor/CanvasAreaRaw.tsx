@@ -217,9 +217,19 @@ export const CanvasAreaRaw = () => {
         });
       }
     };
+
+    const resizeObserver = new ResizeObserver(() => handleResize());
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     handleResize();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
+    };
   }, []);
 
   // Track mouse for wire preview line

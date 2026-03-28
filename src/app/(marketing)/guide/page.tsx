@@ -69,8 +69,8 @@ const shortcuts = [
 
 export default function GuidePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
-      <div className="max-w-4xl mx-auto px-4 py-16 sm:py-24">
+    <div className="min-h-[100dvh] bg-gradient-to-b from-background to-muted/30">
+      <div className="max-w-4xl mx-auto px-4 py-8 sm:py-24">
         {/* Header */}
         <div className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
@@ -125,15 +125,15 @@ export default function GuidePage() {
         {/* CTA */}
         <div className="mt-12 text-center space-y-4">
           <h3 className="text-xl font-semibold">Ready to start? / พร้อมเริ่มวาดผังแล้ว?</h3>
-          <div className="flex justify-center gap-4">
-            <Link href="/app/projects">
-              <Button size="lg">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <Link href="/app/projects" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full">
                 <Zap className="mr-2 h-4 w-4" />
                 Open Editor
               </Button>
             </Link>
-            <Link href="/app/templates">
-              <Button size="lg" variant="outline">
+            <Link href="/app/templates" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full">
                 Browse Templates
               </Button>
             </Link>

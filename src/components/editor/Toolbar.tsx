@@ -6,7 +6,7 @@ import {
   Save, Undo, Redo, Download, ArrowLeft, Loader2,
   MousePointer2, Type, Cable, Grid3x3, Maximize,
   RotateCw, FlipHorizontal, FlipVertical, Magnet,
-  Share2, Check, Copy, Trash, MoreHorizontal
+  Share2, Check, Copy, Trash, MoreHorizontal, FolderOpen, Plus, Shapes
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -42,7 +42,7 @@ const ToolBtn = ({ icon: Icon, label, active, onClick, className, disabled }: {
   </Tooltip>
 );
 
-export const Toolbar = ({ projectId, onOpenPlugins }: { projectId: string, onOpenPlugins?: () => void }) => {
+export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId: string, onOpenPlugins?: () => void, onOpenLibrary?: () => void }) => {
   const {
     undo, redo, canvas, history, currentHistoryIndex,
     activeTool, setActiveTool, selectedIds, deleteObjects,
@@ -190,10 +190,36 @@ export const Toolbar = ({ projectId, onOpenPlugins }: { projectId: string, onOpe
         <ToolBtn icon={Redo} label="Redo (Ctrl+Y)" onClick={redo} disabled={!canRedo} />
         <div className="w-px h-5 bg-border mx-0.5" />
 
-        {/* Mode Buttons */}
-        <ToolBtn icon={MousePointer2} label="Select (V)" active={activeTool === "select"} onClick={() => setActiveTool("select")} />
-        <ToolBtn icon={Cable} label="Wire (W)" active={activeTool === "wire"} onClick={() => setActiveTool("wire")} />
-        <ToolBtn icon={Type} label="Text (T)" active={activeTool === "text"} onClick={() => setActiveTool("text")} />
+        {/* Desktop Mode Buttons */}
+        <div className="hidden md:flex items-center gap-1">
+          <ToolBtn icon={MousePointer2} label="Select (V)" active={activeTool === "select"} onClick={() => setActiveTool("select")} />
+          <ToolBtn icon={Cable} label="Wire (W)" active={activeTool === "wire"} onClick={() => setActiveTool("wire")} />
+          <ToolBtn icon={Type} label="Text (T)" active={activeTool === "text"} onClick={() => setActiveTool("text")} />
+        </div>
+
+        {/* Mobile Mode Buttons */}
+        <div className="flex md:hidden items-center gap-0.5">
+          <ToolBtn icon={MousePointer2} label="Select" active={activeTool === "select"} onClick={() => setActiveTool("select")} />
+          <DropdownMenu>
+            <DropdownMenuTrigger render={
+              <Button variant="ghost" size="icon" className="w-8 h-8">
+                <Plus className="h-4 w-4" />
+              </Button>
+            } />
+            <DropdownMenuContent align="start" className="w-48 z-[60]">
+              <DropdownMenuItem onClick={onOpenLibrary}>
+                <FolderOpen className="h-4 w-4 mr-2" /> Symbol Library
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setActiveTool("wire")}>
+                <Cable className="h-4 w-4 mr-2" /> Draw Wire
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setActiveTool("shape")}>
+                <Shapes className="h-4 w-4 mr-2" /> Draw Shape
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <ToolBtn icon={Type} label="Text" active={activeTool === "text"} onClick={() => setActiveTool("text")} />
+        </div>
 
         {/* Desktop canvas tools */}
         <div className="hidden md:flex items-center gap-1">
