@@ -15,7 +15,7 @@
 ### Checkpoints
 - [ ] Communication sent? (Broad outgage / 1:1 direct reply)
 - [ ] Temp unblock applied? (For isolated users awaiting root fix)
-- [ ] Manual DB edit applied? 
+- [ ] Manual DB edit applied? (See [Safety Notes](manual-db-intervention-safety.md))
 
 ### Next Safe Step
 * [e.g. "Triggering Vercel rollback", "Opening Supabase Table Editor", "Checking Stripe Webhook logs"]
