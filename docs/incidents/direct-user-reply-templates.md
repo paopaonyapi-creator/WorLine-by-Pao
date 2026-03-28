@@ -26,7 +26,7 @@ Use these 1:1 email/chat templates for isolated billing and access incidents (ðŸ
 > While we deploy a permanent fix, could you try clearing your browser cookies for [App Domain] or attempting to log in via an Incognito window? That often clears the stalled session. I will follow up with you as soon as the core issue is fully resolved.
 
 ### 3. Temporary workaround/restore applied (ðŸš‘)
-**When to use:** You gave them a temporary DB unblock while you look into the codebase.
+**When to use:** You gave them a temporary DB unblock while you look into the codebase. *(Did you run through the [Post-Manual DB Fix Checks](post-manual-db-fix-checks.md)?)*
 > **Subject: Temporary Access Restored**
 > 
 > Hi [Name],
