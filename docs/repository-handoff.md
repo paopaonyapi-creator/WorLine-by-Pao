@@ -18,12 +18,12 @@ WorLine is a professional single-line diagram editor built for electrical engine
 
 If you are modifying any of these files, perform extreme manual UI checking:
 - **Authentication & Middleware:** `src/lib/supabase/middleware.ts` 
-  - *Rule:* If environment variables are missing, this file forcefully bounces the entire application to `/login` or `/misconfigured`. Do not loosen these redirects natively.
+  - *Rule:* If environment variables are missing, this file forcefully bounces the entire application to `/login` or `/misconfigured`. Do not loosen these redirects.
 - **Admin Gating:** Handled securely inside components by validating the active user's email against `process.env.ADMIN_EMAILS` (e.g., in `/app/(dashboard)/admin/...`).
 - **Billing Checkout:** `src/app/api/checkout/route.ts`
   - *Rule:* The `userId` and `email` payload strictly comes from `supabase.auth.getUser()` server-side, entirely overriding maliciously intercepted client REST payloads.
 - **Editor Workspace:** `src/components/editor/EditorWorkspace.tsx`
-  - *Rule:* Handles massive JSON object state bindings via Zustand. Saving pushes Stringified JSON representations natively to Supabase's `projects` table.
+  - *Rule:* Handles massive JSON object state bindings via Zustand. Saving pushes Stringified JSON representations to Supabase's `projects` table.
 
 ---
 
@@ -47,7 +47,7 @@ If your `.env.local` or Railway lacks these, tests skip and logic crashes:
 ## 🚨 First Places to Debug Common Issues
 If production is failing, start here:
 1. **App redirects endlessly to `/login`?** Your Supabase token expired or your layout `<Suspense>` boundary is blowing up Auth hooks. Look at your local `.env`.
-2. **"Active" badge doesn't appear after subscribing?** Check your Stripe Dashboard Webhook logs. If they return `500`, your `STRIPE_WEBHOOK_SECRET` mismatch is dropping the payload before Supabase registers the event natively.
+2. **"Active" badge doesn't appear after subscribing?** Check your Stripe Dashboard Webhook logs. If they return `500`, your `STRIPE_WEBHOOK_SECRET` mismatch is dropping the payload before Supabase registers the event.
 3. **Konva canvas throws missing reference errors?** The user is likely on Mobile, or the `pdf-lib` script timed-out exporting a massive JSON payload securely.
 
 ---
@@ -61,5 +61,5 @@ If production is failing, start here:
 ## 🗺️ Most Important Docs to Read First
 When modifying code bounds and pushing drops, leverage the following workflow continuously:
 1. Open the **[Documentation Index](index.md)**.
-2. Read the **Local Test Seed Workflow** to regain test user access natively.
+2. Read the **Local Test Seed Workflow** to regain test user access.
 3. Consult the **Rollout & Rollback Plan** before clicking "Deploy".

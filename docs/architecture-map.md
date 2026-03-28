@@ -3,7 +3,7 @@
 If you need to understand *how* the application routes data securely, this document maps the boundary flows between Server, Client, and external APIs (Supabase/Stripe). 
 
 ## 1. Request / Auth Flow
-Every single page load evaluates identity securely before rendering any React layout natively.
+Every single page load evaluates identity securely before rendering any React layout.
 
 ```mermaid
 graph TD
@@ -16,7 +16,7 @@ graph TD
 ```
 
 ## 2. Admin Protection Flow
-Admin pages double-check the server session against physical hardcoded environment lists to stop forced access natively.
+Admin pages double-check the server session against physical hardcoded environment lists to stop forced access.
 
 ```text
 User hits /admin -> `admin/layout.tsx`
@@ -42,7 +42,7 @@ graph LR
 ```
 
 ## 4. Editor / Save / Export Flow
-The drawing engine is highly client-side dependent (Zustand + Konva) until explicit API `Save` commands fire natively.
+The drawing engine is highly client-side dependent (Zustand + Konva) until explicit API `Save` commands fire.
 
 ```text
 `src/components/editor/EditorWorkspace.tsx`
@@ -58,13 +58,13 @@ The drawing engine is highly client-side dependent (Zustand + Konva) until expli
 ```
 
 ## 5. Testing & Seed Data Flow
-CI drops must dynamically map user logic without risking locking staging environments natively or hitting Stripe blocks.
+CI drops must map user logic without risking locking staging environments or hitting Stripe blocks.
 
 ```text
 Playwright hits UI 
  ↳ `tests/e2e/helpers/seed.ts` bypasses external Auth UIs
  ↳ Injects `PLAYWRIGHT_TEST_USER_EMAIL` straight to Supabase local container bindings
- ↳ Exits test logic exactly at Stripe boundary (does not enter Credit Card natively).
+ ↳ Exits test logic exactly at Stripe boundary (does not enter Credit Card).
 ```
 
 ## 6. Release & Rollout Flow

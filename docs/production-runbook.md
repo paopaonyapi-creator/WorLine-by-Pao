@@ -23,8 +23,8 @@ If any of the following variables are missing in production (e.g., Railway Dashb
 
 ### Validating Admin Emails
 If your account should be an admin but `/admin` redirects you away:
-1. Ensure your exact email string is included inside the `ADMIN_EMAILS` variable natively in Railway (comma-separated with no spaces).
-2. Ensure you have fully authenticated dynamically. 
+1. Ensure your exact email string is included inside the `ADMIN_EMAILS` variable in Railway (comma-separated with no spaces).
+2. Ensure you have fully authenticated. 
 
 ### Verify Webhook Delivery 
 1. Open the Stripe Dashboard > Developers > Webhooks.
@@ -53,4 +53,4 @@ If Railway completes a deployment sequence, verify stability quickly:
 
 ## 4. Rollback & Hotfix Protocols
 1. If the current deployment fundamentally breaks authentication paths, execute an immediate rollback to the last stable commit directly from the Railway dashboard (History > Revert).
-2. If billing architecture drops asynchronously, safely pause subscription marketing in frontend layouts locally, commit fixes without patching via dummy variables, and redeploy natively. Never mock failed configurations inside Edge server boundaries.
+2. If billing architecture drops asynchronously, safely pause subscription marketing in frontend layouts locally, commit fixes without patching via dummy variables, and redeploy. Never mock failed configurations inside Edge server boundaries.
