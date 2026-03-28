@@ -25,6 +25,8 @@ Use this feature map to quickly locate the correct bounded document.
   Read this before spending hours fighting CI pipelines! It explains exactly why certain Stripe checkouts must remain mocked and why Headless Chromium might drop PDF binaries randomly.
 
 ## 3. Incident Response
+- **[🧭 Which Doc First?](incidents/which-doc-first.md)**
+  Start here if you are overwhelmed and don't know where to look. Pick a single sentence that matches your knowledge state.
 - **[🚨 The First 10 Minutes](incidents/first-10-minutes.md)**
   Start here when paged. The mandatory checklist for triaging scope, urgency, and rollback decisions before guessing what broke.
 - **[Incident Playbooks Index](incidents/index.md)**
