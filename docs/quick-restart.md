@@ -7,6 +7,7 @@ Haven't touched the repo since Friday? Run through this 2-minute checklist to ge
 - [ ] Install deps: `pnpm install` (if `package.json` changed)
 - [ ] Review recent commits: `git log -3 --oneline`
 - [ ] Read the latest [Recent Changes Summary](recent-changes-template.md) if one was left behind.
+- [ ] Check for a saved [Session Resume Note](session-resume-template.md) if you paused work mid-feature.
 
 ## 2. Check Repo Health
 - [ ] Run `pnpm typecheck` (ensure the baseline compiles)
