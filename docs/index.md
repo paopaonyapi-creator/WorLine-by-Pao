@@ -31,6 +31,8 @@ Use this feature map to quickly locate the correct bounded document.
   The source of truth when the live application goes down. Outlines recovery steps for Supabase incidents, Stripe Webhook crashes, and Railway memory limits.
 - **[Troubleshooting Shortcuts](troubleshooting-shortcuts.md)**
   A compact symptom → file → dashboard table. Start here when something breaks and you need to know where to look first.
+- **[Debugging Glossary](debugging-glossary.md)**
+  Quick definitions for Supabase, Stripe, Konva, RLS, Railway, and other repo-specific terms.
 - **[Local Test Seed Workflow](local-test-seed-workflow.md)**
   Explains how to quickly spin up localized `user@example.com` and administrative credentials required to power the end-to-end testing matrix.
 
