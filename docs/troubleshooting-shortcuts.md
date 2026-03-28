@@ -1,25 +1,51 @@
 # Troubleshooting Shortcuts
 
 When something breaks, start here. Find the symptom, check the file, open the dashboard.
+This is a fast triage layer — not a deep runbook. Fix the obvious cause in two minutes or escalate.
+
+## How to Use This Table
+
+1. Scan the **Symptom** column for your situation.
+2. Open the **First File** in your editor.
+3. Open the **First Dashboard / Tool** in your browser.
+4. Execute the **First Action**.
+5. If the issue persists, follow the linked doc in the row or jump to [When This Table Is Not Enough](#when-this-table-is-not-enough).
+
+---
 
 ## Quick Triage Table
 
-| Symptom | Likely Area | First File to Check | First Dashboard / Tool | First Action |
-|---------|-------------|---------------------|------------------------|--------------|
-| `/api/health` returns 500 | Deploy | `src/app/api/health/route.ts` | Railway → Deployments → Logs | Check if the build completed. Redeploy if the previous deployment was healthy. |
-| `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. Check if `.env.local` has both Supabase keys set. |
-| `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. Compare against `.env.example`. |
-| `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. |
-| Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check if `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID` are set and valid. |
-| Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. Check for 400/500 responses in the delivery log. |
-| Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
-| Editor save fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Supabase → Table Editor → `projects` | Check browser console for Supabase RLS errors. Confirm the user owns the project row. |
-| PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. Try on Desktop Chrome first. See [Testing Limitations](testing-limitations.md). |
-| Mobile nav or app shell breaks | Responsive | `src/app/app/(dashboard)/layout.tsx` | Browser → DevTools → Toggle Device | Check if `<SheetTrigger>` renders. Compare against the [Manual QA Matrix](manual-qa-matrix.md). |
-| E2E auth tests skip unexpectedly | Testing | `tests/e2e/helpers/seed.ts` | Terminal → `.env.local` | Confirm `PLAYWRIGHT_TEST_USER_EMAIL` is set. See [Local Seed Workflow](local-test-seed-workflow.md). |
-| CI passes but local fails (or vice versa) | Testing | `.github/workflows/ci.yml` | GitHub → Actions → Latest run | Compare env vars between local `.env.local` and CI secrets. See [Testing Limitations](testing-limitations.md). |
+| # | Symptom | Likely Area | First File to Check | First Dashboard / Tool | First Action |
+|---|---------|-------------|---------------------|------------------------|--------------|
+| 1 | `/api/health` returns 500 | Deploy | `src/app/api/health/route.ts` | Railway → Deployments → Logs | Check if the build completed. Redeploy if the previous deployment was healthy. See [Production Runbook](production-runbook.md) §3. |
+| 2 | `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. Check `.env.local` has both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. |
+| 3 | `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. Compare against `.env.example`. See [Production Runbook](production-runbook.md) §1. |
+| 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See [Architecture Map](architecture-map.md) §2. |
+| 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check if `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID` are set and valid in Railway. |
+| 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. Check for 400/500 responses in the delivery log. See [Production Runbook](production-runbook.md) §2. |
+| 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
+| 8 | Editor save fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Supabase → Table Editor → `projects` | Check browser console for Supabase RLS errors. Confirm the user owns the project row. |
+| 9 | PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. Try on Desktop Chrome first. See [Testing Limitations](testing-limitations.md) §3. |
+| 10 | Mobile nav or app shell breaks | Responsive | `src/app/app/(dashboard)/layout.tsx` | Browser → DevTools → Toggle Device | Check if `<SheetTrigger>` renders. Compare against the [Manual QA Matrix](manual-qa-matrix.md). |
+| 11 | E2E auth tests skip unexpectedly | Testing | `tests/e2e/helpers/seed.ts` | Terminal → `.env.local` | Confirm `PLAYWRIGHT_TEST_USER_EMAIL` and `_PASSWORD` are set. See [Local Seed Workflow](local-test-seed-workflow.md). |
+| 12 | CI passes but local fails (or vice versa) | Testing | `.github/workflows/ci.yml` | GitHub → Actions → Latest run | Compare env vars between local `.env.local` and CI secrets. See [Testing Limitations](testing-limitations.md) §1. |
+
+---
 
 ## When This Table Is Not Enough
 
-For extended recovery procedures, consult the [Production Runbook](production-runbook.md).
-For deployment-specific rollback logic, consult the [Rollout Plan](releases/v0.2.0-rollout.md).
+- **Extended recovery procedures** → [Production Runbook](production-runbook.md)
+- **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
+- **Full architecture context** → [Architecture Map](architecture-map.md)
+- **Test seed setup** → [Local Test Seed Workflow](local-test-seed-workflow.md)
+- **Pre-deploy sanity checks** → [Pre-Release Checklist](pre-release-checklist.md)
+- **Codebase orientation** → [Maintainer Guide](../MAINTAINERS.md)
+
+## Symptoms That Require Deeper Manual Investigation
+
+Some issues cannot be resolved from a single file or dashboard:
+
+- **Canvas visual fidelity bugs** — Playwright cannot validate Konva pixel output. Requires manual visual comparison on the actual device. Start with the [Manual QA Matrix](manual-qa-matrix.md).
+- **Stripe anti-fraud lockouts** — Repeated test checkouts trigger Stripe's fraud detection. No code fix; wait and rotate test card numbers. See [Testing Limitations](testing-limitations.md) §4.
+- **Supabase RLS policy mismatches** — If a save/read works for one user but not another, the issue is in Supabase's Row Level Security policies, not application code. Inspect policies directly in Supabase → Authentication → Policies.
+- **Railway memory/CPU limits** — If the app randomly crashes under load, check Railway → Metrics. No code-level fix; increase the resource plan or optimize the build.
