@@ -44,3 +44,6 @@ Before executing `git push` on a release tag, you must verify the operational ch
 - **[Pre-Release Checklist](docs/pre-release-checklist.md):** The exact criteria required before merging to production.
 - **[Launch-Day Checklist](docs/releases/launch-day-checklist.md):** Which external tabs (Stripe, Railway, Supabase) to open immediately after deploying.
 - **[Production Runbook](docs/production-runbook.md):** What to do if `/api/health` 500s directly after a deployment.
+
+## 7. Reporting Regressions
+If you discover a structural bug breaking Auth, Billing, or the Editor—log it rigorously utilizing the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md). Do not drop issues directly into Slack without filling out the Webhook and Middleware verification checklists!
