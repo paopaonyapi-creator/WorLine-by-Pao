@@ -48,6 +48,7 @@ Use this feature map to quickly locate the correct bounded document.
 
 ## 4. Auth, Billing, & Editor (Code Boundaries)
 While specific `docs/` files map these broadly, remember to check these primary file patterns locally:
+- **[High-Risk Edit Checklists](high-risk-edit-checklists.md)** — **Stop and review this before modifying Stripe or Middleware routes.**
 - **Auth Guarding:** `src/lib/supabase/middleware.ts` (Routing logic)
 - **Billing Security:** `src/app/api/checkout/route.ts` (Server-side Stripe identity binding) 
 - **Editor Canvas:** `src/components/editor/EditorWorkspace.tsx` (Core Konva architecture)

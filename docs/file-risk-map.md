@@ -2,6 +2,8 @@
 
 Before modifying files, consult this table to quickly judge how safely you can make a change and what checks are mandatory before pushing to `master`.
 
+> Editing Stripe or Middleware? Stop and run through the [High-Risk Edit Checklists](high-risk-edit-checklists.md) first.
+
 ---
 
 ## Risk Levels Explained
