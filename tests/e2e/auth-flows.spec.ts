@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { NEXT_PUBLIC_APP_URL } from './helpers/env';
 
 // Use standard Next.js local setup or the provided APP_URL
-const URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const URL = NEXT_PUBLIC_APP_URL;
 
 test.describe('Admin Access', () => {
   test('redirects unauthenticated user to login', async ({ page }) => {
