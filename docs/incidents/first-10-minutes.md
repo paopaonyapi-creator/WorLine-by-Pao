@@ -18,7 +18,8 @@
 ### Minute 2-5: Locate the Playbook
 - [ ] Open the [Incident Playbooks Index](index.md).
 - [ ] Find the scenario that perfectly matches your symptom.
-- [ ] *Tag check:* Note the expected action (**⏪**), audience (**👤**), impact (**🌐**), comms (**📣** / **📡**), root cause (**🚀**), data risk (**🧨**), DB fix (**✍️**), temp unblock (**🚑**), and urgency (**🚨** / **⏱️**).
+- [ ] *Tag check:* Use the [Tag Legend](tag-legend.md) to decode urgency, root cause, and data risk.
+- [ ] *Workaround check:* If an isolated incident has a workaround available (**🩹**), provide it before deep-diving into code.
 - [ ] Immediately log into the specific `first-check tool` listed next to the symptom (e.g., Stripe Dash, Railway, Supabase).
 - [ ] Follow the 1-minute playbook inside.
 
