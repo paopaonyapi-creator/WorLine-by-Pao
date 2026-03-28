@@ -1,6 +1,19 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+
+// Clean reusable helper safely extracting Stripe properties bounding null checks natively
+function extractSubscriptionData(subscription: any) {
+  return {
+    status: subscription.status,
+    stripe_price_id: subscription.items?.data?.[0]?.price?.id,
+    current_period_end: subscription.current_period_end 
+      ? new Date(subscription.current_period_end * 1000).toISOString() 
+      : undefined,
+    cancel_at_period_end: subscription.cancel_at_period_end ?? false,
+  };
+}
+
 export async function POST(req: Request) {
   const strSecret = process.env.STRIPE_SECRET_KEY;
   const webSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -47,13 +60,13 @@ export async function POST(req: Request) {
         // which reliably defines the active period constraints.
         if (subscriptionId) {
           try {
-            const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
-            status = subscription.status;
-            currentPeriodEnd = new Date(subscription.current_period_end * 1000).toISOString();
-            cancelAtPeriodEnd = subscription.cancel_at_period_end;
+            const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+            const subData = extractSubscriptionData(subscription);
             
-            // Prefer price resolving off literal subscription items dynamically applied
-            priceId = subscription.items.data[0]?.price?.id;
+            status = subData.status ?? status;
+            currentPeriodEnd = subData.current_period_end;
+            cancelAtPeriodEnd = subData.cancel_at_period_end;
+            priceId = subData.stripe_price_id;
           } catch (err) {
             console.error('Failed to retrieve full subscription on checkout:', err);
           }
@@ -94,12 +107,9 @@ export async function POST(req: Request) {
       const { data } = await supabase.from('subscriptions').select('user_id').eq('stripe_customer_id', customerId).single();
       
       if (data?.user_id) {
-        await supabase.from('subscriptions').update({
-          status: subscription.status,
-          stripe_price_id: subscription.items.data[0].price.id,
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-          cancel_at_period_end: subscription.cancel_at_period_end,
-        }).eq('user_id', data.user_id);
+        // Safe mapping ensuring variables do not drop gracefully
+        const mappedUpdate = extractSubscriptionData(subscription);
+        await supabase.from('subscriptions').update(mappedUpdate).eq('user_id', data.user_id);
       }
       break;
     }
