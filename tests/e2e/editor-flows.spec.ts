@@ -69,4 +69,67 @@ test.describe('Core Editor Workflows', () => {
     const downloadPdf = await downloadPromisePdf;
     expect(downloadPdf.suggestedFilename()).toContain('.pdf');
   });
+
+  test('successfully loads a rich populated fixture, renders reliably, and exports bounds', async ({ page }) => {
+    // 1. Authenticate locally through isolated helper
+    await login(page, TEST_USER_EMAIL, TEST_USER_PASSWORD, URL);
+
+    // 2. Bound dynamically onto the unified user dashboard
+    await page.goto(`${URL}/app/projects`);
+    await expect(page).toHaveURL(/.*\/app\/projects/);
+
+    // 3. Initiate Project Creation safely navigating creation states
+    const createProjectBtn = page.getByTestId('new-project-btn').or(page.getByTestId('new-project-empty-btn')).first();
+    
+    // 4. MOCK FIXTURE INTERCEPT - Override Database response on Editor Load natively 
+    const demoFixture = require('./fixtures/demo-project.json');
+    await page.route('**/rest/v1/projects?*', async route => {
+      // Catch Supabase JS fetching operations bound to single project initialization
+      if (route.request().method() === 'GET' && route.request().url().includes('select=diagram_data')) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ diagram_data: demoFixture }) // .single() strictly returns the naked DB object
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
+    await expect(createProjectBtn).toBeVisible();
+    await createProjectBtn.click();
+    
+    // 5. Await downstream redirect safely dropping into workspace layout boundaries
+    await page.waitForURL(/.*\/app\/projects\/.+/, { timeout: 20000 });
+    
+    // 6. Verify absolute Canvas pipeline rendering via the stable workspace DOM container
+    // Konva runs its rendering loop evaluating all 4 complex nodes inserted locally
+    const editorWorkspace = page.getByTestId('editor-workspace-container').first();
+    await expect(editorWorkspace).toBeVisible();
+    const editorCanvas = editorWorkspace.locator('canvas').first();
+    await expect(editorCanvas).toBeVisible();
+
+    // 7. Verify Data Integrity via Save button (proving UI stability wasn't broken by raw state drops)
+    const saveBtn = page.getByTestId('save-btn');
+    await expect(saveBtn).toBeVisible();
+    await saveBtn.click();
+    await expect(page.locator('li[data-sonner-toast]').filter({ hasText: /Saved successfully/i }).first()).toBeVisible({ timeout: 10000 });
+
+    // 8. Prove Export triggers over rich canvases don't crash the headless browser buffer processing
+    const exportTrigger = page.getByTestId('export-menu-btn');
+    await exportTrigger.click();
+
+    const downloadPromisePng = page.waitForEvent('download');
+    await page.getByTestId('export-png-btn').click();
+    
+    const downloadPng = await downloadPromisePng;
+    expect(downloadPng.suggestedFilename()).toContain('.png');
+
+    // PDF 
+    await exportTrigger.click();
+    const downloadPromisePdf = page.waitForEvent('download');
+    await page.getByTestId('export-pdf-btn').click();
+    const downloadPdf = await downloadPromisePdf;
+    expect(downloadPdf.suggestedFilename()).toContain('.pdf');
+  });
 });

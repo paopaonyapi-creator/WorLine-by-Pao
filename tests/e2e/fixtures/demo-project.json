@@ -1,0 +1,57 @@
+{
+  "objects": [
+    {
+      "id": "transformer-1",
+      "type": "symbol",
+      "symbolId": "transformer-2w",
+      "x": 400,
+      "y": 300,
+      "rotation": 0,
+      "scaleX": 1,
+      "scaleY": 1,
+      "properties": {
+        "name": "TX-01",
+        "rating": "1000 kVA",
+        "primaryVoltage": "11kV",
+        "secondaryVoltage": "400V"
+      }
+    },
+    {
+      "id": "cb-1",
+      "type": "symbol",
+      "symbolId": "circuit-breaker-lv",
+      "x": 400,
+      "y": 450,
+      "rotation": 0,
+      "scaleX": 1,
+      "scaleY": 1,
+      "properties": {
+        "name": "CB-MAIN",
+        "rating": "1600A"
+      }
+    },
+    {
+      "id": "wire-1",
+      "type": "wire",
+      "points": [400, 350, 400, 420],
+      "properties": {
+        "name": "W-01",
+        "type": "3C x 240mm2 XLPE",
+        "length": "10m"
+      }
+    },
+    {
+      "id": "text-1",
+      "type": "text",
+      "x": 450,
+      "y": 300,
+      "text": "Main Step-Down",
+      "fontSize": 16,
+      "fill": "#333333"
+    }
+  ],
+  "width": 1920,
+  "height": 1080,
+  "background": "#ffffff",
+  "gridSize": 20
+}
