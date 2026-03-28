@@ -8,6 +8,7 @@ This checklist is designed for a lightweight, solo-maintainer workflow. Run thro
 - [ ] `pnpm typecheck` – Verifies TypeScript compiler integrity.
 - [ ] `pnpm test` – Passes all local unit tests (Billing helpers, Webhooks, Env resets).
 - [ ] `pnpm test:e2e` – Passes all Playwright E2E flows (`auth`, `authenticated`, `editor-desktop`, `editor-mobile`).
+  *(See [Testing Limitations](testing-limitations.md) for expected CI skips or flaky scenarios)*
 
 ## 2. Manual Smoke Tests
 *(See [Manual QA Matrix](manual-qa-matrix.md) for full scenario tables)*
