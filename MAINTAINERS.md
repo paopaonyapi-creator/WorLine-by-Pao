@@ -34,18 +34,21 @@ pnpm test:e2e
 ```
 *Requires explicit [Seeded Test Users](docs/local-test-seed-workflow.md) within `.env.local` to execute authenticated flows.*
 
-## 5. Most Important Commands
+## 5. Opening a Pull Request
+Every PR auto-populates with the [PR checklist template](.github/pull_request_template.md). Fill it out honestly — it covers auth, billing, editor, and deploy risk areas so regressions are caught before merge.
+
+## 6. Most Important Commands
 ```bash
 pnpm install    # Install deps
 pnpm dev        # Boot the local Turbopack server
 pnpm typecheck  # Prevent stealthy typescript regressions
 ```
 
-## 6. When to Consult Release Docs
+## 7. When to Consult Release Docs
 Before executing `git push` on a release tag, you must verify the operational checklists:
 - **[Pre-Release Checklist](docs/pre-release-checklist.md):** The exact criteria required before merging to production.
 - **[Launch-Day Checklist](docs/releases/launch-day-checklist.md):** Which external tabs (Stripe, Railway, Supabase) to open immediately after deploying.
 - **[Production Runbook](docs/production-runbook.md):** What to do if `/api/health` 500s directly after a deployment.
 
-## 7. Reporting Regressions
+## 8. Reporting Regressions
 If you discover a structural bug breaking Auth, Billing, or the Editor—log it rigorously utilizing the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md). Do not drop issues directly into Slack without filling out the Webhook and Middleware verification checklists!
