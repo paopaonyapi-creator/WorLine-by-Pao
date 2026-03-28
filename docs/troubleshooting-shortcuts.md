@@ -17,7 +17,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 
 | # | Symptom | Likely Area | First File to Check | First Dashboard / Tool | First Action |
 |---|---------|-------------|---------------------|------------------------|--------------|
-| 1 | `/api/health` returns 500 | Deploy | `src/app/api/health/route.ts` | Railway → Deployments → Logs | Check if the build completed. Redeploy if the previous deployment was healthy. See [Production Runbook](production-runbook.md) §3. |
+| 1 | `/api/health` returns 500 | Deploy | `src/app/api/health/route.ts` | Railway → Deployments → Logs | Check if the build completed. Redeploy if the previous deployment was healthy. See **[Downtime Plays](incidents/api-health-returns-500.md)**. |
 | 2 | `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. Check `.env.local` has both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. |
 | 3 | `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. See **[Redirect Plays](incidents/app-redirects-to-misconfigured.md)**. |
 | 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See [Architecture Map](architecture-map.md) §2. |
@@ -35,6 +35,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 ## When This Table Is Not Enough
 
 - **Extended recovery procedures** → [Production Runbook](production-runbook.md)
+- **App is offline / 500 errors** → [Incident: /api/health Returns 500](incidents/api-health-returns-500.md)
 - **Checkout returns 500** → [Incident: Checkout Returns 500](incidents/checkout-returns-500.md)
 - **User stuck on Free after paying** → [Incident: Billing Says Free](incidents/billing-still-free-after-payment.md)
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
