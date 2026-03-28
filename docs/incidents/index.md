@@ -4,7 +4,8 @@ When a user reports a specific symptom or a monitor starts firing, use this dire
 
 > 🚨 **Just got paged? Start with [The First 10 Minutes](first-10-minutes.md) before diagnosing below.**
 
-> **[📖 View the full Tag Legend](tag-legend.md)** to decode urgency, root cause, data risk, and mitigation symbols.
+> **[📖 View the full Tag Legend](tag-legend.md)** to decode urgency, root cause, data risk, and mitigation symbols.  
+> **[📊 View the Incident Matrix](matrix.md)** for a scannable summary of first-check tools and action postures.
 
 ### Deploy / Outage
 - 🔴 **Global 500 Outage** → [`/api/health` returns 500](api-health-returns-500.md) *(Railway)* [⏪] [👤] [🌐] [📣] [📡] [🚀] [🪶] [✅] [⏳] [🚨] [🚫]
