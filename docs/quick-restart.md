@@ -18,7 +18,7 @@ Haven't touched the repo since Friday? Run through this 2-minute checklist to ge
 If you are opening this repo because of an active outage or angry user right now:
 - Open **[🚨 The First 10 Minutes](incidents/first-10-minutes.md)** immediately to triage it safely.
 - Need a fast scan of what tool to check? Open the **[📊 Incident Matrix](incidents/matrix.md)**.
-- Need the full list of playbooks? Open the **[Incident Index](incidents/index.md)**.
+- Need the full list of playbooks? Open the **[Incident Index](incidents/index.md)** (or try the **[Top Recurring Incidents](incidents/top-recurring.md)** fast lane).
 
 ## 4. Check for Lingering Fires
 - [ ] Read the [Release Readiness Scorecard](release-readiness-scorecard.md). Are any core paths blocked?

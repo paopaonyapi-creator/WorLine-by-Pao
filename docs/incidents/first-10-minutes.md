@@ -17,7 +17,7 @@
   - ⚪ A test suite is broken locally (Testing)
 
 ### Minute 2-5: Locate the Playbook
-- [ ] Open the [Incident Playbooks Index](index.md).
+- [ ] Open the [Incident Playbooks Index](index.md) (or try the [Top Recurring Incidents](top-recurring.md) fast lane).
 - [ ] Find the scenario that perfectly matches your symptom.
 - [ ] *Tag check:* Use the [Tag Legend](tag-legend.md) and [Incident Matrix](matrix.md) to decode urgency, root cause, and data risk.
 - [ ] *Workaround check:* If an isolated incident has a workaround available (**🩹**), provide it before deep-diving into code.
