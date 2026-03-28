@@ -13,7 +13,7 @@
 ### 2. Verify Webhook Delivery
 - [ ] Open Stripe Dashboard -> Developers -> Webhooks.
 - [ ] Check "Recent deliveries" for `checkout.session.completed`.
-- [ ] Did it return `200`? (If `400`/`500`: webhook code crashed or secret mismatched. Check [Env Risk Notes](../env-risk-notes.md)).
+- [ ] Did it return `200`? (If `400`: see [Webhook Deliveries Return 400](webhook-deliveries-return-400.md)).
 
 ### 3. Verify Database State
 - [ ] Open Supabase -> Table Editor -> `subscriptions`.

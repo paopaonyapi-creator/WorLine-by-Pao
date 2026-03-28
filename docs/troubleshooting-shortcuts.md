@@ -38,6 +38,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **App is offline / 500 errors** → [Incident: /api/health Returns 500](incidents/api-health-returns-500.md)
 - **Checkout returns 500** → [Incident: Checkout Returns 500](incidents/checkout-returns-500.md)
 - **User stuck on Free after paying** → [Incident: Billing Says Free](incidents/billing-still-free-after-payment.md)
+- **Webhooks failing (400)** → [Incident: Webhooks Return 400](incidents/webhook-deliveries-return-400.md)
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
 - **Full architecture context** → [Architecture Map](architecture-map.md)
