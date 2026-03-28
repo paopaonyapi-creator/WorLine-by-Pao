@@ -2,6 +2,7 @@
 
 **Goal:** Move from "something feels broken" to an absolute triage decision without guessing or freezing.
 **Time to execute:** 2-10 minutes.
+*(Need to see how this flows? See [Worked Incident Examples](worked-examples.md)).*
 
 ---
 

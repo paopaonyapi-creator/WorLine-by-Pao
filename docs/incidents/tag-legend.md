@@ -1,5 +1,8 @@
 # Incident Tag Legend
 
+*These tags classify the severity, scope, and required action for any given incident. Rather than reading paragraphs of text, use these visual signals to execute triage in under 60 seconds.*
+*(Not sure how they stack together? See [Worked Incident Examples](worked-examples.md)).*
+
 Use this reference to quickly decode the symbol matrices found in the [Incident Playbooks Index](index.md).
 
 **Severity Labels:**  
