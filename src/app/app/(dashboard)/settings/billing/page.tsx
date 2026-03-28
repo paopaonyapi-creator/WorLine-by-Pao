@@ -61,7 +61,7 @@ export default function BillingPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mt-8">
         {/* Current Plan */}
         <Card className="border-primary shadow-md relative overflow-hidden">
-          <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 rounded-bl-lg text-xs font-medium">
+          <div data-testid="billing-status-badge" className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 rounded-bl-lg text-xs font-medium">
             Active
           </div>
           <CardHeader>
@@ -98,7 +98,7 @@ export default function BillingPage() {
             </ul>
           </CardContent>
           <CardFooter>
-            <Button className="w-full gap-2" onClick={handleSubscribe} disabled={loading}>
+            <Button data-testid="billing-subscribe-btn" className="w-full gap-2" onClick={handleSubscribe} disabled={loading}>
               <CreditCard className="h-4 w-4" />
               {loading ? "Loading..." : "Subscribe Now"}
             </Button>

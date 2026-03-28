@@ -68,7 +68,7 @@ export default function PricingPage() {
               ))}
             </ul>
 
-            <Link href="/signup">
+            <Link href="/signup" data-testid="pricing-upgrade-btn">
               <Button className="w-full h-11 gap-2 bg-emerald-500 hover:bg-emerald-600 text-white">
                 {t("get_started_free")}
                 <ArrowRight className="h-4 w-4" />
