@@ -7,6 +7,8 @@ Use this feature map to quickly locate the correct bounded document.
 ---
 
 ## 1. Release & Rollout
+- **[Launch-Day Command Checklist](releases/launch-day-checklist.md)**
+  The absolute final pre-flight checklist. Exactly which external dashboards to open (Stripe, Railway, Supabase) and what to click before dropping.
 - **[Pre-Release Checklist](pre-release-checklist.md)**
   Execute this immediately prior to drafting a version tag. It contains the exact manual and automated boundaries required before pushing to production safely natively.
 - **[v0.2.0 Rollout & Rollback Plan](releases/v0.2.0-rollout.md)**
