@@ -8,7 +8,7 @@
 
 ### Minute 0-2: Verify & Classify
 - [ ] **Reproduce:** Can you replicate the failure using a test account, or is it isolated to just one user's machine?
-- [ ] **Scope Impact:** Is this happening to one user (👤), many users (👥), or everyone (🌐)? *(Run the [Broad vs. Isolated Triage Tree](broad-vs-isolated.md) if unsure).*
+- [ ] **Scope Impact:** Is this happening to one user (👤), many users (👥), or everyone (🌐)? *(See [Broad vs. Isolated Triage Tree](broad-vs-isolated.md) if unsure, or jump to [Production Incidents](production-incidents.md) if obviously broad).*
 - [ ] **Classify Severity:**
   - 🔴 App is down globally (Outage)
   - 🟠 Money is blocked or missing (Revenue)
