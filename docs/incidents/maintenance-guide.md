@@ -3,11 +3,7 @@
 *The incident system is a highly structured decision engine. Be careful when updating it. Follow these strict rules to prevent doc drift and keep the matrix usable under pressure.*
 
 **1. When adding a completely new incident playbook:**
-You must update four core navigation files:
-- Add the symptom and full tag sequence to the `index.md`.
-- Add a summarized row to the `matrix.md`.
-- Ensure any new tag symbol is defined in `tag-legend.md`.
-- Decide if the symptom belongs in `user-facing.md` or `maintainer-facing.md` and link it there.
+You must follow the **[New Playbook Checklist](new-playbook-checklist.md)** precisely. Every new symptom *must* have an entry in the Main Index, the Matrix, a filtered hub, and a domain hub (if applicable). Do not create orphaned playbooks.
 
 **2. When adding a new tag family:**
 - Update the definitions in `tag-legend.md`.
