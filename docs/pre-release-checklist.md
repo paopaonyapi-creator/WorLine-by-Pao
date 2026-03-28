@@ -2,6 +2,7 @@
 
 This checklist is designed for a lightweight, solo-maintainer workflow. Run through these steps before generating a new release tag or deploying to the production environment.
 
+
 ## 1. Automated Validation (CI/Local)
 - [ ] `pnpm lint` – Ensures no new style/syntax violations.
 - [ ] `pnpm typecheck` – Verifies TypeScript compiler integrity.
