@@ -162,6 +162,27 @@ worline-by-pao/
 | Testing | Vitest (unit), Playwright (E2E) |
 | Deploy | Docker → Railway Pro |
 
+## Authenticated Playwright Testing
+
+To run the authenticated end-to-end test suite locally, you must provide seeded credentials that match active users existing inside the connected Supabase database. These tests will simulate logging in via the UI to verify role-based permissions and billing boundaries securely.
+
+Create or append the following to your `.env.local` (or supply them directly in CI):
+
+```bash
+PLAYWRIGHT_TEST_USER_EMAIL="user@example.com"
+PLAYWRIGHT_TEST_USER_PASSWORD="password123"
+
+PLAYWRIGHT_TEST_ADMIN_EMAIL="admin@example.com"
+PLAYWRIGHT_TEST_ADMIN_PASSWORD="password123"
+```
+
+*Note: The test suite will gracefully `.skip()` authenticated tests if variables are unsupplied, keeping your test passes honest.*
+
+To execute the test suite in terminal mode:
+```bash
+pnpm test:e2e
+```
+
 ---
 
 ## License

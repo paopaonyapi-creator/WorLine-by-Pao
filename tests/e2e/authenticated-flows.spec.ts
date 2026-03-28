@@ -12,11 +12,18 @@ const URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 // Note: Test skipping logic. 
 // Authenticated E2E flows require a seeded Supabase instance.
 // If the CI environment doesn't specify test accounts, gracefully skip rather than failing blindly.
-const requireSeed = () => {
-  if (!process.env.PLAYWRIGHT_TEST_USER_EMAIL) {
-    test.skip();
+
+export function requireUserSeed() {
+  if (!TEST_USER_EMAIL || !TEST_USER_PASSWORD) {
+    test.skip(true, 'Skipping standard user authenticated test: Missing PLAYWRIGHT_TEST_USER_EMAIL or PASSWORD');
   }
-};
+}
+
+export function requireAdminSeed() {
+  if (!TEST_ADMIN_EMAIL || !TEST_ADMIN_PASSWORD) {
+    test.skip(true, 'Skipping admin authenticated test: Missing PLAYWRIGHT_TEST_ADMIN_EMAIL or PASSWORD');
+  }
+}
 
 test.describe('Authenticated Flow Security (Non-Admin)', () => {
   // Test the API endpoint cleanly without UI
@@ -34,7 +41,7 @@ test.describe('Authenticated Flow Security (Non-Admin)', () => {
 
   // UI tests
   test('authenticated non-admin user is redirected from /admin to /app', async ({ page }) => {
-    requireSeed();
+    requireUserSeed();
     
     // 1. Log in as standard user
     await login(page, TEST_USER_EMAIL, TEST_USER_PASSWORD, URL);
@@ -47,7 +54,7 @@ test.describe('Authenticated Flow Security (Non-Admin)', () => {
   });
 
   test('authenticated user can reach billing settings successfully', async ({ page }) => {
-    requireSeed();
+    requireUserSeed();
     
     await login(page, TEST_USER_EMAIL, TEST_USER_PASSWORD, URL);
     
@@ -63,7 +70,7 @@ test.describe('Authenticated Flow Security (Non-Admin)', () => {
 
 test.describe('Authenticated Flow Security (Admin)', () => {
   test('authenticated admin user can access /admin successfully', async ({ page }) => {
-    requireSeed();
+    requireAdminSeed();
 
     // 1. Log in using seeded admin credentials
     await login(page, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD, URL);
