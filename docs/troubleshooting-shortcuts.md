@@ -22,7 +22,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | 3 | `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. Compare against `.env.example`. See [Production Runbook](production-runbook.md) §1. |
 | 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See [Architecture Map](architecture-map.md) §2. |
 | 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check if `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID` are set and valid in Railway. |
-| 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. Check for 400/500 responses in the delivery log. See [Production Runbook](production-runbook.md) §2. |
+| 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. See **[Billing Plays](incidents/billing-still-free-after-payment.md)**. |
 | 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
 | 8 | Editor save fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Supabase → Table Editor → `projects` | Check browser console for Supabase RLS errors. Confirm the user owns the project row. |
 | 9 | PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. Try on Desktop Chrome first. See [Testing Limitations](testing-limitations.md) §3. |
@@ -35,6 +35,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 ## When This Table Is Not Enough
 
 - **Extended recovery procedures** → [Production Runbook](production-runbook.md)
+- **User stuck on Free after paying** → [Incident: Billing Says Free](incidents/billing-still-free-after-payment.md)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
 - **Full architecture context** → [Architecture Map](architecture-map.md)
 - **Test seed setup** → [Local Test Seed Workflow](local-test-seed-workflow.md)
