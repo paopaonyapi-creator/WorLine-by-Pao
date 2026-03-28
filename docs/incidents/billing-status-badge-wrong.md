@@ -15,7 +15,7 @@
 
 ### 2. Isolate UI vs. Data Issue
 - **If the DB says "active" but the UI says "Free":** The bug is in `src/app/app/(dashboard)/settings/billing/page.tsx`. It is likely failing to fetch the row or misinterpreting the date math.
-- **If the DB says something else (or is missing):** The UI is correct; the data sync from Stripe is broken. See [Billing Says Free](billing-still-free-after-payment.md).
+- **If the DB says something else (or is missing):** The UI is correct; the data sync from Stripe is broken. See [Subscription Row Missing](subscription-row-missing.md).
 
 ### 3. Verify Stripe's Source of Truth
 - [ ] If the data sync is broken, open the Stripe Dashboard.
