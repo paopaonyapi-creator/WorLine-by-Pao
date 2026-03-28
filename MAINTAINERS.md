@@ -17,6 +17,8 @@ If you touch the following files, test extensively.
 - `src/app/api/checkout/route.ts` — The Stripe link. Never trust client payloads. The `user.id` is pulled exclusively from the server session.
 - `src/components/editor/EditorWorkspace.tsx` — The Drawing Engine. Zustand state mapping dictates physical polygon bounds on the Konva canvas.
 
+If something breaks after a change, check the [Troubleshooting Shortcuts](docs/troubleshooting-shortcuts.md) table for a fast symptom → file → dashboard lookup.
+
 ## 4. How to Run Tests
 Do not push failing checks into `master`. 
 

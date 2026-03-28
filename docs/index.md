@@ -28,7 +28,9 @@ Use this feature map to quickly locate the correct bounded document.
 - **[Architecture Map](architecture-map.md)**
   Visually charts the physical data flows covering React `Suspense`, Supabase Webhooks, and E2E bot boundaries logically!
 - **[Production Runbook](production-runbook.md)**
-  The absolute source of truth when the live application goes down. Outlines immediate triage steps connecting Supabase incidents, Stripe Webhook crashes, and Railway memory limits.
+  The source of truth when the live application goes down. Outlines recovery steps for Supabase incidents, Stripe Webhook crashes, and Railway memory limits.
+- **[Troubleshooting Shortcuts](troubleshooting-shortcuts.md)**
+  A compact symptom → file → dashboard table. Start here when something breaks and you need to know where to look first.
 - **[Local Test Seed Workflow](local-test-seed-workflow.md)**
   Explains how to quickly spin up localized `user@example.com` and administrative credentials required to power the end-to-end testing matrix.
 
