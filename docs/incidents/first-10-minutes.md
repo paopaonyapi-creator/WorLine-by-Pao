@@ -7,7 +7,8 @@
 
 ### Minute 0-2: Verify & Classify
 - [ ] **Reproduce:** Can you replicate the failure using a test account, or is it isolated to just one user's machine?
-- [ ] **Classify:** What is the severity?
+- [ ] **Scope Impact:** Is this happening to one user (👤), many users (👥), or everyone (🌐)? *(Broad impact heavily favors a rollback-first response).*
+- [ ] **Classify Severity:**
   - 🔴 App is down globally (Outage)
   - 🟠 Money is blocked or missing (Revenue)
   - 🟡 Users cannot log in or access features (Access)
