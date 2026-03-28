@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getCheckoutConfig } from '@/lib/billing/get-checkout-config';
+import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   try {
@@ -10,12 +11,17 @@ export async function POST(req: Request) {
       apiVersion: '2023-10-16' as any,
     });
 
-    const { userId, email } = await req.json();
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user || !user.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'promptpay'],
       billing_address_collection: 'required',
-      customer_email: email,
+      customer_email: user.email,
       line_items: [
         {
           price: config.stripePriceId,
@@ -25,7 +31,7 @@ export async function POST(req: Request) {
       mode: 'subscription',
       success_url: `${config.appUrl}/app/settings/billing?success=true`,
       cancel_url: `${config.appUrl}/app/settings/billing?canceled=true`,
-      client_reference_id: userId,
+      client_reference_id: user.id,
     });
 
     return NextResponse.json({ url: session.url });

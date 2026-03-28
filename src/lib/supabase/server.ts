@@ -6,17 +6,7 @@ export async function createClient() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!url || !key) {
-    // Build-time fallback — returns a client that won't connect but won't crash
-    return createServerClient(
-      "https://placeholder.supabase.co",
-      "placeholder-anon-key",
-      {
-        cookies: {
-          getAll() { return [] },
-          setAll() {},
-        },
-      }
-    )
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be defined");
   }
 
   const cookieStore = await cookies()

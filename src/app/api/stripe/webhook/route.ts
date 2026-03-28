@@ -1,14 +1,18 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-
-function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!);
-}
-
-// Avoid using Next headers/cookies here because webhook is unauthenticated
 export async function POST(req: Request) {
-  const stripe = getStripe();
+  const strSecret = process.env.STRIPE_SECRET_KEY;
+  const webSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const supUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!strSecret) return NextResponse.json({ error: 'Missing STRIPE_SECRET_KEY' }, { status: 500 });
+  if (!webSecret) return NextResponse.json({ error: 'Missing STRIPE_WEBHOOK_SECRET' }, { status: 500 });
+  if (!supUrl) return NextResponse.json({ error: 'Missing NEXT_PUBLIC_SUPABASE_URL' }, { status: 500 });
+  if (!supRole) return NextResponse.json({ error: 'Missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
+
+  const stripe = new Stripe(strSecret);
   const body = await req.text();
   const signature = req.headers.get('stripe-signature') as string;
 
@@ -18,16 +22,13 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET || ''
+      webSecret
     );
   } catch (error: any) {
     return NextResponse.json({ error: `Webhook Error: ${error.message}` }, { status: 400 });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  );
+  const supabase = createClient(supUrl, supRole);
 
   switch (event.type) {
     case 'checkout.session.completed': {
