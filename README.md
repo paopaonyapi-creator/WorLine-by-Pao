@@ -188,6 +188,8 @@ PLAYWRIGHT_TEST_ADMIN_PASSWORD="password123"
 
 *Note: The test suite will gracefully `.skip()` authenticated tests if variables are unsupplied, keeping your test passes honest.*
 
+> **Need help setting up these test accounts?** Check out the [Local Test Seed Workflow](docs/local-test-seed-workflow.md) guide for a fast, repeatable setup process.
+
 To execute the test suite in terminal mode:
 ```bash
 pnpm test:e2e
