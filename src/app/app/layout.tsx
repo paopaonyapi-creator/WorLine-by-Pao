@@ -10,8 +10,17 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  let user;
+  
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data?.user;
+  } catch (err) {
+    console.error('App layout auth guard failed:', err);
+    // Throwing happens if env vars are stripped at runtime
+    redirect('/misconfigured');
+  }
 
   if (!user) {
     redirect('/login');
