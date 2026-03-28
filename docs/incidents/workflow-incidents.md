@@ -8,7 +8,7 @@
 - ⚪ [E2E auth tests skip unexpectedly](e2e-tests-skip.md) (Check Playwright headless config.)
 
 ### Admin & Infrastructure
-- 🟡 [Admin access denied](admin-access-fails.md) (Check `.env` overrides or Supabase roles.)
+- 🟡 [Admin access denied](admin-access-fails.md) (Check `.env` overrides or Supabase roles. See [Auth Hub](auth-access-hub.md) for more.)
 - 🟠 [Webhook deliveries return 400](webhook-deliveries-return-400.md) (Check Stripe log signatures. Usually requires internal manual DB fixes or temp unblocks. See [Billing Hub](billing-hub.md) for more.)
 
 ---

@@ -3,7 +3,7 @@
 When a user reports a specific symptom or a monitor starts firing, use this directory to find the ultra-short (1-minute) triage steps. These playbooks are designed to stop you from guessing and force you to check the correct dashboard or environment variable immediately.
 
 > 🚨 **Just got paged? Start with [The First 10 Minutes](first-10-minutes.md) before diagnosing below.**
-> **[🌐 Production Incidents](production-incidents.md)** | **[🛠️ Workflow Incidents](workflow-incidents.md)** | **[🟠 Billing Hub](billing-hub.md)** | **[👤 User-Facing Lanes](user-facing.md)** | **[🛠️ Maintainer Lanes](maintainer-facing.md)** | **[❓ Broad vs Isolated Triage](broad-vs-isolated.md)**
+> **[🌐 Production Incidents](production-incidents.md)** | **[🛠️ Workflow Incidents](workflow-incidents.md)** | **[🟠 Billing Hub](billing-hub.md)** | **[🟡 Auth & Access Hub](auth-access-hub.md)** | **[👤 User-Facing Lanes](user-facing.md)** | **[🛠️ Maintainer Lanes](maintainer-facing.md)** | **[❓ Broad vs Isolated Triage](broad-vs-isolated.md)**
 
 > **[📖 View the full Tag Legend](tag-legend.md)** to decode urgency, root cause, data risk, and mitigation symbols.  
 > **[📊 View the Incident Matrix](matrix.md)** for a scannable summary of first-check tools and action postures.

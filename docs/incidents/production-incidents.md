@@ -8,7 +8,7 @@
 - 🔴 [Checkout returns 500](checkout-returns-500.md) (Check Stripe logs via Terminal. Rollback likely. See [Billing Hub](billing-hub.md) for more.)
 
 ### Core Workflows (Auth & UI)
-- 🟡 [`/app` redirects to `/login` (Auth Loop)](app-redirects-to-login.md) (Check cookie limits / middleware logic.)
+- 🟡 [`/app` redirects to `/login` (Auth Loop)](app-redirects-to-login.md) (Check cookie limits / middleware logic. See [Auth Hub](auth-access-hub.md) for more.)
 - 🔵 [Mobile nav or app shell breaks](mobile-nav-or-app-shell-breaks.md) (Check React Suspense boundaries. Rollback likely.)
 - 🔵 [Editor save fails (if broad)](editor-save-fails.md) (Check Supabase RLS policies.)
 - 🔵 [Export breaks broadly after deploy](export-fails-png-pdf.md) (Check serverless function memory limits.)
