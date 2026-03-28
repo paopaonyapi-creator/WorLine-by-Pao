@@ -28,7 +28,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | 9 | PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. See **[Export Plays](incidents/export-fails-png-pdf.md)**. |
 | 10 | Mobile nav or app shell breaks | Responsive | `src/app/app/(dashboard)/layout.tsx` | Browser → DevTools → Toggle Device | Check if `<SheetTrigger>` renders. See **[Responsive Plays](incidents/mobile-nav-or-app-shell-breaks.md)**. |
 | 11 | E2E auth tests skip unexpectedly | Testing | `tests/e2e/helpers/seed.ts` | Terminal → `.env.local` | Confirm `PLAYWRIGHT_TEST_USER_EMAIL` and `_PASSWORD` are set. See **[E2E Plays](incidents/e2e-auth-tests-skip.md)**. |
-| 12 | CI passes but local fails (or vice versa) | Testing | `.github/workflows/ci.yml` | GitHub → Actions → Latest run | Compare env vars between local `.env.local` and CI secrets. See [Testing Limitations](testing-limitations.md) §1. |
+| 12 | CI passes but local fails (or vice versa) | Testing | `.github/workflows/ci.yml` | GitHub → Actions → Latest run | Compare env vars. See **[Sync Plays](incidents/ci-passes-local-fails.md)** |
 
 ---
 
@@ -45,6 +45,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **PNG/PDF export fails** → [Incident: Export Fails](incidents/export-fails-png-pdf.md)
 - **Mobile nav breaks** → [Incident: Mobile Nav Breaks](incidents/mobile-nav-or-app-shell-breaks.md)
 - **E2E auth tests skip** → [Incident: E2E Tests Skip](incidents/e2e-auth-tests-skip.md)
+- **CI vs Local checks differ** → [Incident: CI vs Local Fails](incidents/ci-passes-local-fails.md)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
 - **Full architecture context** → [Architecture Map](architecture-map.md)
 - **Test seed setup** → [Local Test Seed Workflow](local-test-seed-workflow.md)
