@@ -38,17 +38,51 @@ export async function POST(req: Request) {
       const customerId = session.customer as string;
       
       if (userId) {
-        // We get the line items to know the price ID
-        const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
-        const priceId = lineItems.data[0]?.price?.id;
+        let priceId: string | undefined;
+        let currentPeriodEnd: string | undefined;
+        let cancelAtPeriodEnd = false;
+        let status = 'active'; // Default assumption
 
-        await supabase.from('subscriptions').upsert({
+        // 1. Prioritize mapping strictly off the live Subscription object 
+        // which reliably defines the active period constraints.
+        if (subscriptionId) {
+          try {
+            const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
+            status = subscription.status;
+            currentPeriodEnd = new Date(subscription.current_period_end * 1000).toISOString();
+            cancelAtPeriodEnd = subscription.cancel_at_period_end;
+            
+            // Prefer price resolving off literal subscription items dynamically applied
+            priceId = subscription.items.data[0]?.price?.id;
+          } catch (err) {
+            console.error('Failed to retrieve full subscription on checkout:', err);
+          }
+        }
+        
+        // 2. Safe fallback directly to checkout line items if standard subscription retrieval fails
+        if (!priceId) {
+          try {
+            const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+            priceId = lineItems.data[0]?.price?.id;
+          } catch (err) {
+            console.error('Failed to retrieve generic line items on checkout:', err);
+          }
+        }
+
+        const upsertData: any = {
           user_id: userId,
           stripe_customer_id: customerId,
           stripe_subscription_id: subscriptionId,
           stripe_price_id: priceId,
-          status: 'active',
-        }, { onConflict: 'user_id' });
+          status: status,
+        };
+
+        if (currentPeriodEnd) {
+          upsertData.current_period_end = currentPeriodEnd;
+          upsertData.cancel_at_period_end = cancelAtPeriodEnd;
+        }
+
+        await supabase.from('subscriptions').upsert(upsertData, { onConflict: 'user_id' });
       }
       break;
     }
