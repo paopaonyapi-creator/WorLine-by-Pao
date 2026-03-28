@@ -18,7 +18,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | # | Symptom | Likely Area | First File to Check | First Dashboard / Tool | First Action |
 |---|---------|-------------|---------------------|------------------------|--------------|
 | 1 | `/api/health` returns 500 | Deploy | `src/app/api/health/route.ts` | Railway → Deployments → Logs | Check if the build completed. Redeploy if the previous deployment was healthy. See **[Downtime Plays](incidents/api-health-returns-500.md)**. |
-| 2 | `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. Check `.env.local` has both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. |
+| 2 | `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. See **[Auth Loop Plays](incidents/app-redirects-to-login.md)**. |
 | 3 | `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. See **[Redirect Plays](incidents/app-redirects-to-misconfigured.md)**. |
 | 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See **[Admin Plays](incidents/admin-access-fails.md)**. |
 | 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID`. See **[Checkout Plays](incidents/checkout-returns-500.md)**. |
@@ -40,6 +40,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **User stuck on Free after paying** → [Incident: Billing Says Free](incidents/billing-still-free-after-payment.md)
 - **Webhooks failing (400)** → [Incident: Webhooks Return 400](incidents/webhook-deliveries-return-400.md)
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
+- **App redirects to /login** → [Incident: Redirect to Login](incidents/app-redirects-to-login.md)
 - **Admin access denied** → [Incident: Admin Access Fails](incidents/admin-access-fails.md)
 - **Editor save fails** → [Incident: Editor Save Fails](incidents/editor-save-fails.md)
 - **PNG/PDF export fails** → [Incident: Export Fails](incidents/export-fails-png-pdf.md)
