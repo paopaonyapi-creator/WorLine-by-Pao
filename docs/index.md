@@ -32,6 +32,8 @@ Use this feature map to quickly locate the correct bounded document.
 - **Templates & Verification Checks:**
   Use these immediately instead of writing from scratch under pressure:
   [Outage Updates](incidents/outage-update-template.md) | [Direct Replies](incidents/direct-user-reply-templates.md) | [Internal Notes](incidents/internal-incident-note-template.md) | [Post-Rollback Checks](incidents/post-rollback-checks.md) | [Post-DB Fix Checks](incidents/post-manual-db-fix-checks.md)
+- **[Incident Docs Maintenance](incidents/maintenance-guide.md)**
+  Rules for keeping the matrix, legend, and 1-minute playbooks in sync without docs drift.
 
 ## 4. Ops & Infrastructure
 - **[Quick Restart Guide](quick-restart.md)**
