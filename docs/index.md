@@ -11,6 +11,8 @@ Use this feature map to quickly locate the correct bounded document.
   The absolute final pre-flight checklist. Exactly which external dashboards to open (Stripe, Railway, Supabase) and what to click before dropping.
 - **[Pre-Release Checklist](pre-release-checklist.md)**
   Execute this immediately prior to drafting a version tag. It contains the exact manual and automated boundaries required before pushing to production safely.
+- **[Release Readiness Scorecard](release-readiness-scorecard.md)**
+  A scannable summary sheet to quickly judge whether Auth, Billing, Editor, Deploy, and Docs are blocking a release today.
 - **[v0.2.0 Rollout & Rollback Plan](releases/v0.2.0-rollout.md)**
   Consult this the exact second you hit "Deploy" in Railway. It outlines the first 5-minute success criteria and definitive "Go/No-Go" rollback logic.
 - **[Historical Releases](releases/v0.2.0.md)**

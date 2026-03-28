@@ -1,6 +1,8 @@
 # WorLine Pre-Release Checklist
 
-This checklist is designed for a lightweight, solo-maintainer workflow. Run through these steps before generating a new release tag or deploying to the production environment.
+This checklist is designed for a lightweight, solo-maintainer workflow. Run through these steps before generating a new release tag or deploying to the production environment. 
+
+> For a faster, category-based summary of blocking issues, see the [Release Readiness Scorecard](release-readiness-scorecard.md).
 
 
 ## 1. Automated Validation (CI/Local)
