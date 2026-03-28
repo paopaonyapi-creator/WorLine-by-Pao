@@ -34,8 +34,8 @@ test.describe('Core Editor Workflows', () => {
     // Enforces the overarching workspace wrapper finishes loading and injects boundaries
     const editorWorkspace = page.getByTestId('editor-workspace-container').first();
     await expect(editorWorkspace).toBeVisible();
-    const editorCanvas = editorWorkspace.locator('canvas').first();
-    await expect(editorCanvas).toBeVisible();
+    const editorCanvasContainer = editorWorkspace.getByTestId('canvas-container').first();
+    await expect(editorCanvasContainer).toBeVisible();
 
     // 6. Test Database saving pipelines natively via stable Save Button
     const saveBtn = page.getByTestId('save-btn');
@@ -108,8 +108,8 @@ test.describe('Core Editor Workflows', () => {
     // Konva runs its rendering loop evaluating all 4 complex nodes inserted locally
     const editorWorkspace = page.getByTestId('editor-workspace-container').first();
     await expect(editorWorkspace).toBeVisible();
-    const editorCanvas = editorWorkspace.locator('canvas').first();
-    await expect(editorCanvas).toBeVisible();
+    const editorCanvasContainer = editorWorkspace.getByTestId('canvas-container').first();
+    await expect(editorCanvasContainer).toBeVisible();
 
     // 7. Verify Data Integrity via Save button (proving UI stability wasn't broken by raw state drops)
     const saveBtn = page.getByTestId('save-btn');

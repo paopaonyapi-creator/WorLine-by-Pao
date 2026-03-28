@@ -481,6 +481,7 @@ export const CanvasAreaRaw = () => {
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
       tabIndex={0}
+      data-testid="canvas-container"
     >
       <Stage
         width={dimensions.width}
