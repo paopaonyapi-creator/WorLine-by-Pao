@@ -20,7 +20,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | 1 | `/api/health` returns 500 | Deploy | `src/app/api/health/route.ts` | Railway → Deployments → Logs | Check if the build completed. Redeploy if the previous deployment was healthy. See **[Downtime Plays](incidents/api-health-returns-500.md)**. |
 | 2 | `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. Check `.env.local` has both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. |
 | 3 | `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. See **[Redirect Plays](incidents/app-redirects-to-misconfigured.md)**. |
-| 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See [Architecture Map](architecture-map.md) §2. |
+| 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See **[Admin Plays](incidents/admin-access-fails.md)**. |
 | 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID`. See **[Checkout Plays](incidents/checkout-returns-500.md)**. |
 | 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. See **[Billing Plays](incidents/billing-still-free-after-payment.md)**. |
 | 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
@@ -40,6 +40,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **User stuck on Free after paying** → [Incident: Billing Says Free](incidents/billing-still-free-after-payment.md)
 - **Webhooks failing (400)** → [Incident: Webhooks Return 400](incidents/webhook-deliveries-return-400.md)
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
+- **Admin access denied** → [Incident: Admin Access Fails](incidents/admin-access-fails.md)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
 - **Full architecture context** → [Architecture Map](architecture-map.md)
 - **Test seed setup** → [Local Test Seed Workflow](local-test-seed-workflow.md)
