@@ -36,7 +36,7 @@ pnpm test:e2e
 *Requires explicit [Seeded Test Users](docs/local-test-seed-workflow.md) within `.env.local` to execute authenticated flows.*
 
 ## 5. Opening a Pull Request
-Every PR auto-populates with the [PR checklist template](.github/pull_request_template.md). Fill it out honestly — it covers auth, billing, editor, and deploy risk areas so regressions are caught before merge.
+Every PR auto-populates with the [PR checklist template](.github/pull_request_template.md). Fill it out honestly — it covers auth, billing, editor, and deploy risk areas so regressions are caught before merge. Please also review the [Merge Policy](docs/merge-policy.md) for when a PR is strictly required over a direct push and which checks must pass.
 
 ## 6. Most Important Commands
 ```bash

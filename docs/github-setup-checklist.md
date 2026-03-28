@@ -84,8 +84,8 @@ Go to **Settings → Labels** (or Issues → Labels) and create the labels below
 These are not required but improve workflow consistency:
 
 - [ ] **Default branch:** Confirm `master` is the default branch
-- [ ] **Branch protection:** Consider requiring `pnpm typecheck` and `pnpm test` to pass before merging to `master`
-- [ ] **Squash merging:** Consider enabling "Squash and merge" as the default merge strategy for cleaner history
+- [ ] **Branch protection:** Enforce the required tests as documented in the [Merge Policy](merge-policy.md)
+- [ ] **Squash merging:** Enable "Squash and merge" as the default strategy (also per [Merge Policy](merge-policy.md))
 - [ ] **Auto-delete branches:** Enable "Automatically delete head branches" after merge
 
 ---
