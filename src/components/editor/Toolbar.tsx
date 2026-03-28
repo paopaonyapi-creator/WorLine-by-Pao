@@ -202,12 +202,12 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
           <ToolBtn icon={MousePointer2} label="Select" active={activeTool === "select"} onClick={() => setActiveTool("select")} />
           <DropdownMenu>
             <DropdownMenuTrigger render={
-              <Button variant="ghost" size="icon" className="w-8 h-8">
+              <Button data-testid="mobile-tools-menu-btn" variant="ghost" size="icon" className="w-8 h-8">
                 <Plus className="h-4 w-4" />
               </Button>
             } />
             <DropdownMenuContent align="start" className="w-48 z-[60]">
-              <DropdownMenuItem onClick={onOpenLibrary}>
+              <DropdownMenuItem data-testid="mobile-symbol-library-btn" onClick={onOpenLibrary}>
                 <FolderOpen className="h-4 w-4 mr-2" /> Symbol Library
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setActiveTool("wire")}>
@@ -292,7 +292,7 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
         {/* Mobile overflow menu */}
         <DropdownMenu>
           <DropdownMenuTrigger render={
-            <Button variant="ghost" size="icon" className="w-8 h-8 md:hidden">
+            <Button data-testid="mobile-overflow-menu-btn" variant="ghost" size="icon" className="w-8 h-8 md:hidden">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           } />
