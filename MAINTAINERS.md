@@ -1,0 +1,46 @@
+# Maintainer Guide
+
+Welcome to WorLine. If you are preparing to modify this repository, read this central guide first. The codebase operates with tight security, testing, and operational bounds that must be respected to keep production stable.
+
+## 1. What This Repository Is
+WorLine is a single-line diagram editor tailored for professional electrical engineers. At its core, it is a heavy client-side React Canvas application wrapped in a strict Next.js/Supabase server-side security perimeter and monetized via Stripe.
+
+## 2. Before You Change Anything
+Do not rewrite core logic before understanding the existing architecture. 
+- 📚 **[Documentation Index](docs/index.md):** The central hub for all operational guides.
+- 🏗️ **[Architecture Map](docs/architecture-map.md):** Visual flow of how Auth, Admin, Editor, and Webhooks interact.
+- 🤝 **[Repository Handoff Summary](docs/repository-handoff.md):** A detailed snapshot of our tech stack overrides and missing environment bounds.
+
+## 3. High-Risk Areas to Change Carefully
+If you touch the following files, test extensively.
+- `src/lib/supabase/middleware.ts` — The gatekeeper. Missing env vars or bad sessions will crash the app into a redirect loop here.
+- `src/app/api/checkout/route.ts` — The Stripe link. Never trust client payloads. The `user.id` is pulled exclusively from the server session.
+- `src/components/editor/EditorWorkspace.tsx` — The Drawing Engine. Zustand state mapping dictates physical polygon bounds on the Konva canvas.
+
+## 4. How to Run Tests
+Do not push failing checks into `master`. 
+
+**Unit Tests (Fast):**
+```bash
+pnpm test
+```
+*Validates billing parsers and environment reset hooks isolation.*
+
+**E2E Tests (Heavy / Playwright):**
+```bash
+pnpm test:e2e
+```
+*Requires explicit [Seeded Test Users](docs/local-test-seed-workflow.md) within `.env.local` to execute authenticated flows.*
+
+## 5. Most Important Commands
+```bash
+pnpm install    # Install deps
+pnpm dev        # Boot the local Turbopack server
+pnpm typecheck  # Prevent stealthy typescript regressions
+```
+
+## 6. When to Consult Release Docs
+Before executing `git push` on a release tag, you must verify the operational checklists:
+- **[Pre-Release Checklist](docs/pre-release-checklist.md):** The exact criteria required before merging to production.
+- **[Launch-Day Checklist](docs/releases/launch-day-checklist.md):** Which external tabs (Stripe, Railway, Supabase) to open immediately after deploying.
+- **[Production Runbook](docs/production-runbook.md):** What to do if `/api/health` 500s directly after a deployment.
