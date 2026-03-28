@@ -10,6 +10,8 @@ This checklist is designed for a lightweight, solo-maintainer workflow. Run thro
 - [ ] `pnpm test:e2e` – Passes all Playwright E2E flows (`auth`, `authenticated`, `editor-desktop`, `editor-mobile`).
 
 ## 2. Manual Smoke Tests
+*(See [Manual QA Matrix](manual-qa-matrix.md) for full scenario tables)*
+
 - [ ] **Verify `/api/health`** – Returns `200 OK` safely in your target environment.
 - [ ] **Verify Auth Flow** – Log out, log in, confirm correct redirection.
 - [ ] **Verify `/admin` Behavior** – Non-admins are blocked; explicit admins can view the dashboard.
