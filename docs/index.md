@@ -23,6 +23,8 @@ Use this feature map to quickly locate the correct bounded document.
 ## 3. Ops & Infrastructure
 - **[Repository Handoff Summary](repository-handoff.md)**
   Start here if you have been away from the codebase. It details the precise locations of Stripe Logic, Supabase boundaries, and the most critical `.env` fallbacks.
+- **[Architecture Map](architecture-map.md)**
+  Visually charts the physical data flows covering React `Suspense`, Supabase Webhooks, and E2E bot boundaries logically natively!
 - **[Production Runbook](production-runbook.md)**
   The absolute source of truth when the live application goes down. Outlines immediate triage steps natively connecting Supabase incidents, Stripe Webhook crashes, and Railway memory limits.
 - **[Local Test Seed Workflow](local-test-seed-workflow.md)**
