@@ -18,7 +18,7 @@
 👉 **[Admin access denied](admin-access-fails.md)** (Check local `.env` missing fallback variables.)
 
 ### 6. Editor won't save progress
-👉 **[Editor save fails](editor-save-fails.md)** (Always run [Broad vs Isolated triage](broad-vs-isolated.md) before assuming the whole world is broken.)
+👉 **[Editor save fails](editor-save-fails.md)** (Always run [Broad vs Isolated triage](broad-vs-isolated.md) before assuming the whole world is broken. See [Editor Hub](editor-ui-hub.md) for more.)
 
 ### 7. App works but mobile menu won't open
 👉 **[Mobile nav breaks](mobile-nav-or-app-shell-breaks.md)** (Usually a safe rollback if just deployed.)

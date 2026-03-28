@@ -10,7 +10,7 @@
 ### Core Workflows (Auth & UI)
 - 🟡 [`/app` redirects to `/login` (Auth Loop)](app-redirects-to-login.md) (Check cookie limits / middleware logic. See [Auth Hub](auth-access-hub.md) for more.)
 - 🔵 [Mobile nav or app shell breaks](mobile-nav-or-app-shell-breaks.md) (Check React Suspense boundaries. Rollback likely.)
-- 🔵 [Editor save fails (if broad)](editor-save-fails.md) (Check Supabase RLS policies.)
+- 🔵 [Editor save fails (if broad)](editor-save-fails.md) (Check Supabase RLS policies. See [Editor & UI Hub](editor-ui-hub.md) for more.)
 - 🔵 [Export breaks broadly after deploy](export-fails-png-pdf.md) (Check serverless function memory limits.)
 
 ---
