@@ -5,6 +5,8 @@ import { NEXT_PUBLIC_APP_URL, TEST_USER_EMAIL, TEST_USER_PASSWORD } from './help
 
 const URL = NEXT_PUBLIC_APP_URL;
 
+// Test Suite: Core Editor Workflows
+// Implements robust deterministic test-ids across root wrappers, canvases, and toolbars
 test.describe('Core Editor Workflows', () => {
   // Safely skip bounds if the CI agent lacks database-connected credentials
   test.beforeEach(() => {
