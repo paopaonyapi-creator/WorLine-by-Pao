@@ -62,16 +62,7 @@ Optional. Use when the issue needs a specific follow-up action before it can be 
 
 ## Setting Up Labels in GitHub
 
-These labels are not auto-created. To add them once:
-
-1. Go to the repo → **Issues** → **Labels**.
-2. Create each label from the tables above.
-3. Suggested color groups:
-   - Severity: `critical` red, `major` yellow, `minor` green
-   - Area: use a consistent neutral color (e.g., blue or gray)
-   - Status: use a distinct accent color (e.g., purple or orange)
-
-This is a one-time manual setup. No automation needed.
+These labels must be created manually once. See the [GitHub Setup Checklist](github-setup-checklist.md) for exact label names, hex colors, and verification steps.
 
 ---
 

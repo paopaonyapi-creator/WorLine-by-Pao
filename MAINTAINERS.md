@@ -53,3 +53,6 @@ Before executing `git push` on a release tag, you must verify the operational ch
 
 ## 8. Reporting Regressions
 If you discover a breakage in Auth, Billing, Editor, or Deploy — first check the [Troubleshooting Shortcuts](docs/troubleshooting-shortcuts.md) for a known fix. If the issue persists, file it using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and complete the regression checklist so triage can start immediately. Label the issue using the [Triage Taxonomy](docs/triage-taxonomy.md). After resolving a production incident, document what happened using the [Postmortem Template](docs/postmortem-template.md).
+
+## 9. First-Time GitHub Setup
+If you just created or forked this repo, run through the [GitHub Setup Checklist](docs/github-setup-checklist.md) once to create labels, verify templates, and confirm doc links.
