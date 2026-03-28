@@ -8,7 +8,7 @@ Stop and check this guide *before* you modify the repository's most failure-pron
 
 If you are modifying `src/app/api/checkout/route.ts` or `src/app/api/stripe/webhook/route.ts`:
 
-- [ ] **Confirm Env Vars:** Do your changes rely on new Stripe price IDs or webhook secrets? If so, update `.env.example` and Railway immediately.
+- [ ] **Confirm Env Vars:** Do your changes rely on new Stripe price IDs or webhook secrets? If so, update `.env.example` and Railway immediately. (See [Env Risk Notes](env-risk-notes.md) before rotating old ones).
 - [ ] **Confirm Manual Checks:** Can this be tested locally, or will you need to run fake test cards in the Stripe Dashboard?
 - [ ] **Confirm State Impact:** Will this change how the `subscriptions` table behaves? If so, does the billing UI need to reflect the new state?
 - [ ] **Confirm Docs:** If you renamed a secret or changed the webhook endpoint, you *must* update the [Production Runbook](production-runbook.md) and [Debugging Glossary](debugging-glossary.md).

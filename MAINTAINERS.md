@@ -12,6 +12,7 @@ Do not rewrite core logic before understanding the existing architecture.
 - 📚 **[Documentation Index](docs/index.md):** The central hub for all operational guides.
 - 🏗️ **[Architecture Map](docs/architecture-map.md):** Visual flow of how Auth, Admin, Editor, and Webhooks interact.
 - 🤝 **[Repository Handoff Summary](docs/repository-handoff.md):** A detailed snapshot of our tech stack overrides and missing environment bounds.
+- 🔐 **[Env Risk Notes](docs/env-risk-notes.md):** Do not casually rotate Supabase/Stripe secrets. Read this to understand the impact of changing `.env` variables.
 - 📖 **[Debugging Glossary](docs/debugging-glossary.md):** Quick definitions for Supabase, Stripe, Konva, RLS, and other repo-specific terms.
 
 ## 3. High-Risk Areas to Change Carefully
