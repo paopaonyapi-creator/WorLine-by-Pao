@@ -4,7 +4,7 @@ When a user reports a specific symptom or a monitor starts firing, use this dire
 
 > 🚨 **Just got paged? Start with [The First 10 Minutes](first-10-minutes.md) before diagnosing below.**
 > **[🧭 Which Doc First?](which-doc-first.md)** | **[🌐 Production Incidents](production-incidents.md)** | **[🛠️ Workflow Incidents](workflow-incidents.md)** | **[🟠 Billing Hub](billing-hub.md)** | **[🟡 Auth & Access Hub](auth-access-hub.md)** | **[🔵 Editor & UI Hub](editor-ui-hub.md)** | **[👤 User-Facing Lanes](user-facing.md)** | **[🛠️ Maintainer Lanes](maintainer-facing.md)** | **[❓ Broad vs Isolated Triage](broad-vs-isolated.md)**
-
+> **[📣 Comms Setup & Templates](comms-mode-guide.md)** | **[🚑 Mitigation Choices](mitigation-choice-guide.md)**
 > **[📖 View the full Tag Legend](tag-legend.md)** to decode urgency, root cause, data risk, and mitigation symbols.  
 > **[📊 View the Incident Matrix](matrix.md)** for a scannable summary of first-check tools and action postures.
 

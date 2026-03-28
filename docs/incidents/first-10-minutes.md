@@ -24,13 +24,16 @@
 - [ ] Immediately log into the specific `first-check tool` listed next to the symptom (e.g., Stripe Dash, Railway, Supabase).
 - [ ] Follow the 1-minute playbook inside.
 
-### Minute 5-8: The Rollback Decision
+### Minute 5-8: Choose Your Mitigation
 If the playbook proves that recent application code broke the platform for *all* users:
-- [ ] Stop debugging.
+- [ ] Stop debugging logging and start reverting.
 - [ ] Follow the rollback procedures in the [V0.2.0 Rollout Plan](../releases/v0.2.0-rollout.md) or [Production Runbook](../production-runbook.md) immediately to protect users.
+*(If isolated or internal, review the [Mitigation Choice Guide](mitigation-choice-guide.md) before touching DB rows or extending subscriptions).*
 - [ ] Run through the [Post-Rollback Checks](post-rollback-checks.md) before declaring the fire out.
 
 ### Minute 8-10: Communication
-- [ ] **If 🌐 Broad Impact:** Grab an [Outage Update Template](outage-update-template.md) to alert users quickly without guessing what to write.
-- [ ] **If 👤 Isolated:** Grab a [Direct User Reply Template](direct-user-reply-templates.md) to ensure the reporter knows you are mitigating it.
-- [ ] Track actions using an [Internal Incident Note](internal-incident-note-template.md), then start a [Postmortem](../postmortem-template.md) if money/data was lost.
+- [ ] **If 🌐 Broad Impact:** Grab an [Outage Update](outage-update-template.md) to alert users quickly.
+- [ ] **If 👤 Isolated:** Grab a [Direct User Reply](direct-user-reply-templates.md) to ensure the reporter knows.
+- [ ] **If 🤫 Internal:** Track actions using an [Internal Incident Note](internal-incident-note-template.md).
+- [ ] *(See the [Comms Mode Guide](comms-mode-guide.md) if unsure whether to broadcast or DM).*
+- [ ] Start a [Postmortem](../postmortem-template.md) if money/data was lost.
