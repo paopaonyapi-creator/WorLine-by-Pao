@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from '@/app/api/stripe/webhook/route';
 
+// Mocks configured for Webhook Unit Tests
+// Covers: checkout.session.completed, customer.subscription.updated/deleted
 const {
   mockConstructEvent,
   mockRetrieve,
