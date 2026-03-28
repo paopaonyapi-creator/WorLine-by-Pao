@@ -32,4 +32,4 @@ If the playbook proves that recent application code broke the platform for *all*
 ### Minute 8-10: Communication
 - [ ] **If 🌐 Broad Impact:** Grab an [Outage Update Template](outage-update-template.md) to alert users quickly without guessing what to write.
 - [ ] **If 👤 Isolated:** Grab a [Direct User Reply Template](direct-user-reply-templates.md) to ensure the reporter knows you are mitigating it.
-- [ ] Begin taking notes for a [Postmortem](../postmortem-template.md) if money or data was lost.
+- [ ] Track actions using an [Internal Incident Note](internal-incident-note-template.md), then start a [Postmortem](../postmortem-template.md) if money/data was lost.
