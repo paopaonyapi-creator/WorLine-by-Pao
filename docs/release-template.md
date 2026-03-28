@@ -1,6 +1,6 @@
 # Release Notes Template
 
-*Copy this template when drafting notes for a new GitHub Release.*
+*Copy this template when drafting notes for a new GitHub Release. Save historical releases sequentially inside the `docs/releases/` folder (e.g., `docs/releases/v0.3.0.md`).*
 
 ## v[X.Y.Z]
 **Date:** YYYY-MM-DD
