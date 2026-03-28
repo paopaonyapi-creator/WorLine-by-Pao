@@ -4,6 +4,8 @@
 
 Built with **Next.js 16**, **Supabase**, **Stripe**, and **Konva** canvas engine.
 
+> 📚 **Looking for operation playbooks?** Start at the [Documentation Index](docs/index.md) for the pre-release checklists, rollback plans, and testing boundaries dynamically!
+
 ---
 
 ## Quick Start (Local Development)
