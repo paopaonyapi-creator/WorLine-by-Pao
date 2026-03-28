@@ -21,7 +21,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | 2 | `/app` redirects to `/login` unexpectedly | Auth | `src/lib/supabase/middleware.ts` | Supabase → Authentication → Users | Confirm your session token is valid. Check `.env.local` has both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. |
 | 3 | `/app` redirects to `/misconfigured` | Env Config | `src/lib/supabase/middleware.ts` | Railway → Variables | One or more required env vars are missing. See **[Redirect Plays](incidents/app-redirects-to-misconfigured.md)**. |
 | 4 | `/admin` redirects to `/app` | Admin Gating | `src/app/app/(dashboard)/admin/layout.tsx` | Railway → Variables → `ADMIN_EMAILS` | Confirm your email is in the comma-separated list with no extra spaces. See [Architecture Map](architecture-map.md) §2. |
-| 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check if `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID` are set and valid in Railway. |
+| 5 | Checkout returns 500 | Billing | `src/app/api/checkout/route.ts` | Stripe → Developers → Logs | Check `STRIPE_SECRET_KEY` and `STRIPE_PRO_PRICE_ID`. See **[Checkout Plays](incidents/checkout-returns-500.md)**. |
 | 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. See **[Billing Plays](incidents/billing-still-free-after-payment.md)**. |
 | 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
 | 8 | Editor save fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Supabase → Table Editor → `projects` | Check browser console for Supabase RLS errors. Confirm the user owns the project row. |
@@ -35,6 +35,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 ## When This Table Is Not Enough
 
 - **Extended recovery procedures** → [Production Runbook](production-runbook.md)
+- **Checkout returns 500** → [Incident: Checkout Returns 500](incidents/checkout-returns-500.md)
 - **User stuck on Free after paying** → [Incident: Billing Says Free](incidents/billing-still-free-after-payment.md)
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
