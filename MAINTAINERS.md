@@ -7,6 +7,7 @@ WorLine is a single-line diagram editor tailored for professional electrical eng
 
 ## 2. Before You Change Anything
 Do not rewrite core logic before understanding the existing architecture. 
+- ⏱️ **[Quick Restart Guide](docs/quick-restart.md):** Returning from a break? Read this 2-minute checklist first.
 - 📚 **[Documentation Index](docs/index.md):** The central hub for all operational guides.
 - 🏗️ **[Architecture Map](docs/architecture-map.md):** Visual flow of how Auth, Admin, Editor, and Webhooks interact.
 - 🤝 **[Repository Handoff Summary](docs/repository-handoff.md):** A detailed snapshot of our tech stack overrides and missing environment bounds.
