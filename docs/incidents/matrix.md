@@ -1,6 +1,6 @@
 # Incident Triage Matrix
 
-*This matrix provides an at-a-glance summary of action posture and impact for core incidents. It does not replace the [Incident Playbooks Index](index.md).*
+*This matrix provides an at-a-glance summary of action posture and impact for core incidents. It does not replace the [Main Index](index.md), [User-Facing Lanes](user-facing.md), or [Maintainer Lanes](maintainer-facing.md).*
 
 | Symptom | Severity | First-Check | Action Posture | Impact | DB Edit? | Temp Unblock? |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
