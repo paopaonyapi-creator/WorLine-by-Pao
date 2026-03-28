@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Troubleshooting Shortcuts
+    url: https://github.com/paopaonyapi-creator/WorLine-by-Pao/blob/master/docs/troubleshooting-shortcuts.md
+    about: Check the symptom → file → dashboard table before filing. Your issue may have a known fix.
+  - name: Production Runbook
+    url: https://github.com/paopaonyapi-creator/WorLine-by-Pao/blob/master/docs/production-runbook.md
+    about: Extended recovery procedures for auth, billing, and deploy incidents.
