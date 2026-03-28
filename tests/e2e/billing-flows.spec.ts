@@ -59,5 +59,26 @@ test.describe('Billing & Checkout Flows', () => {
       await expect(page).toHaveURL(/.*checkout\.stripe\.com/);
     }
   });
+
+  test('authenticated user maintains stable layout when returning from Stripe checkout via success or canceled URLs', async ({ page }) => {
+    // 1. Authenticate locally through isolated helper
+    await login(page, TEST_USER_EMAIL, TEST_USER_PASSWORD, URL);
+
+    // 2. Simulate user bouncing BACK from checkout.stripe.com with a canceled payload organically
+    await page.goto(`${URL}/app/settings/billing?canceled=true`);
+    
+    // Assert the page securely loads without triggering 500 crashes and the Subscribe button is structurally usable
+    const checkoutTrigger = page.getByTestId('billing-subscribe-btn');
+    await expect(checkoutTrigger).toBeVisible();
+
+    // 3. Simulate user bouncing BACK with a successful payment intent
+    await page.goto(`${URL}/app/settings/billing?success=true`);
+    
+    // Validate the page remains functional and Active Status overlays don't break
+    const billingStatusBadge = page.getByTestId('billing-status-badge');
+    await expect(billingStatusBadge).toBeVisible();
+    await expect(billingStatusBadge).toHaveText(/Active/i);
+  });
 });
+
 
