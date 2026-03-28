@@ -32,7 +32,7 @@ Use this reference to quickly decode the symbol matrices found in the [Incident 
 **Manual DB Edit:**  
 ✍️ **Likely manual DB edit** (Direct Supabase intervention) | ✅ **Usually no DB edit**
 
-**Short-Term Mitigation:**  
+**Temporary Unblock:**  
 🚑 **Likely temporary unblock** | ⏳ **Usually fix first**
 
 **Response Urgency:**  
