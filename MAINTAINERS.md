@@ -55,8 +55,14 @@ Before executing `git push` on a release tag, you must verify the operational ch
 - **[Launch-Day Checklist](docs/releases/launch-day-checklist.md):** Which external tabs (Stripe, Railway, Supabase) to open immediately after deploying.
 - **[Production Runbook](docs/production-runbook.md):** What to do if `/api/health` 500s directly after a deployment.
 
-## 8. Reporting Regressions
+## 8. Incident Response
+If you just got paged or a user reported a serious breakage:
+- 🚨 **[The First 10 Minutes](docs/incidents/first-10-minutes.md):** Open this immediately. It forces you to triage scope, urgency, and rollback bounds before you get tunnel vision.
+- 🎯 **[Incident Playbooks Index](docs/incidents/index.md):** The central control panel mapping specific symptoms to their 1-minute dashboard checks.
+- **Communicate & Verify:** Do not write comms from scratch while the database is on fire. Grab an [Outage Update](docs/incidents/outage-update-template.md) or [1:1 User Reply](docs/incidents/direct-user-reply-templates.md). Track decisions in an [Internal Note](docs/incidents/internal-incident-note-template.md). Never declare the fire out without running the [Post-Rollback Checks](docs/incidents/post-rollback-checks.md) or [Post-Manual DB Fix Checks](docs/incidents/post-manual-db-fix-checks.md).
+
+## 9. Reporting Regressions
 If you discover a breakage in Auth, Billing, Editor, or Deploy — first check the [Troubleshooting Shortcuts](docs/troubleshooting-shortcuts.md) for a known fix. If the issue persists, file it using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and complete the regression checklist so triage can start immediately. Label the issue using the [Triage Taxonomy](docs/triage-taxonomy.md). After resolving a production incident, document what happened using the [Postmortem Template](docs/postmortem-template.md).
 
-## 9. First-Time GitHub Setup
+## 10. First-Time GitHub Setup
 If you just created or forked this repo, run through the [GitHub Setup Checklist](docs/github-setup-checklist.md) once to create labels, verify templates, and confirm doc links.

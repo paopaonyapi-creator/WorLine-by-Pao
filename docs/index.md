@@ -24,7 +24,16 @@ Use this feature map to quickly locate the correct bounded document.
 - **[Testing Limitations & Flaky Notes](testing-limitations.md)**
   Read this before spending hours fighting CI pipelines! It explains exactly why certain Stripe checkouts must remain mocked and why Headless Chromium might drop PDF binaries randomly.
 
-## 3. Ops & Infrastructure
+## 3. Incident Response
+- **[🚨 The First 10 Minutes](incidents/first-10-minutes.md)**
+  Start here when paged. The mandatory checklist for triaging scope, urgency, and rollback decisions before guessing what broke.
+- **[Incident Playbooks Index](incidents/index.md)**
+  The central control panel mapping every user-facing symptom directly to its 1-minute troubleshooting steps. [📖 Tag Legend](incidents/tag-legend.md).
+- **Templates & Verification Checks:**
+  Use these immediately instead of writing from scratch under pressure:
+  [Outage Updates](incidents/outage-update-template.md) | [Direct Replies](incidents/direct-user-reply-templates.md) | [Internal Notes](incidents/internal-incident-note-template.md) | [Post-Rollback Checks](incidents/post-rollback-checks.md) | [Post-DB Fix Checks](incidents/post-manual-db-fix-checks.md)
+
+## 4. Ops & Infrastructure
 - **[Quick Restart Guide](quick-restart.md)**
   Start here if you haven't touched the repo since Friday. A 2-minute checklist to regain context securely.
 - **[Repository Handoff Summary](repository-handoff.md)**
