@@ -211,6 +211,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
           <div
             className="flex-1 overflow-hidden relative"
             id="canvas-container"
+            data-testid="editor-workspace-container"
             style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
           >
             <CanvasArea />

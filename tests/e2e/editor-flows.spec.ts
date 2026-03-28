@@ -20,35 +20,38 @@ test.describe('Core Editor Workflows', () => {
     await expect(page).toHaveURL(/.*\/app\/projects/);
 
     // 3. Initiate Project Creation safely navigating creation states
-    const createProjectBtn = page.getByRole('button', { name: /new project/i }).first();
+    // Uses the new stable test ID instead of raw text masking 
+    const createProjectBtn = page.getByTestId('new-project-btn').or(page.getByTestId('new-project-empty-btn')).first();
     await expect(createProjectBtn).toBeVisible();
     await createProjectBtn.click();
 
     // 4. Await downstream redirect safely dropping into workspace layout boundaries
     await page.waitForURL(/.*\/app\/projects\/.+/, { timeout: 20000 });
     
-    // 5. Verify absolute Canvas pipeline rendering (Konva drops the literal HTML string onto DOM)
-    // Ensures rendering loop completes without WebGL/SSR crashes
-    const editorCanvas = page.locator('canvas').first();
+    // 5. Verify absolute Canvas pipeline rendering via the stable workspace DOM container
+    // Enforces the overarching workspace wrapper finishes loading and injects boundaries
+    const editorWorkspace = page.getByTestId('editor-workspace-container').first();
+    await expect(editorWorkspace).toBeVisible();
+    const editorCanvas = editorWorkspace.locator('canvas').first();
     await expect(editorCanvas).toBeVisible();
 
-    // 6. Test Database saving pipelines natively inside Editor Header
-    const saveBtn = page.getByRole('button', { name: /save/i }).first();
+    // 6. Test Database saving pipelines natively via stable Save Button
+    const saveBtn = page.getByTestId('save-btn');
     await expect(saveBtn).toBeVisible();
     await saveBtn.click();
     
     // Listen for toaster confirming database roundtrip
-    // Uses substring match gracefully
-    await expect(page.getByText(/Saved successfully/i)).toBeVisible({ timeout: 10000 });
+    // Uses structural substring matching bounded into the standard toast alert layer
+    await expect(page.locator('li[data-sonner-toast]').filter({ hasText: /Saved successfully/i }).first()).toBeVisible({ timeout: 10000 });
 
     // 7. Test Export Workflows (PNG generation)
-    // Click explicit Header Dropdown trigger 
-    const exportTrigger = page.locator('button').filter({ hasText: 'Export' }).first();
+    // Click explicit Header Dropdown trigger mapped dynamically to a structural test DOM
+    const exportTrigger = page.getByTestId('export-menu-btn');
     await exportTrigger.click();
 
     // Monitor background thread triggering native buffer saving 
     const downloadPromisePng = page.waitForEvent('download');
-    await page.getByText('Export as PNG', { exact: true }).click();
+    await page.getByTestId('export-png-btn').click();
     
     // Verify client downloaded explicitly without freezing or 500ing
     const downloadPng = await downloadPromisePng;
@@ -60,7 +63,7 @@ test.describe('Core Editor Workflows', () => {
     
     // Execute PDF bounding
     const downloadPromisePdf = page.waitForEvent('download');
-    await page.getByText('Export as PDF (A4)', { exact: true }).click();
+    await page.getByTestId('export-pdf-btn').click();
     
     // Verify asynchronous buffer returned safely into downloads path
     const downloadPdf = await downloadPromisePdf;

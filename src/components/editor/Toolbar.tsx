@@ -75,7 +75,7 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
       .update({ diagram_data: canvas, updated_at: new Date().toISOString() })
       .eq("id", projectId);
     if (error) toast.error("Save failed: " + error.message);
-    else toast.success("Saved successfully");
+    else toast.success("Saved successfully", { id: "save-success-toast" });
     setSaving(false);
   };
 
@@ -268,24 +268,24 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
           </Button>
         </div>
 
-        <Button onClick={handleSave} disabled={saving} variant="outline" size="sm" className="gap-1.5 h-8 px-2.5">
+        <Button data-testid="save-btn" onClick={handleSave} disabled={saving} variant="outline" size="sm" className="gap-1.5 h-8 px-2.5">
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
           <span className="text-xs hidden sm:inline">{saving ? "Saving" : "Save"}</span>
         </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger render={
-            <Button size="sm" className="gap-1.5 h-8 px-2.5">
+            <Button data-testid="export-menu-btn" size="sm" className="gap-1.5 h-8 px-2.5">
               <Download className="h-3.5 w-3.5" />
               <span className="text-xs hidden sm:inline">Export</span>
             </Button>
           } />
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem onClick={exportPng}>Export as PNG</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleExportSVG}>Export as SVG</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-png-btn" onClick={exportPng}>Export as PNG</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-svg-btn" onClick={handleExportSVG}>Export as SVG</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={exportPdf}>Export as PDF (A4)</DropdownMenuItem>
-            <DropdownMenuItem onClick={exportBOM}>Export BOM (CSV)</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-pdf-btn" onClick={exportPdf}>Export as PDF (A4)</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-bom-btn" onClick={exportBOM}>Export BOM (CSV)</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 

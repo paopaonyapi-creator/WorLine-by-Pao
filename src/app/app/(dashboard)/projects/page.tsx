@@ -142,7 +142,7 @@ export default function ProjectsPage() {
             Manage your single-line diagram projects.
           </p>
         </div>
-        <Button onClick={handleNewProject} className="glow-primary w-full sm:w-auto">
+          <Button data-testid="new-project-btn" onClick={handleNewProject} className="glow-primary w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           New Project
         </Button>
@@ -197,7 +197,7 @@ export default function ProjectsPage() {
             <p className="text-muted-foreground text-sm mb-6 text-center">
               Create your first single-line diagram to get started.
             </p>
-            <Button onClick={handleNewProject} className="glow-primary">
+            <Button data-testid="new-project-empty-btn" onClick={handleNewProject} className="glow-primary">
               <Plus className="mr-2 h-4 w-4" />
               Create First Project
             </Button>
