@@ -43,6 +43,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **App redirects to /login** → [Incident: Redirect to Login](incidents/app-redirects-to-login.md)
 - **Billing badge shows wrong plan** → [Incident: Billing Badge Wrong](incidents/billing-status-badge-wrong.md)
 - **Subscription row missing** → [Incident: Subscription Row Missing](incidents/subscription-row-missing.md)
+- **Stripe paid but Supabase canceled** → [Incident: Paid vs Canceled](incidents/stripe-paid-supabase-canceled.md)
 - **Admin access denied** → [Incident: Admin Access Fails](incidents/admin-access-fails.md)
 - **Editor save fails** → [Incident: Editor Save Fails](incidents/editor-save-fails.md)
 - **PNG/PDF export fails** → [Incident: Export Fails](incidents/export-fails-png-pdf.md)
