@@ -2,6 +2,7 @@
 
 This document honestly outlines the limitations of our current E2E and testing pipelines. When running your **Pre-Release Checklist** or relying on automated validations, be explicitly aware of the following bounds to avoid chasing false-positives or overestimating confidence.
 
+
 ## 1. Environment Differences (Local vs CI)
 - **Local Runs:** Expected to execute directly against your localized `.env.local` mappings (usually hitting a local Dockerized Supabase `.co` instance or raw Vercel connections).
 - **CI Runs:** Standard GH Actions are completely sterile by default. 
