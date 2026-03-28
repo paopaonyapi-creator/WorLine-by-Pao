@@ -21,6 +21,8 @@ Use this feature map to quickly locate the correct bounded document.
   Read this before spending hours fighting CI pipelines natively! It explains exactly why certain Stripe checkouts must remain mocked and why Headless Chromium might drop PDF binaries randomly.
 
 ## 3. Ops & Infrastructure
+- **[Repository Handoff Summary](repository-handoff.md)**
+  Start here if you have been away from the codebase. It details the precise locations of Stripe Logic, Supabase boundaries, and the most critical `.env` fallbacks.
 - **[Production Runbook](production-runbook.md)**
   The absolute source of truth when the live application goes down. Outlines immediate triage steps natively connecting Supabase incidents, Stripe Webhook crashes, and Railway memory limits.
 - **[Local Test Seed Workflow](local-test-seed-workflow.md)**
