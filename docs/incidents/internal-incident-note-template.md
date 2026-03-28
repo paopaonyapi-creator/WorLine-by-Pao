@@ -14,7 +14,7 @@
 
 ### Checkpoints
 - [ ] Communication sent? (Broad outgage / 1:1 direct reply)
-- [ ] Temp unblock applied? (For isolated users awaiting root fix)
+- [ ] Temp unblock applied? (See [Unblock Safety](temp-unblock-safety.md))
 - [ ] Manual DB edit applied? (See [Safety Notes](manual-db-intervention-safety.md))
 
 ### Next Safe Step
