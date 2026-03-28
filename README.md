@@ -38,6 +38,8 @@ Edit `.env.local` and fill in your credentials:
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe → Developers → API keys |
 | `STRIPE_WEBHOOK_SECRET` | Stripe → Developers → Webhooks |
 | `STRIPE_PRO_PRICE_ID` | Stripe → Products → Price ID |
+| `NEXT_PUBLIC_APP_URL` | Your production URL |
+| `ADMIN_EMAILS` | Comma-separated admin emails |
 
 ### 3. Initialize the database
 
@@ -96,6 +98,7 @@ railway variables set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
 railway variables set STRIPE_WEBHOOK_SECRET=whsec_...
 railway variables set STRIPE_PRO_PRICE_ID=price_...
 railway variables set NEXT_PUBLIC_APP_URL=https://your-app.up.railway.app
+railway variables set ADMIN_EMAILS=admin@example.com
 
 # Deploy
 railway up
@@ -107,6 +110,8 @@ railway up
 - [ ] Configure Stripe webhook endpoint: `https://your-app.up.railway.app/api/stripe/webhook`
 - [ ] Test signup → login → create project → editor flow
 - [ ] Verify PDF/PNG export works in production
+
+> **Note**: For access to `/admin`, your email must be included in `ADMIN_EMAILS`.
 
 ---
 

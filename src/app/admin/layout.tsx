@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { LayoutDashboard, Users, ArrowLeft } from "lucide-react";
+import { isAdminEmail } from "@/lib/auth/is-admin-email";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -9,6 +10,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   if (!user) {
     redirect("/login");
+  }
+
+  if (!isAdminEmail(user.email)) {
+    redirect("/app");
   }
 
   return (

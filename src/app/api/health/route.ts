@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { APP_VERSION } from '@/lib/app-meta';
 
 /**
  * Health check endpoint for Railway deployment.
@@ -8,6 +9,6 @@ export async function GET() {
   return NextResponse.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    version: '0.1.0',
+    version: APP_VERSION,
   }, { status: 200 });
 }
