@@ -27,7 +27,7 @@
 If the playbook proves that recent application code broke the platform for *all* users:
 - [ ] Stop debugging.
 - [ ] Follow the rollback procedures in the [V0.2.0 Rollout Plan](../releases/v0.2.0-rollout.md) or [Production Runbook](../production-runbook.md) immediately to protect users.
-- [ ] Resume your investigation only *after* the rollback finishes.
+- [ ] Run through the [Post-Rollback Checks](post-rollback-checks.md) before declaring the fire out.
 
 ### Minute 8-10: Communication
 - [ ] **If 🌐 Broad Impact:** Grab an [Outage Update Template](outage-update-template.md) to alert users quickly without guessing what to write.
