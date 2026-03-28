@@ -4,30 +4,7 @@ When a user reports a specific symptom or a monitor starts firing, use this dire
 
 > 🚨 **Just got paged? Start with [The First 10 Minutes](first-10-minutes.md) before diagnosing below.**
 
-**Severity Labels:**  
-🔴 **Outage** (App is down) | 🟠 **Revenue** (Blocking money) | 🟡 **Access** (Users locked out) | 🔵 **Editor/UI** (Core feature degraded) | ⚪ **Testing/CI** (Internal velocity blocked)
-**Action Hints:**  
-⏪ **Rollback-first** (If recently deployed) | 🔎 **Investigate-first** (Likely a data or config sync issue)
-**Audience Tags:**  
-👤 **User-facing** (Customers are complaining) | 🛠️ **Maintainer-facing** (Dev or business operations are blocked)
-**Impact Scope:**  
-🌐 **Broad** (System-wide) | 👥 **Partial** (Many users) | 👤 **Isolated** (Often single user)
-**Communication Hints:**  
-📣 **Communicate Now** (Alert active users/broadcast) | 🤫 **Internal First** (Fix quietly or direct 1:1 reply)
-**Public Status:**  
-📡 **Status-page worthy** (Broad service notice) | 💬 **Direct reply** (1:1 support usually enough)
-**Root Cause Hint:**  
-🚀 **Likely recent deploy** (Regression) | 🧩 **Likely data/config/user** (Drift or isolated state)
-**Data Risk Hint:**  
-🧨 **Customer data risk** (Saved work, billing, access state) | 🪶 **Low direct data risk**
-**Manual DB Edit:**  
-✍️ **Likely manual DB edit** (Direct Supabase intervention) | ✅ **Usually no DB edit**
-**Short-Term Mitigation:**  
-🚑 **Likely temporary unblock** | ⏳ **Usually fix first**
-**Response Urgency:**  
-🚨 **Act immediately** | ⏱️ **Safe to wait briefly**
-**Workaround:**  
-🩹 **Workaround likely** | 🚫 **No real workaround**
+> **[📖 View the full Tag Legend](tag-legend.md)** to decode urgency, root cause, data risk, and mitigation symbols.
 
 ### Deploy / Outage
 - 🔴 **Global 500 Outage** → [`/api/health` returns 500](api-health-returns-500.md) *(Railway)* [⏪] [👤] [🌐] [📣] [📡] [🚀] [🪶] [✅] [⏳] [🚨] [🚫]
