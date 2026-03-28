@@ -17,7 +17,7 @@
 ### Minute 2-5: Locate the Playbook
 - [ ] Open the [Incident Playbooks Index](index.md).
 - [ ] Find the scenario that perfectly matches your symptom.
-- [ ] Note the action hint (**⏪ Rollback-first** vs **🔎 Investigate-first**) and audience tag (**👤 User-facing** vs **🛠️ Maintainer-facing**).
+- [ ] Note the action hint (**⏪**), audience (**👤**), and impact scope (**🌐** / **👥** / **👤**).
 - [ ] Immediately log into the specific `first-check tool` listed next to the symptom (e.g., Stripe Dash, Railway, Supabase).
 - [ ] Follow the 1-minute playbook inside.
 
