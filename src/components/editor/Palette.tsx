@@ -297,7 +297,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
               </Button>
             </div>
             <div className="p-2">
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {displayedSymbols.map(sym => (
                   <SymbolButton key={sym.id} sym={sym} onClick={() => handleAddCenter(sym.id)} />
                 ))}
@@ -341,7 +341,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
               <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wide px-1">
                 Library Categories
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2">
                 {categories.map(cat => {
                   const count = Object.values(symbolRegistry).filter(s => s.category === cat).length;
                   if (count === 0) return null;
@@ -397,7 +397,7 @@ function SymbolButton({ sym, onClick }: { sym: any, onClick: () => void }) {
       <div className="text-foreground scale-125">
         <SymbolMiniIcon symbolType={sym.symbolType} />
       </div>
-      <span className="text-[10px] leading-tight text-center font-medium text-muted-foreground w-full truncate px-0.5">
+      <span className="text-[10px] leading-tight text-center font-medium text-muted-foreground w-full line-clamp-2 px-0.5">
         {sym.displayName}
       </span>
     </button>

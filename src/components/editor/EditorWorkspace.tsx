@@ -366,8 +366,8 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
         </div>
 
         {/* Desktop: Right Properties Panel */}
-        {!readOnly && selectedIds.length > 0 && (
-          <div className="hidden lg:flex w-60 xl:w-64 flex-none border-l border-border/50 bg-background animate-in slide-in-from-right-10 fade-in zoom-in-95 duration-200">
+        {!readOnly && !isMobile && selectedIds.length > 0 && (
+          <div className="hidden md:flex w-60 lg:w-64 flex-none border-l border-border/50 bg-background animate-in slide-in-from-right-10 fade-in zoom-in-95 duration-200">
             <PropertiesPanel />
           </div>
         )}
