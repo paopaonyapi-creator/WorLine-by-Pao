@@ -1,73 +1,79 @@
+"use client";
+
 import { Zap, MousePointer2, Cable, Type, Download, Save, LayoutGrid, Layers } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/lib/i18n/useLocale";
 
-export const metadata = {
-  title: "User Guide",
-  description: "วิธีใช้ WorLine เครื่องมือวาดผังไฟฟ้า Single-Line Diagram ออนไลน์ — How to use WorLine",
-};
-
-const steps = [
-  {
-    icon: Layers,
-    title: "1. Create a Project / สร้างโปรเจค",
-    titleTh: "สร้างโปรเจคใหม่ หรือเลือกจากเทมเพลต",
-    desc: "Go to Projects → Click '+ New Project' or use a pre-built Template (Motor Circuit, Substation, Solar PV, etc.)",
-    descTh: "ไปที่หน้า โปรเจค → กด '+ New Project' หรือไปที่ เทมเพลต เพื่อเลือกแบบผังสำเร็จรูป",
-  },
-  {
-    icon: MousePointer2,
-    title: "2. Place Symbols / วางสัญลักษณ์",
-    titleTh: "ลากสัญลักษณ์จากแถบด้านซ้ายวางบนผืนผ้าใบ",
-    desc: "The left Palette has 100+ symbols in 7 categories. Drag & drop any symbol onto the canvas. Symbols automatically snap to the grid.",
-    descTh: "แถบด้านซ้ายมี 100+ สัญลักษณ์ใน 7 หมวด ลากแล้ววางบน Canvas สัญลักษณ์จะล็อกตำแหน่งตาม Grid อัตโนมัติ",
-  },
-  {
-    icon: Cable,
-    title: "3. Draw Wires / วาดสายไฟ",
-    titleTh: "เชื่อมต่อสัญลักษณ์ด้วยเครื่องมือ Wire",
-    desc: "Click the Wire tool in the toolbar → Blue terminal dots appear on each symbol → Click one terminal, then click another to connect.",
-    descTh: "กดปุ่ม Wire บน Toolbar → จุดสีน้ำเงินจะปรากฏบนสัญลักษณ์ → คลิกจุดเริ่มต้น แล้วคลิกจุดปลายทางเพื่อเชื่อมสาย",
-  },
-  {
-    icon: Type,
-    title: "4. Add Labels / เพิ่มชื่อ",
-    titleTh: "ดับเบิ้ลคลิกสัญลักษณ์เพื่อตั้งชื่อ",
-    desc: "Double-click any symbol to add a label (e.g. 'CB-01', 'TX 115/22kV', 'M1 5.5kW'). Use the Text tool to add free-form text anywhere.",
-    descTh: "ดับเบิ้ลคลิกที่สัญลักษณ์ → พิมพ์ชื่อ เช่น 'CB-01', 'TX 115/22kV' กด Enter เพื่อบันทึก หรือใช้เครื่องมือ Text เพื่อพิมพ์อิสระ",
-  },
-  {
-    icon: LayoutGrid,
-    title: "5. Grid & Snap / ตารางและการล็อก",
-    titleTh: "สัญลักษณ์จะล็อกตาม Grid อัตโนมัติ",
-    desc: "All symbols snap to a 20px grid on placement and drag. This keeps your diagrams neat and professional.",
-    descTh: "สัญลักษณ์ทุกตัวจะล็อกตามตาราง 20px อัตโนมัติเมื่อวางและลาก ทำให้ผังเรียบร้อยเป็นมืออาชีพ",
-  },
-  {
-    icon: Save,
-    title: "6. Save / บันทึก",
-    titleTh: "กดปุ่ม Save เพื่อบันทึกผังบนคลาวด์",
-    desc: "Click the Save button or Ctrl+S to save your diagram to the cloud. All changes are persisted in your account.",
-    descTh: "กดปุ่ม Save หรือ Ctrl+S เพื่อบันทึกผังบนคลาวด์ ข้อมูลจะเก็บในบัญชีของคุณ",
-  },
-  {
-    icon: Download,
-    title: "7. Export / ส่งออก",
-    titleTh: "ส่งออกเป็น PNG, SVG หรือ PDF",
-    desc: "Click Export → Choose PNG (image), SVG (vector), or PDF (print-ready). Your diagram is exported at full quality.",
-    descTh: "กดปุ่ม Export → เลือก PNG (รูปภาพ), SVG (เวกเตอร์) หรือ PDF (พร้อมพิมพ์) ผังจะส่งออกคุณภาพเต็ม",
-  },
-];
-
-const shortcuts = [
-  { keys: "Delete / Backspace", desc: "Delete selected / ลบที่เลือก" },
-  { keys: "Ctrl+Z", desc: "Undo / ย้อนกลับ" },
-  { keys: "Ctrl+Shift+Z / Ctrl+Y", desc: "Redo / ทำซ้ำ" },
-  { keys: "Ctrl+D", desc: "Duplicate / คัดลอก" },
-  { keys: "Escape", desc: "Cancel wire / deselect / ยกเลิก" },
-];
+// Note: since this is a client component, metadata must be handled differently or omitted.
+// For marketing pages, having dynamic text is fine. If SEO is strictly needed, 
+// a layout or split components approach is better. But since we need dynamic translation, 
+// client-side is acceptable here for WorLine.
 
 export default function GuidePage() {
+  const { locale } = useLocale();
+  const isTh = locale === "th";
+
+  const steps = [
+    {
+      icon: Layers,
+      title: isTh ? "1. สร้างโปรเจค (Create a Project)" : "1. Create a Project",
+      desc: isTh 
+        ? "ไปที่เมนู 'โปรเจค' → คลิกปุ่ม '+ สร้างโปรเจคใหม่' หรือจะเลือกใช้เทมเพลตที่เตรียมไว้ให้ (เช่น วงจรมอเตอร์, สถานีไฟฟ้าย่อย, โซลาร์เซลล์ ฯลฯ) ก็ได้"
+        : "Go to Projects → Click '+ New Project' or use a pre-built Template (Motor Circuit, Substation, Solar PV, etc.)",
+    },
+    {
+      icon: MousePointer2,
+      title: isTh ? "2. จัดวางสัญลักษณ์ (Place Symbols)" : "2. Place Symbols",
+      desc: isTh
+        ? "เลือกใช้จากคลังสัญลักษณ์กว่า 100 แบบใน 7 หมวดหมู่ เพียงแค่ลากสัญลักษณ์จากแถบใช้งานด้านซ้ายไปวางตำแหน่งที่ต้องการบนผืนผ้าใบ ระบบจะปรับตำแหน่งให้พอดีกับตาราง (Grid) อัตโนมัติ"
+        : "The left Palette has 100+ symbols in 7 categories. Drag & drop any symbol onto the canvas. Symbols automatically snap to the grid.",
+    },
+    {
+      icon: Cable,
+      title: isTh ? "3. ลากสายไฟ (Draw Wires)" : "3. Draw Wires",
+      desc: isTh
+        ? "คลิกเครื่องมือดรอว์สายไฟ (Wire tool) เพื่อให้จุดขั้วต่อกระแสไฟสีน้ำเงินปรากฎให้คลิกที่ขั้วจุดเริ่มต้นของซิมโบลหนึ่งลากเชื่อมโยงขั้วต่อไปยังอีกซิมโบลหนึ่ง"
+        : "Click the Wire tool in the toolbar → Blue terminal dots appear on each symbol → Click one terminal, then click another to connect.",
+    },
+    {
+      icon: Type,
+      title: isTh ? "4. ระบุชื่อตัวแปร (Add Labels)" : "4. Add Labels",
+      desc: isTh
+        ? "ดับเบิ้ลคลิกบริเวณซิมโบลเพื่อระบุชื่อตัวกำหนด หรือใช้ปุ่มเมนูเครื่องมือ Text (ตัวพิมพ์ T) สำหรับการลงข้อความอิสระตามที่คุณมุ่งหวัง"
+        : "Double-click any symbol to add a label (e.g. 'CB-01', 'TX 115/22kV', 'M1 5.5kW'). Use the Text tool to add free-form text anywhere.",
+    },
+    {
+      icon: LayoutGrid,
+      title: isTh ? "5. ตารางอัจฉริยะและการล็อก (Grid & Snap)" : "5. Grid & Snap",
+      desc: isTh
+        ? "สัญลักษณ์และการลากสายไฟทั้งหมดถูกโปรแกรมบังคับให้ตรึงตำแหน่งด้วยสเกลรูปแบบ 20px ให้สปอร์ตดูเป็นระบบระเบียบ สะอาดและคงความมืออาชีพในการออกแบบไดอะแกรมของคุณ"
+        : "All symbols snap to a 20px grid on placement and drag. This keeps your diagrams neat and professional.",
+    },
+    {
+      icon: Save,
+      title: isTh ? "6. บันทึกผลงาน (Save)" : "6. Save",
+      desc: isTh
+        ? "คลิกปุ่มบันทึกบนระบบ หรือจะกดแป้นพิมพ์ลัด Ctrl+S สำหรับการเก็บข้อมูลเอกสารขึ้นเซิร์ฟเวอร์คลาวด์ของเรา เพื่อสร้างความมั่นใจในทุกการแก้ไข"
+        : "Click the Save button or Ctrl+S to save your diagram to the cloud. All changes are persisted in your account.",
+    },
+    {
+      icon: Download,
+      title: isTh ? "7. เอ็กซ์พอร์ตผลงาน (Export)" : "7. Export",
+      desc: isTh
+        ? "เลือกสั่งการส่งออกโปรเจกต์งานด้วยรูปแบบนามสกุลต่างๆ ไม่ว่าจะเป็นเวคเตอร์ .SVG ตลอดจนถึง .PDF และรูปภาพไฟล์สกุล .PNG ที่พรั่งพร้อมด้วยระดับคุณภาพความละเอียดสูง"
+        : "Click Export → Choose PNG (image), SVG (vector), or PDF (print-ready). Your diagram is exported at full quality.",
+    },
+  ];
+
+  const shortcuts = [
+    { keys: "Delete / Backspace", desc: isTh ? "ลบรายการที่เลือก (Delete selected)" : "Delete selected" },
+    { keys: "Ctrl+Z", desc: isTh ? "ย้อนกลับการกระทำ (Undo)" : "Undo" },
+    { keys: "Ctrl+Shift+Z / Ctrl+Y", desc: isTh ? "ทำซ้ำการกระทำ (Redo)" : "Redo" },
+    { keys: "Ctrl+D", desc: isTh ? "คัดลอกรายการทำซ้ำ (Duplicate)" : "Duplicate" },
+    { keys: "Escape", desc: isTh ? "ยกเลิกการกระทำ เลือกออกให้หมด (Cancel wire/deselect)" : "Cancel wire / deselect / ยกเลิก" },
+  ];
+
   return (
     <div className="min-h-[100dvh] bg-gradient-to-b from-background to-muted/30">
       <div className="max-w-4xl mx-auto px-4 py-8 sm:py-24">
@@ -75,13 +81,15 @@ export default function GuidePage() {
         <div className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             <Zap className="h-4 w-4" />
-            User Guide / วิธีใช้
+            {isTh ? "คู่มือการใช้งานแพลตฟอร์ม" : "User Guide"}
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-            How to Use <span className="text-primary">WorLine</span>
+            {isTh ? "ขั้นตอนการทำงานของ" : "How to Use"} <span className="text-primary">WorLine</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            วาดผังไฟฟ้า Single-Line Diagram แบบมืออาชีพ ด้วย 7 ขั้นตอนง่ายๆ
+            {isTh 
+              ? "สร้างสรรค์การวาดผังไฟฟ้าไดอะแกรม Single-Line ระดับมืออาชีพผ่านเครื่องมือมาตรฐาน"
+              : "Create professional Single-Line Diagrams with these easy steps."}
           </p>
         </div>
 
@@ -99,8 +107,7 @@ export default function GuidePage() {
                 </div>
                 <div className="space-y-1.5">
                   <h3 className="text-lg font-semibold">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.desc}</p>
-                  <p className="text-sm text-primary/70">{step.descTh}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             );
@@ -109,7 +116,7 @@ export default function GuidePage() {
 
         {/* Keyboard Shortcuts */}
         <div className="mt-16 p-6 rounded-xl border bg-card">
-          <h2 className="text-xl font-bold mb-4">⌨️ Keyboard Shortcuts / คีย์ลัด</h2>
+          <h2 className="text-xl font-bold mb-4">⌨️ {isTh ? "คีย์ลัดบนแป้นพิมพ์ (Keyboard Shortcuts)" : "Keyboard Shortcuts"}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {shortcuts.map((s, i) => (
               <div key={i} className="flex items-center gap-3">
@@ -124,17 +131,19 @@ export default function GuidePage() {
 
         {/* CTA */}
         <div className="mt-12 text-center space-y-4">
-          <h3 className="text-xl font-semibold">Ready to start? / พร้อมเริ่มวาดผังแล้ว?</h3>
+          <h3 className="text-xl font-semibold">
+            {isTh ? "เริ่มต้นวาดผังในแบบของคุณได้เลย" : "Ready to start?"}
+          </h3>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link href="/app/projects" className="w-full sm:w-auto">
               <Button size="lg" className="w-full">
                 <Zap className="mr-2 h-4 w-4" />
-                Open Editor
+                {isTh ? "เปิดหน้าจัดการโปรเจค" : "Open Editor"}
               </Button>
             </Link>
             <Link href="/app/templates" className="w-full sm:w-auto">
               <Button size="lg" variant="outline" className="w-full">
-                Browse Templates
+                {isTh ? "ดูเทมเพลตทั้งหมด" : "Browse Templates"}
               </Button>
             </Link>
           </div>

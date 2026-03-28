@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { locale } = useLocale();
+  const isTh = locale === "th";
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +36,7 @@ export default function LoginPage() {
       return;
     }
 
-    toast.success("Welcome back!");
+    toast.success(isTh ? "ยินดีต้อนรับกลับมา!" : "Welcome back!");
     router.push("/app");
     router.refresh();
   };
@@ -49,13 +52,17 @@ export default function LoginPage() {
               <Zap className="h-5 w-5" />
             </div>
           </Link>
-          <CardTitle className="text-2xl font-bold tracking-tight">Welcome back</CardTitle>
-          <CardDescription>Sign in to your WorLine account.</CardDescription>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            {isTh ? "ยินดีต้อนรับกลับมา" : "Welcome back"}
+          </CardTitle>
+          <CardDescription>
+            {isTh ? "เข้าสู่ระบบบัญชี WorLine ของคุณ" : "Sign in to your WorLine account."}
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{isTh ? "อีเมล (Email)" : "Email"}</Label>
               <Input
                 id="email"
                 type="email"
@@ -67,12 +74,12 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{isTh ? "รหัสผ่าน (Password)" : "Password"}</Label>
               <Input
                 id="password"
                 type="password"
                 required
-                placeholder="Your password"
+                placeholder={isTh ? "รหัสผ่านของคุณ" : "Your password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-11"
@@ -84,19 +91,19 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {isTh ? "กำลังเข้าสู่ระบบ..." : "Signing in..."}
                 </>
               ) : (
-                "Sign In"
+                isTh ? "เข้าสู่ระบบ" : "Sign In"
               )}
             </Button>
             <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-primary transition-colors text-center">
-              Forgot your password?
+              {isTh ? "ลืมรหัสผ่านใช่หรือไม่?" : "Forgot your password?"}
             </Link>
             <div className="text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
+              {isTh ? "ยังไม่มีบัญชีใช่หรือไม่? " : "Don't have an account? "}
               <Link href="/signup" className="text-primary hover:underline font-medium">
-                Create one
+                {isTh ? "สร้างบัญชีใหม่" : "Create one"}
               </Link>
             </div>
           </CardFooter>

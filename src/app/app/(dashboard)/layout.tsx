@@ -153,7 +153,7 @@ export default function DashboardLayout({
                     onClick={() => { handleSignOut(); setMobileOpen(false); }}
                   >
                     <LogOut className="h-4 w-4" />
-                    Sign out
+                    {t("sidebar_signout")}
                   </Button>
                 </div>
               </SheetContent>

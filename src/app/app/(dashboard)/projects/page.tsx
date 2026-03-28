@@ -142,7 +142,7 @@ export default function ProjectsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t("sidebar_projects")}</h1>
           <p className="text-muted-foreground mt-1">
-            Manage your single-line diagram projects.
+            {t("manage_projects")}
           </p>
         </div>
           <Button data-testid="new-project-btn" onClick={handleNewProject} className="glow-primary w-full sm:w-auto">
@@ -279,7 +279,7 @@ export default function ProjectsPage() {
                       <rect x="10" y="20" width="12" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
                       <line x1="16" y1="26" x2="16" y2="30" stroke="currentColor" strokeWidth="1.5" />
                     </svg>
-                    <span className="text-xs text-muted-foreground/60 font-medium">Single-Line Diagram</span>
+                    <span className="text-xs text-muted-foreground/60 font-medium">{t("single_line_diagram")}</span>
                   </div>
                 </CardContent>
               </Link>

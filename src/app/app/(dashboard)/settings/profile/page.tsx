@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Loader2, User, Mail, Calendar } from "lucide-react";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function ProfilePage() {
   const [displayName, setDisplayName] = useState("");
@@ -16,6 +17,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const supabase = createClient();
+  const { t } = useLocale();
 
   useEffect(() => {
     async function loadProfile() {
@@ -37,9 +39,9 @@ export default function ProfilePage() {
     });
 
     if (error) {
-      toast.error("Failed to update profile");
+      toast.error(t("profile_update_fail"));
     } else {
-      toast.success("Profile updated!");
+      toast.success(t("profile_update_success"));
     }
     setSaving(false);
   };
@@ -55,8 +57,8 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-        <p className="text-muted-foreground mt-2">Manage your account settings.</p>
+        <h1 className="text-3xl font-bold tracking-tight">{t("sidebar_profile")}</h1>
+        <p className="text-muted-foreground mt-2">{t("manage_account")}</p>
       </div>
 
       <div className="grid gap-6 max-w-2xl">
@@ -64,32 +66,32 @@ export default function ProfilePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Personal Information
+              {t("personal_info")}
             </CardTitle>
-            <CardDescription>Update your display name.</CardDescription>
+            <CardDescription>{t("update_display_name")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="displayName">Display Name</Label>
+              <Label htmlFor="displayName">{t("display_name")}</Label>
               <Input
                 id="displayName"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Your name"
+                placeholder={t("your_name")}
                 className="h-11"
               />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5" />
-                Email
+                {t("email")}
               </Label>
               <Input value={email} disabled className="h-11 bg-muted" />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
                 <Calendar className="h-3.5 w-3.5" />
-                Member Since
+                {t("member_since")}
               </Label>
               <Input value={createdAt} disabled className="h-11 bg-muted" />
             </div>
@@ -97,10 +99,10 @@ export default function ProfilePage() {
               {saving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {t("saving")}
                 </>
               ) : (
-                "Save Changes"
+                t("save_changes")
               )}
             </Button>
           </CardContent>
@@ -108,8 +110,8 @@ export default function ProfilePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Export Data</CardTitle>
-            <CardDescription>Download all your projects as a JSON backup file.</CardDescription>
+            <CardTitle>{t("export_data")}</CardTitle>
+            <CardDescription>{t("export_desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -138,7 +140,7 @@ export default function ProfilePage() {
                 toast.success(`Exported ${projects.length} projects`);
               }}
             >
-              Download Backup (JSON)
+              {t("download_backup")}
             </Button>
           </CardContent>
         </Card>

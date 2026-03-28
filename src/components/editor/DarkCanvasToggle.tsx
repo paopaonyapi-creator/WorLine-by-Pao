@@ -4,10 +4,13 @@ import { useEditorStore } from "@/store/editorStore";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export const DarkCanvasToggle = () => {
   const { canvas } = useEditorStore();
   const [isDark, setIsDark] = useState(false);
+  const { locale } = useLocale();
+  const isTh = locale === "th";
 
   useEffect(() => {
     const saved = localStorage.getItem("worline-dark-canvas");
@@ -37,7 +40,7 @@ export const DarkCanvasToggle = () => {
       size="icon"
       className="w-7 h-7"
       onClick={toggle}
-      title={isDark ? "Light Canvas" : "Dark Canvas (AutoCAD style)"}
+      title={isDark ? (isTh ? "แคนวาสสีสว่าง" : "Light Canvas") : (isTh ? "แคนวาสสีเทาดำ (สไตล์ AutoCAD)" : "Dark Canvas (AutoCAD style)")}
     >
       {isDark ? <Sun className="h-3.5 w-3.5 text-amber-400" /> : <Moon className="h-3.5 w-3.5" />}
     </Button>

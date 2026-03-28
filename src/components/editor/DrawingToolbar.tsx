@@ -7,6 +7,7 @@ import {
   Group, Ungroup, Hash, Layers, ToggleLeft, ToggleRight, MousePointer2, Hand
 } from "lucide-react";
 import { toast } from "sonner";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export const DrawingToolbar = () => {
   const {
@@ -18,21 +19,24 @@ export const DrawingToolbar = () => {
     selectedIds,
   } = useEditorStore();
 
+  const { locale } = useLocale();
+  const isTh = locale === "th";
+
   const tools = [
-    { id: "select" as const, icon: MousePointer2, label: "Select", shortcut: "V" },
-    { id: "pan" as const, icon: Hand, label: "Pan / Hand", shortcut: "H" },
-    { id: "pencil" as const, icon: Pencil, label: "Freehand", shortcut: "F" },
-    { id: "shape" as const, icon: Square, label: "Rectangle", shortcut: "D" },
-    { id: "arrow" as const, icon: ArrowUpRight, label: "Arrow", shortcut: "A" },
-    { id: "dimension" as const, icon: Ruler, label: "Dimension", shortcut: "M" },
-    { id: "busbar" as const, icon: Minus, label: "Bus Bar", shortcut: "B" },
+    { id: "select" as const, icon: MousePointer2, label: isTh ? "เลือก" : "Select", shortcut: "V" },
+    { id: "pan" as const, icon: Hand, label: isTh ? "เลื่อนหน้าจอ" : "Pan / Hand", shortcut: "H" },
+    { id: "pencil" as const, icon: Pencil, label: isTh ? "วาดเส้นอิสระ" : "Freehand", shortcut: "F" },
+    { id: "shape" as const, icon: Square, label: isTh ? "สี่เหลี่ยม" : "Rectangle", shortcut: "D" },
+    { id: "arrow" as const, icon: ArrowUpRight, label: isTh ? "ลูกศร" : "Arrow", shortcut: "A" },
+    { id: "dimension" as const, icon: Ruler, label: isTh ? "วาดบอกขนาด" : "Dimension", shortcut: "M" },
+    { id: "busbar" as const, icon: Minus, label: isTh ? "บัสบาร์" : "Bus Bar", shortcut: "B" },
   ];
 
   const layers = [
-    { id: "power" as const, label: "Power", color: "bg-red-500" },
-    { id: "control" as const, label: "Control", color: "bg-blue-500" },
-    { id: "ground" as const, label: "Ground", color: "bg-green-500" },
-    { id: "annotation" as const, label: "Note", color: "bg-yellow-500" },
+    { id: "power" as const, label: isTh ? "กำลัง (Power)" : "Power", color: "bg-red-500" },
+    { id: "control" as const, label: isTh ? "ควบคุม (Control)" : "Control", color: "bg-blue-500" },
+    { id: "ground" as const, label: isTh ? "กราวด์ (Ground)" : "Ground", color: "bg-green-500" },
+    { id: "annotation" as const, label: isTh ? "หมายเหตุ (Note)" : "Note", color: "bg-yellow-500" },
   ];
 
   return (
@@ -63,9 +67,9 @@ export const DrawingToolbar = () => {
         className="w-7 h-7"
         onClick={() => {
           toggleOrthoMode();
-          toast.success(orthoMode ? "Ortho OFF" : "Ortho ON (H/V only)");
+          toast.success(orthoMode ? (isTh ? "ปิดเส้นพิกัดฉาก (Ortho OFF)" : "Ortho OFF") : (isTh ? "เปิดเส้นพิกัดฉาก (Ortho ON)" : "Ortho ON (H/V only)"));
         }}
-        title="Ortho Mode (lock H/V)"
+        title={isTh ? "หมวดพิกัดฉาก (อิสระ/ฉาก)" : "Ortho Mode (lock H/V)"}
       >
         {orthoMode ? <ToggleRight className="h-3.5 w-3.5 text-primary" /> : <ToggleLeft className="h-3.5 w-3.5" />}
       </Button>
@@ -79,10 +83,10 @@ export const DrawingToolbar = () => {
         className="w-7 h-7"
         onClick={() => {
           groupSelected();
-          toast.success("Grouped");
+          toast.success(isTh ? "จัดกลุ่มแล้ว" : "Grouped");
         }}
         disabled={selectedIds.length < 2}
-        title="Group (Ctrl+G)"
+        title={isTh ? "จัดกลุ่ม (Group) (Ctrl+G)" : "Group (Ctrl+G)"}
       >
         <Group className="h-3.5 w-3.5" />
       </Button>
@@ -92,10 +96,10 @@ export const DrawingToolbar = () => {
         className="w-7 h-7"
         onClick={() => {
           ungroupSelected();
-          toast.success("Ungrouped");
+          toast.success(isTh ? "ยกเลิกการจัดกลุ่มแล้ว" : "Ungrouped");
         }}
         disabled={selectedIds.length === 0}
-        title="Ungroup (Ctrl+Shift+G)"
+        title={isTh ? "ยกเลิกการจัดกลุ่ม (Ungroup) (Ctrl+Shift+G)" : "Ungroup (Ctrl+Shift+G)"}
       >
         <Ungroup className="h-3.5 w-3.5" />
       </Button>
@@ -109,9 +113,9 @@ export const DrawingToolbar = () => {
         className="w-7 h-7"
         onClick={() => {
           autoNumberSymbols();
-          toast.success("Auto numbered!");
+          toast.success(isTh ? "รันหมายเลขอัตโนมัติเรียบร้อย!" : "Auto numbered!");
         }}
-        title="Auto Number Symbols"
+        title={isTh ? "รันหมายเลข Component อัตโนมัติ" : "Auto Number Symbols"}
       >
         <Hash className="h-3.5 w-3.5" />
       </Button>

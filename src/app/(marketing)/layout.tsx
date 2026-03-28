@@ -127,7 +127,7 @@ export default function MarketingLayout({
                 <span className="font-bold">WorLine by Pao</span>
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Professional electrical single-line diagram editor built for engineers.
+                {t("footer_desc")}
               </p>
             </div>
 
@@ -162,7 +162,7 @@ export default function MarketingLayout({
               &copy; {new Date().getFullYear()} WorLine by Pao. {t("footer_rights")}
             </p>
             <p className="text-xs text-muted-foreground/60">
-              Built with Next.js, Supabase, and Stripe
+              {t("footer_tech")}
             </p>
           </div>
         </div>

@@ -3,9 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/editorStore";
 import { ZoomIn, ZoomOut, Maximize } from "lucide-react";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export const ZoomControls = () => {
   const { zoom, setZoom } = useEditorStore();
+  const { locale } = useLocale();
+  const isTh = locale === "th";
 
   const zoomIn = () => setZoom(Math.min(zoom + 0.1, 3));
   const zoomOut = () => setZoom(Math.max(zoom - 0.1, 0.2));
@@ -19,7 +22,7 @@ export const ZoomControls = () => {
       <button
         className="h-8 min-w-[3rem] text-xs font-medium text-center hover:bg-muted rounded px-2 transition-colors"
         onClick={fitToScreen}
-        title="Reset zoom to 100%"
+        title={isTh ? "รีเซ็ตการซูมเป็น 100%" : "Reset zoom to 100%"}
       >
         {Math.round(zoom * 100)}%
       </button>
@@ -27,7 +30,7 @@ export const ZoomControls = () => {
         <ZoomIn className="h-4 w-4" />
       </Button>
       <div className="w-px h-5 bg-border mx-1" />
-      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={fitToScreen} title="Fit to screen">
+      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={fitToScreen} title={isTh ? "พอดีกับหน้าจอ" : "Fit to screen"}>
         <Maximize className="h-4 w-4" />
       </Button>
     </div>

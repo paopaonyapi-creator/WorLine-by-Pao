@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,8 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { locale } = useLocale();
+  const isTh = locale === "th";
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +42,7 @@ export default function SignupPage() {
       return;
     }
 
-    toast.success("Account created! Welcome to WorLine.");
+    toast.success(isTh ? "สร้างบัญชีสำเร็จ! ยินดีต้อนรับสู่ WorLine" : "Account created! Welcome to WorLine.");
     router.push("/app");
     router.refresh();
   };
@@ -55,17 +58,21 @@ export default function SignupPage() {
               <Zap className="h-5 w-5" />
             </div>
           </Link>
-          <CardTitle className="text-2xl font-bold tracking-tight">Create your account</CardTitle>
-          <CardDescription>Start designing electrical schematics in seconds.</CardDescription>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            {isTh ? "สร้างบัญชีใหม่" : "Create your account"}
+          </CardTitle>
+          <CardDescription>
+            {isTh ? "เริ่มต้นออกแบบระบบไฟฟ้าได้ในไม่กี่วินาที" : "Start designing electrical schematics in seconds."}
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">{isTh ? "ชื่อ-นามสกุล (Full Name)" : "Full Name"}</Label>
               <Input
                 id="fullName"
                 type="text"
-                placeholder="John Doe"
+                placeholder={isTh ? "คำมูน วงศ์คำเหลา" : "John Doe"}
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -73,7 +80,7 @@ export default function SignupPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{isTh ? "อีเมล (Email)" : "Email"}</Label>
               <Input
                 id="email"
                 type="email"
@@ -85,13 +92,13 @@ export default function SignupPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{isTh ? "รหัสผ่าน (Password)" : "Password"}</Label>
               <Input
                 id="password"
                 type="password"
                 required
                 minLength={6}
-                placeholder="Min. 6 characters"
+                placeholder={isTh ? "อย่างน้อย 6 ตัวอักษร" : "Min. 6 characters"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-11"
@@ -103,16 +110,16 @@ export default function SignupPage() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account...
+                  {isTh ? "กำลังสร้างบัญชี..." : "Creating account..."}
                 </>
               ) : (
-                "Create Account"
+                isTh ? "สร้างบัญชี" : "Create Account"
               )}
             </Button>
             <div className="text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
+              {isTh ? "มีบัญชีอยู่แล้วใช่หรือไม่? " : "Already have an account? "}
               <Link href="/login" className="text-primary hover:underline font-medium">
-                Sign in
+                {isTh ? "เข้าสู่ระบบ" : "Sign in"}
               </Link>
             </div>
           </CardFooter>

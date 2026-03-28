@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -17,17 +18,19 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { locale } = useLocale();
+  const isTh = locale === "th";
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error(isTh ? "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร" : "Password must be at least 6 characters");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error(isTh ? "รหัสผ่านไม่ตรงกัน" : "Passwords do not match");
       return;
     }
 
@@ -41,7 +44,7 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    toast.success("Password updated successfully!");
+    toast.success(isTh ? "อัปเดตรหัสผ่านสำเร็จ!" : "Password updated successfully!");
     router.push("/app");
   };
 
@@ -57,14 +60,18 @@ export default function ResetPasswordPage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-2">
             <Lock className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight">Set New Password</CardTitle>
-          <CardDescription>Enter your new password below.</CardDescription>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            {isTh ? "ตั้งรหัสผ่านใหม่" : "Set New Password"}
+          </CardTitle>
+          <CardDescription>
+            {isTh ? "กรุณากรอกรหัสผ่านใหม่ของคุณด้านล่าง" : "Enter your new password below."}
+          </CardDescription>
         </CardHeader>
 
         <form onSubmit={handleReset}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="password">New Password</Label>
+              <Label htmlFor="password">{isTh ? "รหัสผ่านใหม่ (New Password)" : "New Password"}</Label>
               <Input
                 id="password"
                 type="password"
@@ -77,7 +84,7 @@ export default function ResetPasswordPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">{isTh ? "ยืนยันรหัสผ่านใหม่ (Confirm Password)" : "Confirm Password"}</Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -95,10 +102,10 @@ export default function ResetPasswordPage() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Updating...
+                  {isTh ? "กำลังอัปเดต..." : "Updating..."}
                 </>
               ) : (
-                "Update Password"
+                isTh ? "อัปเดตรหัสผ่าน" : "Update Password"
               )}
             </Button>
           </CardFooter>

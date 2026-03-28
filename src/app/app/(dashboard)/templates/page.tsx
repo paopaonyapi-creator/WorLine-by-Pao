@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Zap, CircuitBoard, Sun, Building2, Factory, Home } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 // ─── Pre-built diagram_data for each template ─────────
 const presets: Record<string, any> = {
@@ -160,6 +161,8 @@ export default function TemplatesPage() {
   const [creating, setCreating] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
+  const { t, locale } = useLocale();
+  const isTh = locale === "th";
 
   const handleUseTemplate = async (template: typeof templates[0]) => {
     setCreating(template.id);
@@ -176,7 +179,7 @@ export default function TemplatesPage() {
       const { data, error } = await supabase
         .from("projects")
         .insert({
-          name: template.id === "blank" ? "Untitled Project" : template.name,
+          name: template.id === "blank" ? "Untitled Project" : (isTh && template.nameTh ? template.nameTh : template.name),
           user_id: user.id,
           diagram_data: diagramData,
         })
@@ -184,16 +187,16 @@ export default function TemplatesPage() {
         .single();
 
       if (error) {
-        toast.error("Failed to create project");
+        toast.error(t("create_failed"));
         return;
       }
 
       if (data) {
-        toast.success(`"${data.name}" created!`);
+        toast.success(`"${data.name}" ${t("created_success")}`);
         router.push(`/app/projects/${data.id}`);
       }
     } catch {
-      toast.error("Something went wrong");
+      toast.error(t("error_generic"));
     } finally {
       setCreating(null);
     }
@@ -202,13 +205,13 @@ export default function TemplatesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Templates / เทมเพลต</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("sidebar_templates")}</h1>
         <p className="text-muted-foreground mt-2">
-          Start your schematic with a pre-configured template. กดใช้เทมเพลตเพื่อเริ่มวาดผังไฟฟ้าทันที
+          {t("manage_templates")}
         </p>
         <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
           <Zap className="h-3 w-3" />
-          🎉 Launch offer — All templates free until March 2027
+          {t("templates_banner")}
         </div>
       </div>
 
@@ -220,12 +223,10 @@ export default function TemplatesPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Icon className="h-5 w-5 text-primary" />
-                  {tpl.name}
+                  {isTh && tpl.nameTh ? tpl.nameTh : tpl.name}
                 </CardTitle>
                 <CardDescription>
-                  {tpl.desc}
-                  <br />
-                  <span className="text-xs opacity-75">{tpl.descTh}</span>
+                  {isTh && tpl.descTh ? tpl.descTh : tpl.desc}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
@@ -242,10 +243,10 @@ export default function TemplatesPage() {
                   {creating === tpl.id ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating...
+                      {t("creating_project")}
                     </>
                   ) : (
-                    "Use Template"
+                    t("use_template")
                   )}
                 </Button>
               </div>

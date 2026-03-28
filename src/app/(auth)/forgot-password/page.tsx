@@ -9,12 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const supabase = createClient();
+  const { locale } = useLocale();
+  const isTh = locale === "th";
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,15 +54,23 @@ export default function ForgotPasswordPage() {
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-2">
                 <Mail className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-bold tracking-tight">Check your email</CardTitle>
+              <CardTitle className="text-2xl font-bold tracking-tight">
+                {isTh ? "กรุณาตรวจสอบอีเมลของคุณ" : "Check your email"}
+              </CardTitle>
               <CardDescription className="text-center">
-                We sent a password reset link to <strong>{email}</strong>. Check your inbox and click the link to reset your password.
+                {isTh 
+                  ? <>เราได้ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ <strong>{email}</strong> แล้ว กรุณาตรวจสอบกล่องจดหมายของคุณและคลิกลิงก์ดังกล่าว</>
+                  : <>We sent a password reset link to <strong>{email}</strong>. Check your inbox and click the link to reset your password.</>}
               </CardDescription>
             </>
           ) : (
             <>
-              <CardTitle className="text-2xl font-bold tracking-tight">Reset your password</CardTitle>
-              <CardDescription>Enter your email and we&apos;ll send you a reset link.</CardDescription>
+              <CardTitle className="text-2xl font-bold tracking-tight">
+                {isTh ? "รีเซ็ตรหัสผ่าน" : "Reset your password"}
+              </CardTitle>
+              <CardDescription>
+                {isTh ? "กรอกอีเมลของคุณเพื่อรับลิงก์รีเซ็ตรหัสผ่าน" : "Enter your email and we'll send you a reset link."}
+              </CardDescription>
             </>
           )}
         </CardHeader>
@@ -67,12 +78,12 @@ export default function ForgotPasswordPage() {
         {sent ? (
           <CardFooter className="flex flex-col space-y-4 pt-4">
             <Button variant="outline" className="w-full" onClick={() => setSent(false)}>
-              Try a different email
+              {isTh ? "ลองใช้อีเมลอื่น" : "Try a different email"}
             </Button>
             <Link href="/login" className="w-full">
               <Button variant="ghost" className="w-full">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to login
+                {isTh ? "กลับไปหน้าเข้าสู่ระบบ" : "Back to login"}
               </Button>
             </Link>
           </CardFooter>
@@ -80,7 +91,7 @@ export default function ForgotPasswordPage() {
           <form onSubmit={handleReset}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{isTh ? "อีเมล (Email)" : "Email"}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -97,15 +108,15 @@ export default function ForgotPasswordPage() {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Sending...
+                    {isTh ? "กำลังส่งข้อมูล..." : "Sending..."}
                   </>
                 ) : (
-                  "Send Reset Link"
+                  isTh ? "ส่งลิงก์รีเซ็ตรหัสผ่าน" : "Send Reset Link"
                 )}
               </Button>
               <Link href="/login" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 <ArrowLeft className="inline mr-1 h-3 w-3" />
-                Back to login
+                {isTh ? "กลับไปหน้าเข้าสู่ระบบ" : "Back to login"}
               </Link>
             </CardFooter>
           </form>
