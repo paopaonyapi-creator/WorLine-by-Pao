@@ -1,14 +1,5 @@
 import { Page } from '@playwright/test';
 
-// Use seeded test accounts provided by the environment
-// If running locally, you must provide these in your .env or CI script
-// to run the authenticated suites.
-export const TEST_USER_EMAIL = process.env.PLAYWRIGHT_TEST_USER_EMAIL;
-export const TEST_USER_PASSWORD = process.env.PLAYWRIGHT_TEST_USER_PASSWORD;
-
-export const TEST_ADMIN_EMAIL = process.env.PLAYWRIGHT_TEST_ADMIN_EMAIL;
-export const TEST_ADMIN_PASSWORD = process.env.PLAYWRIGHT_TEST_ADMIN_PASSWORD;
-
 /**
  * Standard login helper to complete the Supabase authentication flow via the UI.
  */

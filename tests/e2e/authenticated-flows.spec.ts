@@ -1,30 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { login } from './helpers/auth';
+import { requireUserSeed, requireAdminSeed } from './helpers/seed';
 import { 
-  login, 
+  NEXT_PUBLIC_APP_URL,
   TEST_USER_EMAIL, 
   TEST_USER_PASSWORD, 
   TEST_ADMIN_EMAIL, 
   TEST_ADMIN_PASSWORD 
-} from './helpers/auth';
+} from './helpers/env';
 
-const URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-
-// Note: Test skipping logic. 
-// Authenticated E2E flows require a seeded Supabase instance.
-// If the CI environment doesn't specify test accounts, gracefully skip rather than failing blindly.
-
-export function requireUserSeed() {
-  if (!TEST_USER_EMAIL || !TEST_USER_PASSWORD) {
-    test.skip(true, 'Skipping standard user authenticated test: Missing PLAYWRIGHT_TEST_USER_EMAIL or PASSWORD');
-  }
-}
-
-export function requireAdminSeed() {
-  if (!TEST_ADMIN_EMAIL || !TEST_ADMIN_PASSWORD) {
-    test.skip(true, 'Skipping admin authenticated test: Missing PLAYWRIGHT_TEST_ADMIN_EMAIL or PASSWORD');
-  }
-}
-
+const URL = NEXT_PUBLIC_APP_URL;
 test.describe('Authenticated Flow Security (Non-Admin)', () => {
   // Test the API endpoint cleanly without UI
   test('unauthenticated checkout request gets rejected with 401', async ({ request }) => {

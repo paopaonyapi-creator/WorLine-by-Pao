@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { updateSession } from '../../src/lib/supabase/middleware';
+import { mockEnv } from './helpers/env';
 
 // Mock NextResponse
 vi.mock('next/server', async (importOriginal) => {
@@ -16,14 +17,9 @@ vi.mock('next/server', async (importOriginal) => {
 });
 
 describe('Production Hardening Middleware', () => {
-  const originalEnv = process.env;
-
-  beforeEach(() => {
-    process.env = { ...originalEnv };
-  });
+  mockEnv();
 
   afterEach(() => {
-    process.env = originalEnv;
     vi.clearAllMocks();
   });
 

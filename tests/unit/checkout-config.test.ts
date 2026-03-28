@@ -1,16 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { getCheckoutConfig } from '../../src/lib/billing/get-checkout-config';
+import { mockEnv } from './helpers/env';
 
 describe('getCheckoutConfig', () => {
-  const originalEnv = process.env;
-
-  beforeEach(() => {
-    process.env = { ...originalEnv };
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
-  });
+  mockEnv();
 
   it('throws if STRIPE_SECRET_KEY is missing', () => {
     delete process.env.STRIPE_SECRET_KEY;
