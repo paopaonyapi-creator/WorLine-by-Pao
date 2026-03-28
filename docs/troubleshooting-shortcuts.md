@@ -25,7 +25,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 | 6 | Webhook not updating subscription | Billing | `src/app/api/stripe/webhook/route.ts` | Stripe → Developers → Webhooks → Recent deliveries | Confirm `STRIPE_WEBHOOK_SECRET` matches. See **[Billing Plays](incidents/billing-still-free-after-payment.md)**. |
 | 7 | Billing page shows wrong status badge | Billing | `src/app/app/(dashboard)/settings/billing/page.tsx` | Supabase → Table Editor → `subscriptions` | Query the `subscriptions` table for the user's row. Verify `status` and `current_period_end`. |
 | 8 | Editor save fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Supabase → Table Editor → `projects` | Check browser console for Supabase RLS errors. Confirm user owns project. See **[Save Plays](incidents/editor-save-fails.md)**. |
-| 9 | PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. Try on Desktop Chrome first. See [Testing Limitations](testing-limitations.md) §3. |
+| 9 | PNG/PDF export fails | Editor | `src/components/editor/EditorWorkspace.tsx` | Browser → Console | Usually a `pdf-lib` timeout or canvas `toDataURL` error. See **[Export Plays](incidents/export-fails-png-pdf.md)**. |
 | 10 | Mobile nav or app shell breaks | Responsive | `src/app/app/(dashboard)/layout.tsx` | Browser → DevTools → Toggle Device | Check if `<SheetTrigger>` renders. Compare against the [Manual QA Matrix](manual-qa-matrix.md). |
 | 11 | E2E auth tests skip unexpectedly | Testing | `tests/e2e/helpers/seed.ts` | Terminal → `.env.local` | Confirm `PLAYWRIGHT_TEST_USER_EMAIL` and `_PASSWORD` are set. See [Local Seed Workflow](local-test-seed-workflow.md). |
 | 12 | CI passes but local fails (or vice versa) | Testing | `.github/workflows/ci.yml` | GitHub → Actions → Latest run | Compare env vars between local `.env.local` and CI secrets. See [Testing Limitations](testing-limitations.md) §1. |
@@ -42,6 +42,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 - **App redirects to /misconfigured** → [Incident: Redirect to Misconfigured](incidents/app-redirects-to-misconfigured.md)
 - **Admin access denied** → [Incident: Admin Access Fails](incidents/admin-access-fails.md)
 - **Editor save fails** → [Incident: Editor Save Fails](incidents/editor-save-fails.md)
+- **PNG/PDF export fails** → [Incident: Export Fails](incidents/export-fails-png-pdf.md)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
 - **Full architecture context** → [Architecture Map](architecture-map.md)
 - **Test seed setup** → [Local Test Seed Workflow](local-test-seed-workflow.md)
