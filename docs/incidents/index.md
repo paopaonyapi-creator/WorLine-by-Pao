@@ -2,6 +2,8 @@
 
 When a user reports a specific symptom or a monitor starts firing, use this directory to find the ultra-short (1-minute) triage steps. These playbooks are designed to stop you from guessing and force you to check the correct dashboard or environment variable immediately.
 
+> 🚨 **Just got paged? Start with [The First 10 Minutes](first-10-minutes.md) before diagnosing below.**
+
 **Severity Labels:**  
 🔴 **Outage** (App is down) | 🟠 **Revenue** (Blocking money) | 🟡 **Access** (Users locked out) | 🔵 **Editor/UI** (Core feature degraded) | ⚪ **Testing/CI** (Internal velocity blocked)
 

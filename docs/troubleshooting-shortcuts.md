@@ -35,6 +35,7 @@ This is a fast triage layer — not a deep runbook. Fix the obvious cause in two
 ## When This Table Is Not Enough
 
 - **Extended recovery procedures** → [Production Runbook](production-runbook.md)
+- **Just got paged?** → [The First 10 Minutes](incidents/first-10-minutes.md)
 - **Any specific 1-minute incident play** → [Incident Playbooks Index](incidents/index.md) (Sorted by severity 🔴/🟠/🟡/🔵/⚪ and first-check tool)
 - **Deployment-specific rollback logic** → [Rollout Plan](releases/v0.2.0-rollout.md)
 - **Full architecture context** → [Architecture Map](architecture-map.md)
