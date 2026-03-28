@@ -99,13 +99,20 @@ export const PropertiesPanel = () => {
       </div>
 
       {/* Content */}
-      <div className="p-3 space-y-3 flex-1 overflow-y-auto text-sm pb-20">
+      <div key={selectedObjects.map((o) => o.id).join(",")} className="p-3 space-y-3 flex-1 overflow-y-auto text-sm pb-20">
         {selectedObjects.length === 1 && (
           <>
             {/* ─── Identity Section ─── */}
             <Section title={t("prop_identity")} defaultOpen={true}>
               <Field label={t("prop_type")}>
-                <div className="text-sm font-medium">{symDef?.displayName || firstObj.type}</div>
+                <div className="text-sm font-medium">
+                  {(() => {
+                    if (!isSymbol || !symObj) return firstObj.type;
+                    const symKey = `sym_${symObj.symbolId}` as any;
+                    const translated = t(symKey);
+                    return translated !== symKey ? translated : (symDef?.displayName || firstObj.type);
+                  })()}
+                </div>
               </Field>
               {isSymbol && symObj && (
                 <Field label={t("prop_label")}>

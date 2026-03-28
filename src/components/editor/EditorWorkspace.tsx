@@ -118,7 +118,10 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+import { useLocale } from "@/lib/i18n/useLocale";
+
 export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: string; readOnly?: boolean }) => {
+  const { t } = useLocale();
   const { initialize, canvas, zoom, panX, panY, selectedIds } = useEditorStore();
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
@@ -321,7 +324,7 @@ export const EditorWorkspace = ({ projectId, readOnly = false }: { projectId: st
                   className="rounded-full shadow-xl bg-primary text-primary-foreground gap-2 px-6 h-12 pointer-events-auto animate-in slide-in-from-bottom-4 duration-200"
                 >
                   <Wrench className="w-5 h-5" />
-                  <span className="font-semibold text-sm">Edit Properties</span>
+                  <span className="font-semibold text-sm">{t("tool_edit_properties")}</span>
                 </Button>
               </div>
             )}

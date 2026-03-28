@@ -242,6 +242,28 @@ export const translations = {
   thick_thick: { en: "Thick", th: "หนา" },
   thick_heavy: { en: "Heavy", th: "หนามาก" },
 
+  wire_hint_start: { en: "Click a terminal dot to start wire", th: "คลิกจุดเชื่อมต่อเพื่อเริ่มลากสายไฟ" },
+  wire_hint_connect: { en: "Click a terminal to connect • Esc to cancel", th: "คลิกจุดเชื่อมต่อเพื่อต่อสาย • กด Esc เพื่อยกเลิก" },
+  tool_edit_properties: { en: "Edit Properties", th: "แก้ไขคุณสมบัติ" },
+  
+  sort_newest: { en: "Newest first", th: "ใหม่สุดก่อน" },
+  sort_oldest: { en: "Oldest first", th: "เก่าสุดก่อน" },
+  sort_az: { en: "Name A → Z", th: "ชื่อ A → Z" },
+  sort_za: { en: "Name Z → A", th: "ชื่อ Z → A" },
+  showing_projects: { en: "Showing", th: "กำลังแสดง" },
+  of_projects: { en: "of", th: "จาก" },
+  prev_page: { en: "Prev", th: "ก่อนหน้า" },
+  next_page: { en: "Next", th: "ถัดไป" },
+  
+  // Specific Symbol Types for Translation
+  sym_circuit_breaker: { en: "Circuit Breaker", th: "เซอร์กิตเบรกเกอร์ (CB)" },
+  sym_mccb: { en: "MCCB", th: "เบรกเกอร์ MCCB" },
+  sym_acb: { en: "ACB", th: "เบรกเกอร์ ACB" },
+  sym_fuse: { en: "Fuse", th: "ฟิวส์" },
+  sym_motor: { en: "Motor", th: "มอเตอร์" },
+  sym_lamp: { en: "Lamp/Indicator", th: "หลอดไฟ/ไฟแสดงสถานะ" },
+  sym_timer: { en: "Timer Relay", th: "โอเวอร์โหลด/ไทม์เมอร์" },
+  sym_contactor: { en: "Contactor", th: "คอนแทคเตอร์/รีเลย์" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;

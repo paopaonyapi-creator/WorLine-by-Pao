@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "@/lib/i18n/useLocale";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Folder, Clock, Trash2, Share2, Link2, Check, Pencil, Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
@@ -30,6 +32,7 @@ export default function ProjectsPage() {
   const [page, setPage] = useState(1);
   const perPage = 12;
   const supabase = createClient();
+  const { t } = useLocale();
 
   useEffect(() => {
     async function fetchProjects() {
@@ -137,14 +140,14 @@ export default function ProjectsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("sidebar_projects")}</h1>
           <p className="text-muted-foreground mt-1">
             Manage your single-line diagram projects.
           </p>
         </div>
           <Button data-testid="new-project-btn" onClick={handleNewProject} className="glow-primary w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
-          New Project
+          {t("new_project")}
         </Button>
       </div>
 
@@ -154,11 +157,11 @@ export default function ProjectsPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search projects..."
+              placeholder={t("search_projects")}
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
               className="pl-9 h-10"
-              aria-label="Search projects"
+              aria-label={t("search_projects")}
             />
           </div>
           <select
@@ -167,10 +170,10 @@ export default function ProjectsPage() {
             className="h-10 rounded-md border bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             aria-label="Sort projects"
           >
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-            <option value="name-asc">Name A → Z</option>
-            <option value="name-desc">Name Z → A</option>
+            <option value="newest">{t("sort_newest")}</option>
+            <option value="oldest">{t("sort_oldest")}</option>
+            <option value="name-asc">{t("sort_az")}</option>
+            <option value="name-desc">{t("sort_za")}</option>
           </select>
         </div>
       )}
@@ -193,13 +196,13 @@ export default function ProjectsPage() {
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Folder className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No projects yet</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("no_projects")}</h3>
             <p className="text-muted-foreground text-sm mb-6 text-center">
-              Create your first single-line diagram to get started.
+              {t("create_first")}
             </p>
             <Button data-testid="new-project-empty-btn" onClick={handleNewProject} className="glow-primary">
               <Plus className="mr-2 h-4 w-4" />
-              Create First Project
+              {t("new_project")}
             </Button>
           </CardContent>
         </Card>
@@ -324,7 +327,7 @@ export default function ProjectsPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-between pt-4">
             <p className="text-sm text-muted-foreground">
-              Showing {(page - 1) * perPage + 1}–{Math.min(page * perPage, sorted.length)} of {sorted.length}
+              {t("showing_projects")} {(page - 1) * perPage + 1}–{Math.min(page * perPage, sorted.length)} {t("of_projects")} {sorted.length}
             </p>
             <div className="flex items-center gap-2">
               <Button
@@ -334,7 +337,7 @@ export default function ProjectsPage() {
                 disabled={page === 1}
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
-                Prev
+                {t("prev_page")}
               </Button>
               <span className="text-sm font-medium px-2">
                 {page} / {totalPages}
@@ -345,7 +348,7 @@ export default function ProjectsPage() {
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
               >
-                Next
+                {t("next_page")}
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>

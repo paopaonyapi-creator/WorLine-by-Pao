@@ -170,8 +170,11 @@ const ObjectNode = ({ obj, isSelected, onSelect, onChange, onEdit, onDblClick, a
   );
 };
 
+import { useLocale } from "@/lib/i18n/useLocale";
+
 // ─── Main Canvas Area ───────────────────────────────────
 export const CanvasAreaRaw = () => {
+  const { t } = useLocale();
   const {
     canvas,
     selectedIds,
@@ -612,7 +615,7 @@ export const CanvasAreaRaw = () => {
       {/* Wire mode indicator */}
       {activeTool === "wire" && (
         <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs px-3 py-1 rounded-full shadow-lg z-10">
-          {isDrawingWire ? "Click a terminal to connect • Esc to cancel" : "Click a terminal dot to start wire"}
+          {isDrawingWire ? t("wire_hint_connect") : t("wire_hint_start")}
         </div>
       )}
 
