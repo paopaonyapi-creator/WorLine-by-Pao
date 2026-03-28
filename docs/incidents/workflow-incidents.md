@@ -9,7 +9,7 @@
 
 ### Admin & Infrastructure
 - 🟡 [Admin access denied](admin-access-fails.md) (Check `.env` overrides or Supabase roles.)
-- 🟠 [Webhook deliveries return 400](webhook-deliveries-return-400.md) (Check Stripe log signatures. Usually requires internal manual DB fixes or temp unblocks.)
+- 🟠 [Webhook deliveries return 400](webhook-deliveries-return-400.md) (Check Stripe log signatures. Usually requires internal manual DB fixes or temp unblocks. See [Billing Hub](billing-hub.md) for more.)
 
 ---
 > ↩️ **Not what you need?** Return to [Which Doc First?](which-doc-first.md) or the [Main Incident Index](index.md).

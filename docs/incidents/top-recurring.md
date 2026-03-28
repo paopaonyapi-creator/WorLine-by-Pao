@@ -6,7 +6,7 @@
 👉 **[`api/health` 500](api-health-returns-500.md)** (Check Railway immediately. Rollback highly likely.)
 
 ### 2. Users paying but getting locked out
-👉 **[User paid but still Free](billing-still-free-after-payment.md)** (Checkout succeeded, but Stripe Webhook dropped. Requires manual DB edit.)
+👉 **[User paid but still Free](billing-still-free-after-payment.md)** (Checkout succeeded, but Stripe Webhook dropped. Requires manual DB edit. See [Billing Hub](billing-hub.md) for more.)
 
 ### 3. Subscription data mismatch
 👉 **[Subscription row missing](subscription-row-missing.md)** (Edge case in Supabase auth linking. Requires temporary unblock.)
