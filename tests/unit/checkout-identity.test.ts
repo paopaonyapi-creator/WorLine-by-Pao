@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Pre-mock next/server and stripe
 vi.mock('next/server', () => {
@@ -11,18 +11,18 @@ vi.mock('next/server', () => {
 
 vi.mock('stripe', () => {
   return {
-    default: vi.fn().mockImplementation(() => ({
-      checkout: {
+    default: class MockStripe {
+      checkout = {
         sessions: {
           create: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.test/123' })
         }
-      }
-    }))
+      };
+    }
   };
 });
 
 // We need to alter createClient response before import
-const mockGetUser = vi.fn();
+const { mockGetUser } = vi.hoisted(() => ({ mockGetUser: vi.fn() }));
 vi.mock('../../src/lib/supabase/server', () => {
   return {
     createClient: vi.fn().mockReturnValue(Promise.resolve({
