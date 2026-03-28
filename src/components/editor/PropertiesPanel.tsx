@@ -6,21 +6,22 @@ import { Label } from "@/components/ui/label";
 import { WireObject, SymbolObject } from "@/lib/editor/types";
 import { symbolRegistry } from "@/lib/editor/symbols/registry";
 import { useState, useCallback } from "react";
+import { useLocale } from "@/lib/i18n/useLocale";
 
-const WIRE_COLORS = [
-  { label: "Black (Phase)", value: "#000000" },
-  { label: "Red (Line)", value: "#ef4444" },
-  { label: "Blue (Neutral)", value: "#3b82f6" },
-  { label: "Green (Ground)", value: "#22c55e" },
-  { label: "Orange (Control)", value: "#f97316" },
-  { label: "Gray", value: "#6b7280" },
+const getWireColors = (t: any) => [
+  { label: t("color_black"), value: "#000000" },
+  { label: t("color_red"), value: "#ef4444" },
+  { label: t("color_blue"), value: "#3b82f6" },
+  { label: t("color_green"), value: "#22c55e" },
+  { label: t("color_orange"), value: "#f97316" },
+  { label: t("color_gray"), value: "#6b7280" },
 ];
 
-const WIRE_THICKNESSES = [
-  { label: "Thin", value: 1 },
-  { label: "Normal", value: 2 },
-  { label: "Thick", value: 3 },
-  { label: "Heavy", value: 4 },
+const getWireThicknesses = (t: any) => [
+  { label: t("thick_thin"), value: 1 },
+  { label: t("thick_normal"), value: 2 },
+  { label: t("thick_thick"), value: 3 },
+  { label: t("thick_heavy"), value: 4 },
 ];
 
 const VOLTAGES = ["12V", "24V", "48V", "110V", "220V", "380V", "400V", "690V", "11kV", "22kV", "33kV", "115kV"];
@@ -54,6 +55,7 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 );
 
 export const PropertiesPanel = () => {
+  const { t } = useLocale();
   const { selectedIds, canvas, deleteObjects, duplicateSelected, updateObject, rotateSelected, flipSelectedH, flipSelectedV } = useEditorStore();
 
   const selectedObjects = canvas.objects.filter((obj) => selectedIds.includes(obj.id));
@@ -66,8 +68,8 @@ export const PropertiesPanel = () => {
     return (
       <div className="w-full h-full bg-background p-4 flex flex-col items-center justify-center text-center text-sm text-muted-foreground">
         <span className="text-lg mb-2">📋</span>
-        Select an object to edit properties
-        <span className="text-xs mt-2 opacity-50">Click on any symbol or wire</span>
+        {t("prop_empty")}
+        <span className="text-xs mt-2 opacity-50">{t("prop_empty_sub")}</span>
       </div>
     );
   }
@@ -84,7 +86,7 @@ export const PropertiesPanel = () => {
       {/* Header */}
       <div className="p-3 border-b font-semibold text-sm flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
-          <span>Properties</span>
+          <span>{t("prop_title")}</span>
           {symDef && (
             <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-normal">
               {symDef.category}
@@ -101,12 +103,12 @@ export const PropertiesPanel = () => {
         {selectedObjects.length === 1 && (
           <>
             {/* ─── Identity Section ─── */}
-            <Section title="Identity" defaultOpen={true}>
-              <Field label="Type">
+            <Section title={t("prop_identity")} defaultOpen={true}>
+              <Field label={t("prop_type")}>
                 <div className="text-sm font-medium">{symDef?.displayName || firstObj.type}</div>
               </Field>
               {isSymbol && symObj && (
-                <Field label="Label / Tag">
+                <Field label={t("prop_label")}>
                   <Input
                     className="h-9"
                     defaultValue={(symObj as any).label || ""}
@@ -116,7 +118,7 @@ export const PropertiesPanel = () => {
                 </Field>
               )}
               {isWire && wireObj && (
-                <Field label="Wire Label">
+                <Field label={t("prop_wire_label")}>
                   <Input
                     className="h-9"
                     defaultValue={(wireObj as any).label || ""}
@@ -129,7 +131,7 @@ export const PropertiesPanel = () => {
 
             {/* ─── Position Section (Symbol only) ─── */}
             {(isSymbol || firstObj.type === "text") && (
-              <Section title="Position" defaultOpen={false}>
+              <Section title={t("prop_position")} defaultOpen={false}>
                 <div className="grid grid-cols-3 gap-2">
                   <Field label="X">
                     <div className="h-9 flex items-center border rounded px-2 text-sm bg-muted/30 font-mono">
@@ -154,9 +156,9 @@ export const PropertiesPanel = () => {
 
             {/* ─── Electrical Properties (Symbol only) ─── */}
             {isSymbol && symObj && (
-              <Section title="Electrical" defaultOpen={true}>
+              <Section title={t("prop_electrical")} defaultOpen={true}>
                 {/* Phase */}
-                <Field label="Phase">
+                <Field label={t("prop_phase")}>
                   <div className="flex gap-1">
                     {PHASES.map((p) => (
                       <button
@@ -175,20 +177,20 @@ export const PropertiesPanel = () => {
                 </Field>
 
                 {/* Voltage */}
-                <Field label="Voltage">
+                <Field label={t("prop_voltage")}>
                   <select
                     className="w-full h-9 border rounded-md px-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                     defaultValue={(symObj as any).voltage || ""}
                     onChange={(e) => handleUpdate(firstObj.id, { voltage: e.target.value })}
                   >
-                    <option value="">— Select —</option>
+                    <option value="">{t("prop_select")}</option>
                     {VOLTAGES.map((v) => <option key={v} value={v}>{v}</option>)}
                   </select>
                 </Field>
 
                 {/* Rated Power (motors, generators) */}
                 {["motor", "motor_3ph", "stepper_motor", "servo_motor", "generator", "sync_generator", "async_generator", "dc_generator", "vfd", "wind_turbine"].includes(symObj.symbolId) && (
-                  <Field label="Rated Power">
+                  <Field label={t("prop_rated_power")}>
                     <div className="flex gap-1.5">
                       <Input
                         type="number"
@@ -204,7 +206,7 @@ export const PropertiesPanel = () => {
 
                 {/* Rated Current (CBs, contactors, fuses) */}
                 {["circuit_breaker", "mccb", "acb", "vcb", "mcb", "contactor", "contactor_nc", "fuse", "fuse_link", "disconnect_switch", "load_break_switch", "overload_relay", "differential_switch", "rcbo", "ats", "mts", "switch_disconnector", "fuse_disconnector", "disconnect_fuse_switch"].includes(symObj.symbolId) && (
-                  <Field label="Rated Current">
+                  <Field label={t("prop_rated_current")}>
                     <div className="flex gap-1.5">
                       <Input
                         type="number"
@@ -220,7 +222,7 @@ export const PropertiesPanel = () => {
 
                 {/* Protection Type (breakers/relays) */}
                 {["circuit_breaker", "mccb", "acb", "vcb", "mcb", "differential_switch", "rcbo"].includes(symObj.symbolId) && (
-                  <Field label="Protection Type">
+                  <Field label={t("prop_protection_type")}>
                     <div className="flex gap-1 flex-wrap">
                       {PROTECTION_TYPES.map((p) => (
                         <button
@@ -241,7 +243,7 @@ export const PropertiesPanel = () => {
 
                 {/* Transformer Ratio */}
                 {["transformer", "transformer_3w", "auto_transformer", "isolation_transformer", "zig_zag_transformer", "current_transformer", "potential_transformer"].includes(symObj.symbolId) && (
-                  <Field label="Ratio">
+                  <Field label={t("prop_ratio")}>
                     <Input
                       className="h-9"
                       defaultValue={(symObj as any).ratio || ""}
@@ -255,14 +257,14 @@ export const PropertiesPanel = () => {
 
             {/* ─── Cable Section (Symbol + Wire) ─── */}
             {(isSymbol || isWire) && (
-              <Section title="Cable" defaultOpen={isWire}>
-                <Field label="Cable Size">
+              <Section title={t("prop_cable")} defaultOpen={isWire}>
+                <Field label={t("prop_cable_size")}>
                   <select
                     className="w-full h-9 border rounded-md px-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                     defaultValue={(firstObj as any).cableSize || ""}
                     onChange={(e) => handleUpdate(firstObj.id, { cableSize: e.target.value })}
                   >
-                    <option value="">— Select —</option>
+                    <option value="">{t("prop_select")}</option>
                     {CABLE_SIZES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </Field>
@@ -270,9 +272,9 @@ export const PropertiesPanel = () => {
                 {/* Wire-specific: Color + Thickness */}
                 {isWire && wireObj && (
                   <>
-                    <Field label="Wire Color">
+                    <Field label={t("prop_wire_color")}>
                       <div className="grid grid-cols-6 gap-1.5">
-                        {WIRE_COLORS.map((c) => (
+                        {getWireColors(t).map((c) => (
                           <button
                             key={c.value}
                             title={c.label}
@@ -287,19 +289,19 @@ export const PropertiesPanel = () => {
                         ))}
                       </div>
                     </Field>
-                    <Field label="Thickness">
+                    <Field label={t("prop_thickness")}>
                       <div className="flex gap-1">
-                        {WIRE_THICKNESSES.map((t) => (
+                        {getWireThicknesses(t).map((tkn) => (
                           <button
-                            key={t.value}
-                            onClick={() => handleUpdate(firstObj.id, { thickness: t.value })}
+                            key={tkn.value}
+                            onClick={() => handleUpdate(firstObj.id, { thickness: tkn.value })}
                             className={`flex-1 h-8 text-xs rounded-md border transition-all font-medium ${
-                              wireObj.thickness === t.value
+                              wireObj.thickness === tkn.value
                                 ? "bg-primary text-primary-foreground border-primary"
                                 : "bg-muted/30 border-border hover:border-muted-foreground"
                             }`}
                           >
-                            {t.label}
+                            {tkn.label}
                           </button>
                         ))}
                       </div>
@@ -311,12 +313,12 @@ export const PropertiesPanel = () => {
 
             {/* ─── Notes Section ─── */}
             {isSymbol && symObj && (
-              <Section title="Notes" defaultOpen={false}>
-                <Field label="Notes">
+              <Section title={t("prop_notes")} defaultOpen={false}>
+                <Field label={t("prop_notes")}>
                   <textarea
                     className="w-full border rounded-md px-2 py-2 text-sm bg-background min-h-[60px] resize-none focus:outline-none focus:ring-2 focus:ring-ring"
                     defaultValue={(symObj as any).notes || ""}
-                    placeholder="Add notes..."
+                    placeholder={t("prop_add_notes")}
                     rows={2}
                     onBlur={(e) => handleUpdate(firstObj.id, { notes: e.target.value })}
                   />
@@ -328,7 +330,7 @@ export const PropertiesPanel = () => {
 
         {selectedObjects.length > 1 && (
           <div className="text-sm p-3 bg-muted/30 rounded-lg text-center">
-            <span className="font-semibold text-primary">{selectedObjects.length}</span> objects selected
+            <span className="font-semibold text-primary">{selectedObjects.length}</span> {t("prop_objects_selected")}
           </div>
         )}
       </div>
@@ -350,10 +352,10 @@ export const PropertiesPanel = () => {
         )}
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 gap-2 h-9 border-destructive text-destructive hover:bg-destructive/10" onClick={() => deleteObjects(selectedIds)}>
-            <Trash className="w-4 h-4" /> Delete
+            <Trash className="w-4 h-4" /> {t("tool_delete")}
           </Button>
           <Button variant="outline" size="sm" className="flex-1 gap-2 h-9" onClick={() => duplicateSelected()}>
-            <Copy className="w-4 h-4" /> Duplicate
+            <Copy className="w-4 h-4" /> {t("tool_duplicate")}
           </Button>
         </div>
       </div>

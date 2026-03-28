@@ -19,7 +19,7 @@ import { symbolRegistry } from "@/lib/editor/symbols/registry";
 import { SymbolObject } from "@/lib/editor/types";
 import { rgb, StandardFonts } from "pdf-lib";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
+import { useLocale } from "@/lib/i18n/useLocale";
 const ToolBtn = ({ icon: Icon, label, active, onClick, className, disabled }: {
   icon: any; label: string; active?: boolean; onClick: () => void; className?: string; disabled?: boolean;
 }) => (
@@ -43,6 +43,7 @@ const ToolBtn = ({ icon: Icon, label, active, onClick, className, disabled }: {
 );
 
 export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId: string, onOpenPlugins?: () => void, onOpenLibrary?: () => void }) => {
+  const { t } = useLocale();
   const {
     undo, redo, canvas, history, currentHistoryIndex,
     activeTool, setActiveTool, selectedIds, deleteObjects,
@@ -57,13 +58,13 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
   const canUndo = currentHistoryIndex > 0;
   const canRedo = currentHistoryIndex < history.length - 1;
 
-  const handleFitToScreen = () => { setZoom(1); setPan(0, 0); toast.success("Fit to screen"); };
+  const handleFitToScreen = () => { setZoom(1); setPan(0, 0); toast.success(t("toast_fit_screen")); };
 
   const handleToggleGrid = () => {
     setGridVisible(!gridVisible);
     const gridLayer = document.querySelector('[data-grid-layer]');
     if (gridLayer) (gridLayer as HTMLElement).style.opacity = gridVisible ? '0' : '1';
-    toast.success(gridVisible ? "Grid hidden" : "Grid visible");
+    toast.success(gridVisible ? t("toast_grid_hidden") : t("toast_grid_visible"));
   };
 
   const handleSave = async () => {
@@ -74,8 +75,8 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
       .from("projects")
       .update({ diagram_data: canvas, updated_at: new Date().toISOString() })
       .eq("id", projectId);
-    if (error) toast.error("Save failed: " + error.message);
-    else toast.success("Saved successfully", { id: "save-success-toast" });
+    if (error) toast.error(t("toast_save_failed") + error.message);
+    else toast.success(t("toast_save_success"), { id: "save-success-toast" });
     setSaving(false);
   };
 
@@ -84,11 +85,11 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
     setSharing(true);
     const supabase = createClient();
     const { error } = await supabase.from("projects").update({ is_public: true }).eq("id", projectId);
-    if (error) { toast.error("Failed to make project public"); setSharing(false); return; }
+    if (error) { toast.error(t("toast_share_failed")); setSharing(false); return; }
     const shareUrl = `${window.location.origin}/share/${projectId}`;
     await navigator.clipboard.writeText(shareUrl);
     setShared(true);
-    toast.success("Public link copied to clipboard!");
+    toast.success(t("toast_share_copied"));
     setTimeout(() => setShared(false), 3000);
     setSharing(false);
   };
@@ -96,9 +97,9 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
   const exportPdf = async () => {
     try {
       setSaving(true);
-      toast.info("Generating PDF...");
+      toast.info(t("toast_pdf_generating"));
       const canvasEl = document.querySelector('canvas');
-      if (!canvasEl) { toast.error("Canvas not found"); setSaving(false); return; }
+      if (!canvasEl) { toast.error(t("toast_canvas_not_found")); setSaving(false); return; }
       const imgData = canvasEl.toDataURL("image/png");
       const { PDFDocument } = await import('pdf-lib');
       const pdfDoc = await PDFDocument.create();
@@ -127,8 +128,8 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
       link.href = url; link.download = "diagram_with_titleblock.pdf";
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      toast.success("PDF exported");
-    } catch { toast.error("PDF export failed"); } finally { setSaving(false); }
+      toast.success(t("toast_pdf_exported"));
+    } catch { toast.error(t("toast_pdf_failed")); } finally { setSaving(false); }
   };
 
   const exportBOM = () => {
@@ -148,8 +149,8 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
       link.href = url; link.download = `BOM_${projectId}.csv`;
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      toast.success("BOM exported");
-    } catch { toast.error("BOM export failed"); }
+      toast.success(t("toast_bom_exported"));
+    } catch { toast.error(t("toast_bom_failed")); }
   };
 
   const handleExportSVG = () => {
@@ -161,8 +162,8 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
       link.href = url; link.download = `worline-export-${projectId}.svg`;
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      toast.success("SVG exported");
-    } catch { toast.error("SVG export failed"); }
+      toast.success(t("toast_svg_exported"));
+    } catch { toast.error(t("toast_svg_failed")); }
   };
 
   const exportPng = () => {
@@ -171,7 +172,7 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
       const link = document.createElement("a");
       link.href = canvasEl.toDataURL("image/png");
       link.download = "diagram.png"; link.click();
-      toast.success("PNG exported");
+      toast.success(t("toast_png_exported"));
     }
   };
 
@@ -186,20 +187,20 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
         </Link>
         <div className="w-px h-5 bg-border mx-0.5 hidden sm:block" />
 
-        <ToolBtn icon={Undo} label="Undo (Ctrl+Z)" onClick={undo} disabled={!canUndo} />
-        <ToolBtn icon={Redo} label="Redo (Ctrl+Y)" onClick={redo} disabled={!canRedo} />
+        <ToolBtn icon={Undo} label={t("tool_undo")} onClick={undo} disabled={!canUndo} />
+        <ToolBtn icon={Redo} label={t("tool_redo")} onClick={redo} disabled={!canRedo} />
         <div className="w-px h-5 bg-border mx-0.5" />
 
         {/* Desktop Mode Buttons */}
         <div className="hidden md:flex items-center gap-1">
-          <ToolBtn icon={MousePointer2} label="Select (V)" active={activeTool === "select"} onClick={() => setActiveTool("select")} />
-          <ToolBtn icon={Cable} label="Wire (W)" active={activeTool === "wire"} onClick={() => setActiveTool("wire")} />
-          <ToolBtn icon={Type} label="Text (T)" active={activeTool === "text"} onClick={() => setActiveTool("text")} />
+          <ToolBtn icon={MousePointer2} label={t("tool_select")} active={activeTool === "select"} onClick={() => setActiveTool("select")} />
+          <ToolBtn icon={Cable} label={t("tool_wire")} active={activeTool === "wire"} onClick={() => setActiveTool("wire")} />
+          <ToolBtn icon={Type} label={t("tool_text")} active={activeTool === "text"} onClick={() => setActiveTool("text")} />
         </div>
 
         {/* Mobile Mode Buttons */}
         <div className="flex md:hidden items-center gap-0.5">
-          <ToolBtn icon={MousePointer2} label="Select" active={activeTool === "select"} onClick={() => setActiveTool("select")} />
+          <ToolBtn icon={MousePointer2} label={t("tool_select")} active={activeTool === "select"} onClick={() => setActiveTool("select")} />
           <DropdownMenu>
             <DropdownMenuTrigger render={
               <Button data-testid="mobile-tools-menu-btn" variant="ghost" size="icon" className="w-8 h-8">
@@ -208,36 +209,36 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
             } />
             <DropdownMenuContent align="start" className="w-48 z-[60]">
               <DropdownMenuItem data-testid="mobile-symbol-library-btn" onClick={onOpenLibrary}>
-                <FolderOpen className="h-4 w-4 mr-2" /> Symbol Library
+                <FolderOpen className="h-4 w-4 mr-2" /> {t("tool_symbol_lib")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setActiveTool("wire")}>
-                <Cable className="h-4 w-4 mr-2" /> Draw Wire
+                <Cable className="h-4 w-4 mr-2" /> {t("tool_wire")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setActiveTool("shape")}>
-                <Shapes className="h-4 w-4 mr-2" /> Draw Shape
+                <Shapes className="h-4 w-4 mr-2" /> {t("tool_shape")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <ToolBtn icon={Type} label="Text" active={activeTool === "text"} onClick={() => setActiveTool("text")} />
+          <ToolBtn icon={Type} label={t("tool_text")} active={activeTool === "text"} onClick={() => setActiveTool("text")} />
         </div>
 
         {/* Desktop canvas tools */}
         <div className="hidden md:flex items-center gap-1">
           <div className="w-px h-5 bg-border mx-0.5" />
-          <ToolBtn icon={Grid3x3} label="Toggle Grid" active={gridVisible} onClick={handleToggleGrid} />
-          <ToolBtn icon={Magnet} label="Snap to Grid" active={snapToGrid} onClick={toggleSnapToGrid} />
-          <ToolBtn icon={Maximize} label="Fit to Screen" onClick={handleFitToScreen} />
+          <ToolBtn icon={Grid3x3} label={t("tool_grid_toggle")} active={gridVisible} onClick={handleToggleGrid} />
+          <ToolBtn icon={Magnet} label={t("tool_snap_to_grid")} active={snapToGrid} onClick={toggleSnapToGrid} />
+          <ToolBtn icon={Maximize} label={t("tool_fit_screen")} onClick={handleFitToScreen} />
         </div>
 
         {/* Transform tools (context-sensitive) */}
         {selectedIds.length > 0 && (
           <div className="hidden sm:flex items-center gap-1">
             <div className="w-px h-5 bg-border mx-0.5" />
-            <ToolBtn icon={RotateCw} label="Rotate 90°" onClick={rotateSelected} />
-            <ToolBtn icon={FlipHorizontal} label="Flip H" onClick={flipSelectedH} />
-            <ToolBtn icon={FlipVertical} label="Flip V" onClick={flipSelectedV} />
-            <ToolBtn icon={Copy} label="Duplicate" onClick={duplicateSelected} />
-            <ToolBtn icon={Trash} label="Delete" onClick={() => deleteObjects(selectedIds)} className="text-destructive hover:text-destructive" />
+            <ToolBtn icon={RotateCw} label={t("tool_rotate_90")} onClick={rotateSelected} />
+            <ToolBtn icon={FlipHorizontal} label={t("tool_flip_h")} onClick={flipSelectedH} />
+            <ToolBtn icon={FlipVertical} label={t("tool_flip_v")} onClick={flipSelectedV} />
+            <ToolBtn icon={Copy} label={t("tool_duplicate")} onClick={duplicateSelected} />
+            <ToolBtn icon={Trash} label={t("tool_delete")} onClick={() => deleteObjects(selectedIds)} className="text-destructive hover:text-destructive" />
           </div>
         )}
 
@@ -245,8 +246,8 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
         {selectedIds.length > 0 && (
           <div className="flex sm:hidden items-center gap-1">
             <div className="w-px h-5 bg-border mx-0.5" />
-            <ToolBtn icon={Copy} label="Duplicate" onClick={duplicateSelected} />
-            <ToolBtn icon={Trash} label="Delete" onClick={() => deleteObjects(selectedIds)} className="text-destructive" />
+            <ToolBtn icon={Copy} label={t("tool_duplicate")} onClick={duplicateSelected} />
+            <ToolBtn icon={Trash} label={t("tool_delete")} onClick={() => deleteObjects(selectedIds)} className="text-destructive" />
           </div>
         )}
       </div>
@@ -256,7 +257,7 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
         {onOpenPlugins && (
           <Button onClick={onOpenPlugins} variant="ghost" size="sm" className="gap-1.5 h-8 px-2 md:px-3 text-primary hidden sm:flex hover:bg-primary/10">
             <LayoutGrid className="h-4 w-4" />
-            <span className="text-xs font-semibold">Plugins</span>
+            <span className="text-xs font-semibold">{t("tool_plugins")}</span>
           </Button>
         )}
 
@@ -264,28 +265,28 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
         <div className="hidden md:flex items-center gap-1">
           <Button onClick={handleShare} disabled={sharing} variant="ghost" size="sm" className="gap-1.5 h-8 px-2.5">
             {shared ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Share2 className="h-3.5 w-3.5" />}
-            <span className="text-xs">{shared ? "Copied" : "Share"}</span>
+            <span className="text-xs">{shared ? t("tool_copied") : t("tool_share")}</span>
           </Button>
         </div>
 
         <Button data-testid="save-btn" onClick={handleSave} disabled={saving} variant="outline" size="sm" className="gap-1.5 h-8 px-2.5">
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-          <span className="text-xs hidden sm:inline">{saving ? "Saving" : "Save"}</span>
+          <span className="text-xs hidden sm:inline">{saving ? t("tool_saving") : t("save")}</span>
         </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger render={
             <Button data-testid="export-menu-btn" size="sm" className="gap-1.5 h-8 px-2.5">
               <Download className="h-3.5 w-3.5" />
-              <span className="text-xs hidden sm:inline">Export</span>
+              <span className="text-xs hidden sm:inline">{t("tool_export")}</span>
             </Button>
           } />
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem data-testid="export-png-btn" onClick={exportPng}>Export as PNG</DropdownMenuItem>
-            <DropdownMenuItem data-testid="export-svg-btn" onClick={handleExportSVG}>Export as SVG</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-png-btn" onClick={exportPng}>{t("tool_export_png")}</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-svg-btn" onClick={handleExportSVG}>{t("tool_export_svg")}</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem data-testid="export-pdf-btn" onClick={exportPdf}>Export as PDF (A4)</DropdownMenuItem>
-            <DropdownMenuItem data-testid="export-bom-btn" onClick={exportBOM}>Export BOM (CSV)</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-pdf-btn" onClick={exportPdf}>{t("tool_export_pdf")}</DropdownMenuItem>
+            <DropdownMenuItem data-testid="export-bom-btn" onClick={exportBOM}>{t("tool_export_bom")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -298,35 +299,35 @@ export const Toolbar = ({ projectId, onOpenPlugins, onOpenLibrary }: { projectId
           } />
           <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuItem onClick={onOpenPlugins}>
-              <LayoutGrid className="h-4 w-4 mr-2 text-primary" /> <span className="text-primary font-medium">Plugins</span>
+              <LayoutGrid className="h-4 w-4 mr-2 text-primary" /> <span className="text-primary font-medium">{t("tool_plugins")}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleShare}>
-              <Share2 className="h-4 w-4 mr-2" /> Share
+              <Share2 className="h-4 w-4 mr-2" /> {t("tool_share")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {selectedIds.length > 0 && (
               <>
                 <DropdownMenuItem onClick={rotateSelected}>
-                  <RotateCw className="h-4 w-4 mr-2" /> Rotate 90°
+                  <RotateCw className="h-4 w-4 mr-2" /> {t("tool_rotate_90")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={flipSelectedH}>
-                  <FlipHorizontal className="h-4 w-4 mr-2" /> Flip Horizontal
+                  <FlipHorizontal className="h-4 w-4 mr-2" /> {t("tool_flip_h")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={flipSelectedV}>
-                  <FlipVertical className="h-4 w-4 mr-2" /> Flip Vertical
+                  <FlipVertical className="h-4 w-4 mr-2" /> {t("tool_flip_v")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>
             )}
             <DropdownMenuItem onClick={handleToggleGrid}>
-              <Grid3x3 className="h-4 w-4 mr-2" /> {gridVisible ? "Hide Grid" : "Show Grid"}
+              <Grid3x3 className="h-4 w-4 mr-2" /> {gridVisible ? t("tool_hide_grid") : t("tool_show_grid")}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={toggleSnapToGrid}>
-              <Magnet className="h-4 w-4 mr-2" /> {snapToGrid ? "Disable Snap" : "Enable Snap"}
+              <Magnet className="h-4 w-4 mr-2" /> {snapToGrid ? t("tool_disable_snap") : t("tool_enable_snap")}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleFitToScreen}>
-              <Maximize className="h-4 w-4 mr-2" /> Fit to Screen
+              <Maximize className="h-4 w-4 mr-2" /> {t("tool_fit_screen")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

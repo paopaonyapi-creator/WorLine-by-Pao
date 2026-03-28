@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 function SymbolMiniIcon({ symbolType }: { symbolType: string }) {
   const size = 28;
@@ -125,6 +126,7 @@ type UserSymbol = {
 };
 
 export const Palette = ({ onClose }: { onClose?: () => void }) => {
+  const { t } = useLocale();
   const { addObject, panX, panY, zoom, selectedIds, canvas } = useEditorStore();
   const [userSymbols, setUserSymbols] = useState<UserSymbol[]>([]);
   const supabase = createClient();
@@ -174,15 +176,15 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
 
   const handleSaveToLibrary = async () => {
     if (selectedIds.length === 0) {
-      toast.error("Select objects first");
+      toast.error(t("toast_select_first"));
       return;
     }
-    const name = prompt("Name for this group:");
+    const name = prompt(t("toast_name_group"));
     if (!name) return;
 
     const selectedObjs = canvas.objects.filter(o => selectedIds.includes(o.id));
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { toast.error("Not logged in"); return; }
+    if (!user) { toast.error(t("toast_not_logged_in")); return; }
 
     const { error } = await supabase.from("user_symbols").insert({
       user_id: user.id,
@@ -191,9 +193,9 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
     });
 
     if (error) {
-      toast.error("Failed to save: " + error.message);
+      toast.error(t("toast_save_group_failed") + error.message);
     } else {
-      toast.success(`"${name}" saved to My Library!`);
+      toast.success(`"${name}" ${t("toast_saved_library")}`);
       const { data } = await supabase.from("user_symbols").select("id, name, symbol_data").order("created_at", { ascending: false });
       if (data) setUserSymbols(data);
     }
@@ -221,7 +223,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
         y: o.y - minY + centerY,
       });
     });
-    toast.success(`Placed "${us.name}"`);
+    toast.success(`${t("toast_placed")} "${us.name}"`);
 
     if (onClose) onClose();
   };
@@ -230,7 +232,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
     const { error } = await supabase.from("user_symbols").delete().eq("id", id);
     if (!error) {
       setUserSymbols(prev => prev.filter(s => s.id !== id));
-      toast.success("Deleted from library");
+      toast.success(t("toast_deleted_library"));
     }
   };
 
@@ -248,11 +250,11 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
         <div className="flex items-center justify-between">
           <span className="font-semibold text-sm flex items-center gap-2">
             <Zap className="h-4 w-4 text-primary" />
-            Symbol Library
+            {t("palette_title")}
           </span>
           {selectedIds.length > 0 && (
             <Button variant="ghost" size="sm" className="h-6 text-[10px] gap-1 px-2" onClick={handleSaveToLibrary}>
-              <Plus className="h-3 w-3" /> Save Selection
+              <Plus className="h-3 w-3" /> {t("palette_save_selection")}
             </Button>
           )}
         </div>
@@ -260,7 +262,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
           <Search className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search 100+ symbols..."
+            placeholder={t("palette_search")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-3 py-1.5 text-sm rounded-md border bg-muted/30 placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-all"
@@ -273,7 +275,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
         {/* --- STATE 1: SEARCH RESULTS --- */}
         {search && (
           <div className="p-2 animate-in fade-in duration-200">
-            <p className="px-1 pb-2 text-xs font-medium text-muted-foreground">Search Results</p>
+            <p className="px-1 pb-2 text-xs font-medium text-muted-foreground">{t("palette_search_results")}</p>
             <div className="grid grid-cols-3 gap-2">
               {displayedSymbols.map(sym => (
                 <SymbolButton key={sym.id} sym={sym} onClick={() => handleAddCenter(sym.id)} />
@@ -281,7 +283,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
             </div>
             {displayedSymbols.length === 0 && (
               <div className="py-12 text-center text-muted-foreground">
-                <p className="text-sm">No symbols found for "{search}"</p>
+                <p className="text-sm">{t("palette_no_results")} "{search}"</p>
               </div>
             )}
           </div>
@@ -314,7 +316,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
             {userSymbols.length > 0 && (
               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wide flex items-center gap-1.5 px-1">
-                  <Bookmark className="h-3.5 w-3.5" /> My Saved Groups
+                  <Bookmark className="h-3.5 w-3.5" /> {t("palette_my_saved")}
                 </p>
                 <div className="space-y-1">
                   {userSymbols.map(us => (
@@ -339,7 +341,7 @@ export const Palette = ({ onClose }: { onClose?: () => void }) => {
             {/* Categories List */}
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wide px-1">
-                Library Categories
+                {t("palette_categories")}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {categories.map(cat => {
