@@ -53,6 +53,7 @@ export default function DashboardLayout({
             <Link
               key={item.name}
               href={item.href}
+              data-testid={`nav-${item.href.split('/').pop()}`}
               onClick={onNavigate}
               aria-current={isActive(item.href) ? "page" : undefined}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
@@ -80,6 +81,7 @@ export default function DashboardLayout({
             <Link
               key={item.name}
               href={item.href}
+              data-testid={`nav-${item.href.split('/').pop()}`}
               onClick={onNavigate}
               aria-current={isActive(item.href) ? "page" : undefined}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
@@ -134,9 +136,9 @@ export default function DashboardLayout({
             <ThemeToggle />
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger>
-                <Button variant="ghost" size="icon" className="h-9 w-9" aria-label="Open menu">
+                <div role="button" data-testid="mobile-nav-toggle" className="flex items-center justify-center rounded-md h-9 w-9 hover:bg-accent hover:text-accent-foreground">
                   <Menu className="h-5 w-5" />
-                </Button>
+                </div>
               </SheetTrigger>
               <SheetContent side="left" className="w-72 pt-8">
                 <div className="flex items-center gap-2 mb-2 px-2">
