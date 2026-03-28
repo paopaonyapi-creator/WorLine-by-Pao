@@ -30,5 +30,6 @@ If the playbook proves that recent application code broke the platform for *all*
 - [ ] Resume your investigation only *after* the rollback finishes.
 
 ### Minute 8-10: Communication
-- [ ] **If 🔴 or 🟠:** Ensure affected users (or the person who reported the bug) know you are actively mitigating it.
+- [ ] **If 🌐 Broad Impact:** Grab an [Outage Update Template](outage-update-template.md) to alert users quickly without guessing what to write.
+- [ ] **If 👤 Isolated:** Ensure the reporter knows you are mitigating it.
 - [ ] Begin taking notes for a [Postmortem](../postmortem-template.md) if money or data was lost.
