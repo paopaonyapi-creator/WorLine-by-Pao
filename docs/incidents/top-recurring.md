@@ -1,6 +1,6 @@
 # Top Recurring Incidents Fast Lane
 
-*Not every incident is equally likely. These are the absolute most common things that break in production. If you don't confidently see your issue here, fall back to the [Main Incident Index](index.md) or [Broad Production Incidents](production-incidents.md).*
+*Not every incident is equally likely. These are the absolute most common things that break in production. If you don't confidently see your issue here, fall back to the [Main Incident Index](index.md), [Broad Production Incidents](production-incidents.md), or [Workflow Incidents](workflow-incidents.md).*
 
 ### 1. App completely down (Outage)
 👉 **[`api/health` 500](api-health-returns-500.md)** (Check Railway immediately. Rollback highly likely.)

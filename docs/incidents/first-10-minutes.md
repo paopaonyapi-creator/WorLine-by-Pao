@@ -14,7 +14,7 @@
   - 🟠 Money is blocked or missing (Revenue)
   - 🟡 Users cannot log in or access features (Access)
   - 🔵 A specific feature throws errors (Editor/UI)
-  - ⚪ A test suite is broken locally (Testing)
+  - ⚪ A test suite is broken locally (Testing) *(See [Workflow Incidents](workflow-incidents.md))*
 
 ### Minute 2-5: Locate the Playbook
 - [ ] Open the [Incident Playbooks Index](index.md) (or try the [Top Recurring Incidents](top-recurring.md) fast lane).
