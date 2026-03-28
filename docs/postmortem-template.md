@@ -5,6 +5,8 @@ Name the file by date and area: `YYYY-MM-DD-area-short-description.md`.
 
 No blame. Focus on what happened, why, and what prevents recurrence.
 
+For a realistic example, see [2026-03-28 Webhook Secret Mismatch](postmortems/2026-03-28-checkout-webhook-secret-mismatch.md).
+
 ---
 
 ## Incident Summary
