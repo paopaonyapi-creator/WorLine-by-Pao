@@ -23,10 +23,13 @@ const CATEGORY_META: Record<string, { icon: any, color: string, desc: string }> 
   "Breakers and Protection": { icon: Shield, color: "text-red-500", desc: "ACB, VCB, MCB, RCD, SPD" },
   "Fuses": { icon: Zap, color: "text-orange-500", desc: "Inline, Link, Disconnectors" },
   "Relays and Contactors": { icon: Brain, color: "text-violet-500", desc: "Relays, Contactors, Coils" },
+  "Protection Relays": { icon: Rocket, color: "text-rose-500", desc: "27, 32, 46, 49, 50, 51, 59, 81, 86, 87" },
+  "Automation": { icon: MonitorSmartphone, color: "text-teal-500", desc: "PLC, VFD, Soft Starter, SSR" },
   "Metering": { icon: Gauge, color: "text-cyan-500", desc: "Amps, Volts, kW, Smart Meter" },
-  "Indicators and Lamps": { icon: Lightbulb, color: "text-yellow-500", desc: "Lamps, Resistors, VFD" },
+  "Indicators and Lamps": { icon: Lightbulb, color: "text-yellow-500", desc: "Lamps, Resistors, Capacitors" },
   "Terminals and Connectors": { icon: Waypoints, color: "text-gray-500", desc: "Blocks, Plugs, Sockets" },
 };
+
 
 type UserSymbol = {
   id: string;
