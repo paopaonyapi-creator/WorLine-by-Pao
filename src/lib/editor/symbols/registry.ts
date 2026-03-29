@@ -318,7 +318,11 @@ export const SYMBOL_REGISTRY: Record<string, any> = {
   ansi_hz_meter: sym("ansi_hz_meter", "Metering", "Freq Meter", "frequency_meter", 40, 40, {}, "ansi"),
   ansi_demand: sym("ansi_demand", "Metering", "Demand Meter", "power_meter", 50, 50, { label: "Demand" }, "ansi"),
   ansi_kwh: sym("ansi_kwh", "Metering", "kWh Meter", "power_meter", 50, 50, { label: "kWh" }, "ansi"),
+  ansi_relay_46: sym("ansi_relay_46", "Relays and Contactors", "Phase Rev (46)", "ansi_relay_coil", 50, 50, { label: "46" }, "ansi"),
+  ansi_relay_25: sym("ansi_relay_25", "Relays and Contactors", "Sync Check (25)", "ansi_relay_coil", 50, 50, { label: "25" }, "ansi"),
+  ansi_cap_bank: sym("ansi_cap_bank", "Indicators and Lamps", "Capacitor Bank", "ansi_capacitor", 60, 60, { label: "Bank" }, "ansi"),
+  ansi_reactor: sym("ansi_reactor", "Indicators and Lamps", "Reactor", "ansi_inductor", 60, 30, { label: "Reactor" }, "ansi"),
   
-}; // END OF SYMBOL_REGISTRY // Total 306 Items
+}; // END OF SYMBOL_REGISTRY // Total 300 Items
 
 export const symbolRegistry = SYMBOL_REGISTRY;
